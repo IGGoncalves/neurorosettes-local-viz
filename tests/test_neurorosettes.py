@@ -1,91 +1,23 @@
 """Script to test the spring components of neurites"""
-from dataclasses import dataclass, field
-from typing import List, Union
+import time
 
 import numpy as np
 import vedo
 
-from neurorosettes.subcellular import CellBody, Neurite
 from neurorosettes.neurons import Neuron
 from neurorosettes.simulation import Container
 import neurorosettes.utilities as utilities
 
 
-@dataclass
-class UniformGrid:
-    min: float
-    max: float
-    step: float
-    grid_values: np.ndarray = field(init=False)
-    idx_values: np.ndarray = field(init=False)
-    grid: np.ndarray = field(init=False)
-
-    def __post_init__(self) -> None:
-        self.grid_values = np.arange(self.min, self.max, self.step)
-        self.idx_values = np.arange(self.grid_values.shape[0])
-        self.grid = np.empty(shape=[self.grid_values.shape[0], self.grid_values.shape[0]], dtype=object)
-        self.grid[...] = [[[] for _ in range(self.grid.shape[0])] for _ in range(self.grid.shape[1])]
-
-    @property
-    def representation_grid_valuesd(self) -> np.ndarray:
-        return np.arange(self.min, self.max+1, self.step)
-
-    def interpolate_idx(self, position: np.ndarray) -> List[int]:
-        idxx = np.floor(np.interp(position[0], self.grid_values, self.idx_values)).astype(int)
-        idxy = np.floor(np.interp(position[1], self.grid_values, self.idx_values)).astype(int)
-
-        return idxx, idxy
-
-    def register_cell(self, cell: CellBody) -> None:
-        idxx, idxy = self.interpolate_idx(cell.position)
-        self.grid[idxy][idxx].append(cell)
-
-    def register_neurite(self, neurite: Neurite) -> None:
-        idxx, idxy = self.interpolate_idx(neurite.distal_point)
-        self.grid[idxy][idxx].append(neurite)
-
-    def remove_cell(self, cell: CellBody) -> None:
-        idxx, idxy = self.interpolate_idx(cell.position)
-        self.grid[idxy][idxx].remove(cell)
-
-    def remove_neurite(self, neurite: Neurite) -> None:
-        idxx, idxy = self.interpolate_idx(neurite.distal_point)
-        self.grid[idxy][idxx].remove(neurite)
-
-    def get_objects_in_voxel(self, idxx, idxy) -> List[Union[CellBody, Neurite]]:
-        return self.grid[idxy][idxx]
-
-    def get_close_objects(self, position: np.ndarray) -> List[Union[CellBody, Neurite]]:
-        idxx, idxy = self.interpolate_idx(position)
-        neighbors = self.get_objects_in_voxel(idxx, idxy)
-
-        if idxx-1 > self.idx_values[0]:
-            neighbors.extend(self.get_objects_in_voxel(idxx-1, idxy))
-            if idxy > self.idx_values[0]:
-                neighbors.extend(self.get_objects_in_voxel(idxx-1, idxy-1))
-            if idxy < self.idx_values[-1]+1:
-                neighbors.extend(self.get_objects_in_voxel(idxx-1, idxy+1))
-
-        if idxx+1 < self.idx_values[-1]+1:
-            neighbors.extend(self.get_objects_in_voxel(idxx+1, idxy))
-            if idxy > self.idx_values[0]:
-                neighbors.extend(self.get_objects_in_voxel(idxx+1, idxy-1))
-            if idxy < self.idx_values[-1]+1:
-                neighbors.extend(self.get_objects_in_voxel(idxx+1, idxy+1))
-
-        return neighbors
-
-
 # Define time variables
 timestep = 0.1
-total_time = 10.0
+total_time = 40.0
 pb = utilities.get_progress_bar(total_time, timestep)
 
 # Initialize simulation objects
 container = Container(timestep=0.1,
-                      viscosity=7.96)
-
-domain = UniformGrid(-40, 40, 20)
+                      viscosity=7.96,
+                      grid=[-80, 80, 20])
 
 # Populate environment with cells
 container.animator.plotter.show(interactive=False, resetcam=False)
@@ -97,19 +29,30 @@ neuron.set_outgrowth_axis(np.array([1.0, 0.0, 0.0]))
 neuron.create_neurites_based_on_differentiation(differentiation_grade=2)
 container.register_neuron(neuron)
 
-# Create a neuron with two neurites
-neuron2 = Neuron()
-neuron2.create_cell(np.array([-15.0, -18.0, 0.0]))
-container.register_neuron(neuron2)
+neuron = Neuron()
+neuron.create_cell(np.array([-5.0, -15.0, 0.0]))
+container.register_neuron(neuron)
+neuron = Neuron()
+neuron.create_cell(np.array([25.0, 6.0, 0.0]))
+container.register_neuron(neuron)
 
-domain.register_cell(neuron.cell)
-domain.register_cell(neuron2.cell)
-domain.register_neurite(neuron.neurites[0])
-domain.register_neurite(neuron.neurites[1])
+container.grid.remove_cell(container.neurons[0].cell)
+container.neurons[0].move_cell(np.array([-5.0, -10.0, 0.0]))
+container.grid.register_cell(container.neurons[0].cell)
 
-print(domain.get_close_objects(neuron.neurites[0].distal_point))
+container.animator.plotter += vedo.Grid(sx=container.grid.representation_grid_values,
+                                        sy=container.grid.representation_grid_values)
 
-container.animator.plotter += vedo.Grid(sx=domain.representation_grid_valuesd, 
-                                        sy=domain.representation_grid_valuesd)
+container.animator.plotter.show(interactive=False)
+
+time.sleep(1)
+
+# Run and plot simulation
+for _ in pb.range():
+    container.update_cell_positions()
+    container.update_drawings()
+
+    time.sleep(0.001)
+    pb.print()
 
 container.animator.plotter.show(interactive=True)

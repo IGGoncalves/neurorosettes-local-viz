@@ -1,5 +1,5 @@
 import numpy as np
-from vedo import Plotter, Sphere, Spring, ProgressBar
+from vedo import Plotter, Sphere, Spring, ProgressBar, Grid
 
 
 def get_random_position(scaling_factor: float) -> np.ndarray:
@@ -39,8 +39,11 @@ class Animator:
         self.plotter = Plotter(interactive=False, axes=0)
         self.set_camera()
 
+    def add_grid(self, x_grid, y_grid):
+        self.plotter += Grid(sx=x_grid, sy=y_grid)
+
     def set_camera(self):
-        self.plotter.camera.SetPosition([0., 0., 200.])
+        self.plotter.camera.SetPosition([0., 0., 400.])
         self.plotter.camera.SetFocalPoint([0., 0., 0.])
         self.plotter.camera.SetViewUp([0., 1., 0.])
         self.plotter.camera.SetDistance(200.)
@@ -56,7 +59,7 @@ class Animator:
 
     def draw_sphere(self, center: np.ndarray, radius: float, **kwargs) -> Sphere:
         """Plots a sphere to represent a soma cell in vedo."""
-        sphere = Sphere(pos=center, r=radius, alpha=0.6, **kwargs)
+        sphere = Sphere(pos=center, r=radius, **kwargs)
         self.plotter += sphere
 
         return sphere

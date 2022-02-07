@@ -17,6 +17,7 @@ class CellBody:
         self.force_from_neighbors: np.ndarray = np.zeros(3)
         self.mechanics: Optional[SphereMechanics] = None
         self.sphere: Optional[Sphere] = None
+        self.displacement: np.ndarray = np.zeros(3)
 
     def set_center_position(self, coordinates: np.ndarray) -> None:
         """Sets the cell position"""
@@ -77,6 +78,7 @@ class Neurite:
         self.mechanics: CylinderMechanics = cylinder_mechanics
         self.cylinder: Optional[Tuple[Spring, Sphere]] = None
         self.force_from_daughter: Optional[np.ndarray] = None
+        self.displacement: np.ndarray = np.zeros(3)
 
     def set_force_from_daughter(self, force):
         """Sets the force transmitted by daughter"""
