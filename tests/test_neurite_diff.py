@@ -16,7 +16,7 @@ text_pos = (0.65, 0.3)
 
 # Define time variables
 timestep = 0.1
-total_time = 40.0
+total_time = 400.0
 
 for n in range(20):
     pb = utilities.get_progress_bar(total_time, timestep)
@@ -40,7 +40,7 @@ for n in range(20):
     container.register_neuron(neuron)
 
     neuron = Neuron()
-    neuron.create_cell(coordinates=np.array([25.0, 15.0, 0.0]))
+    neuron.create_cell(coordinates=np.array([25.0, 5.0, 0.0]))
     neuron.set_outgrowth_axis(utilities.get_random_unit_vector(two_dimensions=True))
     neuron.clocks.set_clocks(0.0000001, 0.0000001, 0.1)
     container.register_neuron(neuron)
@@ -69,8 +69,9 @@ for n in range(20):
 
     # Run and plot simulation
     for t in pb.range():
-        container.advance_cycles()
-        container.differentiate()
+        if t % 10.0 == 0.0:
+            container.advance_cycles()
+            container.differentiate()
         container.update_cell_positions()
         container.update_drawings()
         pb.print()

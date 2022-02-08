@@ -26,7 +26,7 @@ neuron.create_neurites_based_on_differentiation(differentiation_grade=2)
 container.register_neuron(neuron)
 
 neuron = Neuron()
-neuron.create_cell(coordinates=np.array([4.0, 30.0, 0.0]))
+neuron.create_cell(coordinates=np.array([4.0, 40.0, 0.0]))
 container.register_neuron(neuron)
 
 container.animator.plotter.show(resetcam=False, interactive=False)

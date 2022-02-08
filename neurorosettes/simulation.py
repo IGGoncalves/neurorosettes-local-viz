@@ -60,18 +60,24 @@ class UniformGrid:
         idxx, idxy = self.interpolate_idx(position)
         neighbors = list(self.get_objects_in_voxel(idxx, idxy))
 
-        if idxx - 1 > self.idx_values[0]:
+        if idxy > 0:
+            neighbors.extend(self.get_objects_in_voxel(idxx, idxy - 1))
+
+        if idxy < len(self.idx_values) - 1:
+            neighbors.extend(self.get_objects_in_voxel(idxx, idxy + 1))
+
+        if idxx > 0:
             neighbors.extend(self.get_objects_in_voxel(idxx - 1, idxy))
-            if idxy > self.idx_values[0]:
+            if idxy > 0:
                 neighbors.extend(self.get_objects_in_voxel(idxx - 1, idxy - 1))
-            if idxy < self.idx_values[-1] + 1:
+            if idxy < len(self.idx_values) - 1:
                 neighbors.extend(self.get_objects_in_voxel(idxx - 1, idxy + 1))
 
-        if idxx + 1 < self.idx_values[-1] + 1:
+        if idxx < len(self.idx_values) - 1:
             neighbors.extend(self.get_objects_in_voxel(idxx + 1, idxy))
-            if idxy > self.idx_values[0]:
+            if idxy > 0:
                 neighbors.extend(self.get_objects_in_voxel(idxx + 1, idxy - 1))
-            if idxy < self.idx_values[-1] + 1:
+            if idxy < len(self.idx_values) - 1:
                 neighbors.extend(self.get_objects_in_voxel(idxx + 1, idxy + 1))
 
         return neighbors
@@ -139,7 +145,6 @@ class Container:
         for i, neuron in enumerate(self.neurons):
             if not neuron.ready_for_differentiation or len(neuron.neurites) >= neuron.max_number_of_neurites:
                 continue
-
             # Decide whether to create a new neurite or extend an existing one
             if neuron.neurites:
                 neuron.create_secondary_neurite()
@@ -147,8 +152,6 @@ class Container:
                 neurite.create_neurite_representation(self.animator)
                 neighbors = self.grid.get_close_objects(neurite.distal_point)
                 neighbor_ok = [False for _ in neighbors]
-                self.update_drawings()
-                time.sleep(0.5)
 
                 while not all(neighbor_ok):
                     for j, neighbor in enumerate(neighbors):
@@ -179,20 +182,18 @@ class Container:
                         else:
                             distance = np.linalg.norm(neurite.distal_point - neighbor.position)
                             if distance >= 8:
-                                self.update_drawings()
                                 neighbor_ok[j] = True
                             else:
                                 unit_vector = neurite.spring_axis / np.linalg.norm(neurite.spring_axis)
                                 point = neighbor.position - unit_vector * 8.5
                                 if np.linalg.norm(neurite.proximal_point - point) > 5.0:
                                     neurite.move_distal_point(point)
-                                    self.update_drawings()
                                     neighbor_ok[j] = True
 
                         if not neighbor_ok[j]:
                             new_vector = get_random_unit_vector(two_dimensions=True)
                             new_vector *= neurite.mechanics.default_length
-                            neurite.move_distal_point(neurite.distal_point + new_vector)
+                            neurite.move_distal_point(neurite.proximal_point + new_vector)
                             break
 
             else:
