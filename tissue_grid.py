@@ -15,19 +15,20 @@ from neurorosettes import utilities
 
 def create_tissue() -> list:
     """Returns a list of randomly distributed positions for a given number of cells"""
-    coordinates = [np.array([x + 8 * (i % 2), y, 0])
-                   for x in range(-50, 51, 17)
-                   for i, y in enumerate(range(-30, 31, 15))]
+    coordinates = [np.array([x + 8 * (i % 2), y, y])
+                   for x in range(-90, 91, 30)
+                   for i, y in enumerate(range(-50, 51, 25))]
     return coordinates
 
 
 # Define time variables
 timestep = 0.1
-total_time = 20
+total_time = 100
 pb = utilities.get_progress_bar(total_time, timestep)
 
 # Initialize simulation objects
 container = Container(timestep=timestep,
+                      simulation_2d=False,
                       viscosity=7.96,
                       grid=[-160, 160, 20])
 
@@ -35,8 +36,8 @@ for position in create_tissue():
     # Populate environment with cells
     neuron = Neuron()
     neuron.create_cell(coordinates=np.array(position))
-    neuron.set_outgrowth_axis(utilities.get_random_unit_vector(two_dimensions=True))
-    neuron.clocks.set_clocks(0.03, 0.0001, 0.015)
+    neuron.set_outgrowth_axis(utilities.get_random_unit_vector())
+    neuron.clocks.set_clocks(0.003, 0.0001, 0.002)
     container.register_neuron(neuron)
 
 container.animator.plotter.show(resetcam=False, interactive=False)

@@ -40,14 +40,14 @@ class Animator:
         self.set_camera()
 
     def add_grid(self, x_grid, y_grid):
-        self.plotter += Grid(sx=x_grid, sy=y_grid)
+        self.plotter += Grid(sx=x_grid, sy=y_grid, c='lightgrey')
 
     def set_camera(self):
         self.plotter.camera.SetPosition([0., 0., 400.])
-        self.plotter.camera.SetFocalPoint([0., 0., 0.])
-        self.plotter.camera.SetViewUp([0., 1., 0.])
-        self.plotter.camera.SetDistance(200.)
-        self.plotter.camera.SetClippingRange([180., 220.])
+        #self.plotter.camera.SetFocalPoint([0., 0., 0.])
+        #self.plotter.camera.SetViewUp([0., 1., 0.])
+        #self.plotter.camera.SetDistance(200.)
+        #self.plotter.camera.SetClippingRange([180., 220.])
 
     def draw_spring(self, base_point: np.ndarray, top_point: np.ndarray, radius: float):
         """Plots a spring and a sphere to represent a neurite in vedo."""
