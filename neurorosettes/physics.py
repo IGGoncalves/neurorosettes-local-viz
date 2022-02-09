@@ -183,7 +183,7 @@ class SphereCylinderInteractions:
         distance = np.linalg.norm(distance_vector)
 
         unit_vector = distance_vector / distance
-        force = self.repulsion.compute_repulsion(distance, sphere_radius, cylinder_radius)
+        force = self.repulsion.compute_repulsion(distance, sphere_radius*1.5, cylinder_radius*1.5)
 
         force *= unit_vector
         return force, fraction_to_mother
@@ -252,7 +252,7 @@ class CylinderCylinderInteractions:
         unit_vector = distance / distance_norm
         force = self.repulsion.compute_repulsion(distance_norm, cylinder_radius_1, cylinder_radius_2)
 
-        force -= self.adhesion.compute_adhesion(distance_norm, cylinder_radius_1*5, cylinder_radius_2)
+        force -= self.adhesion.compute_adhesion(distance_norm, cylinder_radius_1*1.5, cylinder_radius_2*1.5)
 
         force *= unit_vector
         return force, fraction_to_mother
@@ -265,7 +265,7 @@ default_sphere_mechanics = SphereMechanics(radius=8.0,
 
 default_cylinder_mechanics = CylinderMechanics(radius=0.5,
                                                spring_constant=5.0,
-                                               default_length=15.0,
+                                               default_length=10.0,
                                                max_length=25.0)
 
 # Default interactions

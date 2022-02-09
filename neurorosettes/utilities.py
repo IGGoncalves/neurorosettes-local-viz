@@ -53,13 +53,14 @@ class Animator:
         """Plots a spring and a sphere to represent a neurite in vedo."""
         cylinder = Spring(startPoint=base_point, endPoint=top_point, r=radius)
         top_sphere = Sphere(pos=top_point, r=radius, c='b3')
-        self.plotter += cylinder + top_sphere
+        self.plotter += cylinder
+        self.plotter += top_sphere
 
         return cylinder, top_sphere
 
     def draw_sphere(self, center: np.ndarray, radius: float, **kwargs) -> Sphere:
         """Plots a sphere to represent a soma cell in vedo."""
-        sphere = Sphere(pos=center, r=radius, **kwargs)
+        sphere = Sphere(pos=center, r=radius, alpha=0.4, **kwargs)
         self.plotter += sphere
 
         return sphere

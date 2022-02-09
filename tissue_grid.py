@@ -16,14 +16,14 @@ from neurorosettes import utilities
 def create_tissue() -> list:
     """Returns a list of randomly distributed positions for a given number of cells"""
     coordinates = [np.array([x + 8 * (i % 2), y, 0])
-                   for x in range(-60, 61, 17)
-                   for i, y in enumerate(range(-45, 46, 15))]
+                   for x in range(-50, 51, 17)
+                   for i, y in enumerate(range(-30, 31, 15))]
     return coordinates
 
 
 # Define time variables
 timestep = 0.1
-total_time = 400
+total_time = 20
 pb = utilities.get_progress_bar(total_time, timestep)
 
 # Initialize simulation objects
@@ -36,11 +36,10 @@ for position in create_tissue():
     neuron = Neuron()
     neuron.create_cell(coordinates=np.array(position))
     neuron.set_outgrowth_axis(utilities.get_random_unit_vector(two_dimensions=True))
-    neuron.clocks.set_clocks(0.005, 0.0001, 0.01)
+    neuron.clocks.set_clocks(0.03, 0.0001, 0.015)
     container.register_neuron(neuron)
 
 container.animator.plotter.show(resetcam=False, interactive=False)
-time.sleep(5)
 
 # Run and plot simulation
 for i, t in enumerate(pb.range()):
@@ -54,5 +53,4 @@ for i, t in enumerate(pb.range()):
     #    vedo.io.screenshot(f"{str(i).zfill(5)}.png")
     pb.print()
 
-vedo.io.screenshot(f"differentiation_on_7_proliferation_on.png")
-container.animator.plotter.close()
+container.animator.plotter.show(interactive=True)

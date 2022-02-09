@@ -146,12 +146,6 @@ class Neurite:
 
     def get_neurite_neighbor_force(self, neighbor: "Neurite", interaction: CylinderCylinderInteractions):
         """Returns the interaction force between two cells"""
-        # Compute the vector that connects the centers of the two cells
-        distance_vector = np.array(self.distal_point) - np.array(neighbor.distal_point)
-        norm = np.linalg.norm(distance_vector)
-        distance_vector_normalized = distance_vector / norm
-
-        # Calculate cell-cell adhesion forces
         force, fraction = interaction.compute_interactions(self.mechanics.radius,
                                                            self.proximal_point, self.distal_point,
                                                            neighbor.mechanics.radius,

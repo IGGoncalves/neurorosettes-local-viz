@@ -47,15 +47,20 @@ for n in range(20):
 
     neuron = Neuron()
     neuron.create_cell(coordinates=np.array([25.0, 32.0, 0.0]))
+    neuron.set_outgrowth_axis(utilities.get_random_unit_vector(two_dimensions=True))
+    neuron.clocks.set_clocks(0.0000001, 0.0000001, 0.1)
     container.register_neuron(neuron)
 
     neuron = Neuron()
     neuron.create_cell(coordinates=np.array([7.0, 42.0, 0.0]))
+    neuron.set_outgrowth_axis(utilities.get_random_unit_vector(two_dimensions=True))
+    neuron.clocks.set_clocks(0.0000001, 0.0000001, 0.1)
     container.register_neuron(neuron)
 
     neuron = Neuron()
     neuron.create_cell(coordinates=np.array([10.0, 20.0, 0.0]))
-    neuron.set_outgrowth_axis(np.array([-0.8, -0.4, 0.0]))
+    neuron.set_outgrowth_axis(utilities.get_random_unit_vector(two_dimensions=True))
+    neuron.clocks.set_clocks(0.0000001, 0.0000001, 0.1)
     container.register_neuron(neuron)
 
     container.animator.plotter.show(resetcam=False, interactive=False)

@@ -6,7 +6,7 @@ from dataclasses import dataclass, field
 import numpy as np
 
 from neurorosettes.physics import SphereSphereInteractions, SphereCylinderInteractions, default_potentials_repulsion, \
-    CylinderCylinderInteractions, default_potentials_adhesion
+    CylinderCylinderInteractions, default_potentials_adhesion, PotentialsRepulsion
 from neurorosettes.subcellular import CellBody, Neurite
 from neurorosettes.neurons import Neuron
 from neurorosettes.utilities import Animator, get_random_unit_vector
@@ -98,7 +98,8 @@ class Container:
         self.timestep = timestep
         self.sphere_int = SphereSphereInteractions(default_potentials_adhesion,
                                                    default_potentials_repulsion)
-        self.sphere_cylinder_int = SphereCylinderInteractions(default_potentials_repulsion)
+        self.sphere_cylinder_int = SphereCylinderInteractions(PotentialsRepulsion(repulsion_coefficient=200.0,
+                                                                                  smoothness_factor=1))
         self.cylinder_int = CylinderCylinderInteractions(default_potentials_adhesion,
                                                          default_potentials_repulsion)
         self.viscosity = viscosity
@@ -171,8 +172,8 @@ class Container:
                                 neighbor_ok[j] = True
 
                             else:
-                                new_point = - point + neurite.spring_axis * 0.05
-                                new_length = np.linalg.norm(neurite.proximal_point + new_point)
+                                new_point = point - neurite.spring_axis * 0.05
+                                new_length = np.linalg.norm(neurite.proximal_point - new_point)
 
                                 if new_length > 5.0:
                                     neurite.move_distal_point(new_point)
@@ -217,8 +218,8 @@ class Container:
                                 neighbor_ok[j] = True
 
                             else:
-                                new_point = - point + neurite.spring_axis * 0.05
-                                new_length = np.linalg.norm(neurite.proximal_point + new_point)
+                                new_point = point - neurite.spring_axis * 0.05
+                                new_length = np.linalg.norm(neurite.proximal_point - new_point)
 
                                 if new_length > 5.0:
                                     neurite.move_distal_point(new_point)
@@ -247,7 +248,7 @@ class Container:
             self.grid.register_neurite(neurite)
 
             # Increase the differentiation grade and reset the differentiation signal
-            neuron.clocks.differentiation_clock.increase_differentiation_grade()
+            neuron.clocks.differentiation_clock.differentiation_signal = False
 
     def kill(self) -> None:
         """Checks for neurons that are flagged for death and removes them from the container"""
@@ -321,7 +322,7 @@ class Container:
 
                     # Transmit the force from cell to proximal part of the neurite
                     if j > 0:
-                        neuron.neurites[j-1].force_from_daughter -= cell_force * (1 - fraction)
+                        neuron.neurites[j - 1].force_from_daughter -= cell_force * (1 - fraction)
                     else:
                         neuron.cell.force_from_daughter -= cell_force * (1 - fraction)
 
@@ -336,7 +337,7 @@ class Container:
 
                     # Transmit the force from cell to proximal part of the neurite
                     if j > 0:
-                        neuron.neurites[j-1].force_from_daughter -= neurite_force * (1 - fraction)
+                        neuron.neurites[j - 1].force_from_daughter -= neurite_force * (1 - fraction)
                     else:
                         neuron.cell.force_from_daughter -= neurite_force * (1 - fraction)
 
@@ -344,7 +345,7 @@ class Container:
                 self.neurons[i].neurites[j].displacement = displacement
 
                 if j > 0:
-                    neuron.neurites[j-1].force_from_daughter -= force_spring
+                    neuron.neurites[j - 1].force_from_daughter -= force_spring
                 else:
                     neuron.cell.force_from_daughter -= force_spring
 
