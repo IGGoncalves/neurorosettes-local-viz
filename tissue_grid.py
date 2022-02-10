@@ -1,15 +1,9 @@
 """Script to simulate the formation of a neuroblastoma rosette by cells with radial neurites (2D)"""
-import glob
-import os
-import time
-from PIL import Image
-
 import numpy as np
 import vedo
 
 from neurorosettes.neurons import Neuron
 from neurorosettes.simulation import Container
-from neurorosettes.physics import default_sphere_interactions
 from neurorosettes import utilities
 
 
@@ -26,6 +20,8 @@ timestep = 0.1
 total_time = 100
 pb = utilities.get_progress_bar(total_time, timestep)
 
+clock = vedo.Text2D("Simulation step: 0", pos="top right", c="black")
+
 # Initialize simulation objects
 container = Container(timestep=timestep,
                       simulation_2d=False,
@@ -40,18 +36,22 @@ for position in create_tissue():
     neuron.clocks.set_clocks(0.003, 0.0001, 0.002)
     container.register_neuron(neuron)
 
+container.animator.plotter += clock
 container.animator.plotter.show(resetcam=False, interactive=False)
 
 # Run and plot simulation
-for i, t in enumerate(pb.range()):
-    container.advance_cycles()
-    container.kill()
-    container.differentiate()
-    container.divide()
+for t in pb.range():
+    if t % 5 == 0:
+        container.advance_cycles()
+        container.kill()
+        container.differentiate()
+        container.divide()
     container.update_cell_positions()
     container.update_drawings()
-    #if i % 1000:
-    #    vedo.io.screenshot(f"{str(i).zfill(5)}.png")
+
+    if t % 50 == 0:
+        clock.text(f"Simulation step: {t}")
+
     pb.print()
 
 container.animator.plotter.show(interactive=True)
