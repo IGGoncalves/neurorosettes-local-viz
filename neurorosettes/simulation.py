@@ -24,61 +24,63 @@ class UniformGrid:
     def __post_init__(self) -> None:
         self.grid_values = np.arange(self.min, self.max, self.step)
         self.idx_values = np.arange(self.grid_values.shape[0])
-        self.grid = np.empty(shape=[self.grid_values.shape[0], self.grid_values.shape[0]], dtype=object)
-        self.grid[...] = [[[] for _ in range(self.grid.shape[0])] for _ in range(self.grid.shape[1])]
+
+        self.grid = np.empty(shape=[self.grid_values.shape[0],
+                                    self.grid_values.shape[0],
+                                    self.grid_values.shape[0]], dtype=object)
+
+        self.grid[...] = [[[[] for _ in range(self.grid.shape[0])]
+                           for _ in range(self.grid.shape[1])]
+                          for _ in range(self.grid.shape[2])]
 
     @property
     def representation_grid_values(self) -> np.ndarray:
         return np.arange(self.min, self.max + 1, self.step)
 
-    def interpolate_idx(self, position: np.ndarray) -> Tuple[int, int]:
+    def interpolate_idx(self, position: np.ndarray) -> Tuple[int, int, int]:
         idxx = np.floor(np.interp(position[0], self.grid_values, self.idx_values)).astype(int)
         idxy = np.floor(np.interp(position[1], self.grid_values, self.idx_values)).astype(int)
+        idxz = np.floor(np.interp(position[2], self.grid_values, self.idx_values)).astype(int)
 
-        return idxx, idxy
+        return idxx, idxy, idxz
 
     def register_cell(self, cell: CellBody) -> None:
-        idxx, idxy = self.interpolate_idx(cell.position)
-        self.grid[idxy][idxx].append(cell)
+        idxx, idxy, idxz = self.interpolate_idx(cell.position)
+        self.grid[idxz][idxy][idxx].append(cell)
 
     def register_neurite(self, neurite: Neurite) -> None:
-        idxx, idxy = self.interpolate_idx(neurite.distal_point)
-        self.grid[idxy][idxx].append(neurite)
+        idxx, idxy, idxz = self.interpolate_idx(neurite.distal_point)
+        self.grid[idxz][idxy][idxx].append(neurite)
 
     def remove_cell(self, cell: CellBody) -> None:
-        idxx, idxy = self.interpolate_idx(cell.position)
-        self.grid[idxy][idxx].remove(cell)
+        idxx, idxy, idxz = self.interpolate_idx(cell.position)
+        self.grid[idxz][idxy][idxx].remove(cell)
 
     def remove_neurite(self, neurite: Neurite) -> None:
-        idxx, idxy = self.interpolate_idx(neurite.distal_point)
-        self.grid[idxy][idxx].remove(neurite)
+        idxx, idxy, idxz = self.interpolate_idx(neurite.distal_point)
+        self.grid[idxz][idxy][idxx].remove(neurite)
 
-    def get_objects_in_voxel(self, idxx, idxy) -> List[Union[CellBody, Neurite]]:
-        return self.grid[idxy][idxx]
+    def get_objects_in_voxel(self, idxx: int, idxy: int, idxz: int) -> List[Union[CellBody, Neurite]]:
+        return self.grid[idxz][idxy][idxx]
 
     def get_close_objects(self, position: np.ndarray) -> List[Union[CellBody, Neurite]]:
-        idxx, idxy = self.interpolate_idx(position)
-        neighbors = list(self.get_objects_in_voxel(idxx, idxy))
+        idxx, idxy, idxz = self.interpolate_idx(position)
+        neighbors = list()
 
-        if idxy > 0:
-            neighbors.extend(self.get_objects_in_voxel(idxx, idxy - 1))
+        x_neighbors = [idxx + value for value in [-1, 0, 1]
+                       if 0 < idxx + value < len(self.idx_values) - 1]
 
-        if idxy < len(self.idx_values) - 1:
-            neighbors.extend(self.get_objects_in_voxel(idxx, idxy + 1))
+        y_neighbors = [idxy + value for value in [-1, 0, 1]
+                       if 0 < idxy + value < len(self.idx_values) - 1]
 
-        if idxx > 0:
-            neighbors.extend(self.get_objects_in_voxel(idxx - 1, idxy))
-            if idxy > 0:
-                neighbors.extend(self.get_objects_in_voxel(idxx - 1, idxy - 1))
-            if idxy < len(self.idx_values) - 1:
-                neighbors.extend(self.get_objects_in_voxel(idxx - 1, idxy + 1))
+        z_neighbors = [idxz + value for value in [-1, 0, 1]
+                       if 0 < idxz + value < len(self.idx_values) - 1]
 
-        if idxx < len(self.idx_values) - 1:
-            neighbors.extend(self.get_objects_in_voxel(idxx + 1, idxy))
-            if idxy > 0:
-                neighbors.extend(self.get_objects_in_voxel(idxx + 1, idxy - 1))
-            if idxy < len(self.idx_values) - 1:
-                neighbors.extend(self.get_objects_in_voxel(idxx + 1, idxy + 1))
+        for z in z_neighbors:
+            for y in y_neighbors:
+                for x in x_neighbors:
+                    print(f"CHECKING {x}, {y}, {z}", self.get_objects_in_voxel(x, y, z))
+                    neighbors.extend(self.get_objects_in_voxel(x, y, z))
 
         return neighbors
 
@@ -110,7 +112,7 @@ class Container:
         self.animator = Animator()
         self.grid = UniformGrid(*grid)
 
-        #self.animator.add_grid(self.grid.grid_values, self.grid.grid_values)
+        self.animator.add_grid(self.grid.grid_values, self.grid.grid_values)
 
     def register_neuron(self, neuron: Neuron, color="red") -> None:
         """Registers a neuron and its representation into the container"""
@@ -284,20 +286,38 @@ class Container:
         for neuron in self.neurons:
             if not neuron.ready_for_division:
                 continue
+
+            cell_neighbors = [neighbor
+                              for neighbor in self.grid.get_close_objects(neuron.cell.position)
+                              if isinstance(neighbor, CellBody)]
+
+            if len(cell_neighbors) >= 5:
+                print("HERE NEIGHBORS")
+                print(self.grid.get_close_objects(neuron.cell.position))
+                print("MANY NEIGHBORS")
+                neuron.cell.sphere.c("blue")
+                for neighbor in cell_neighbors:
+                    print(neighbor.position)
+                    if neighbor is neuron.cell:
+                        continue
+                    neighbor.sphere.c("yellow")
+
+                self.update_drawings()
+                time.sleep(5)
+                for neighbor in cell_neighbors:
+                    neighbor.sphere.c("red")
+                self.update_drawings()
+                neuron.clocks.cycle_clock.division_signal = False
+                neuron.clocks.cycle_clock.cycle_block = True
+                continue
+
             # Create a new neuron next to the old one
             position = neuron.cell.position + get_random_unit_vector(two_dimensions=self.simulation_2d) * neuron.cell_radius * 2.1
-            color = neuron.cell.sphere.color()
-            new_neuron = self.create_new_neuron(position, color)
+            new_neuron = self.create_new_neuron(position)
             new_neuron.set_clocks_from_mother(neuron)
             # Update the cell cycle state of the old neuron to arrest
             neuron.clocks.cycle_clock.remove_proliferation_flag()
-            self.grid.register_cell(new_neuron.cell)
-
-    @staticmethod
-    def get_nearby_cells(neurons: List[Neuron]) -> List[CellBody]:
-        """Returns the cells that are near to the passed cell"""
-        # TODO: Build a grid to avoid long distance interactions
-        return [neuron.cell for neuron in neurons]
+            self.update_drawings()
 
     def get_displacement_from_force(self, force: np.ndarray) -> np.ndarray:
         """Returns a velocity from the passed force"""

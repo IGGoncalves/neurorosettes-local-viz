@@ -41,9 +41,10 @@ class Animator:
 
     def add_grid(self, x_grid, y_grid):
         self.plotter += Grid(sx=x_grid, sy=y_grid, c='lightgrey')
+        #self.plotter += Grid(sx=x_grid, sy=y_grid, c='lightgrey', normal=(0, 1, 0))
 
     def set_camera(self):
-        self.plotter.camera.SetPosition([0., 0., 400.])
+        self.plotter.camera.SetPosition([0., 0., 500.])
         #self.plotter.camera.SetFocalPoint([0., 0., 0.])
         #self.plotter.camera.SetViewUp([0., 1., 0.])
         #self.plotter.camera.SetDistance(200.)
@@ -60,7 +61,7 @@ class Animator:
 
     def draw_sphere(self, center: np.ndarray, radius: float, **kwargs) -> Sphere:
         """Plots a sphere to represent a soma cell in vedo."""
-        sphere = Sphere(pos=center, r=radius, alpha=0.4, **kwargs)
+        sphere = Sphere(pos=center, r=radius, alpha=0.9, **kwargs)
         self.plotter += sphere
 
         return sphere
