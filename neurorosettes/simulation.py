@@ -79,7 +79,6 @@ class UniformGrid:
         for z in z_neighbors:
             for y in y_neighbors:
                 for x in x_neighbors:
-                    print(f"CHECKING {x}, {y}, {z}", self.get_objects_in_voxel(x, y, z))
                     neighbors.extend(self.get_objects_in_voxel(x, y, z))
 
         return neighbors
@@ -287,32 +286,9 @@ class Container:
             if not neuron.ready_for_division:
                 continue
 
-            cell_neighbors = [neighbor
-                              for neighbor in self.grid.get_close_objects(neuron.cell.position)
-                              if isinstance(neighbor, CellBody)]
-
-            if len(cell_neighbors) >= 5:
-                print("HERE NEIGHBORS")
-                print(self.grid.get_close_objects(neuron.cell.position))
-                print("MANY NEIGHBORS")
-                neuron.cell.sphere.c("blue")
-                for neighbor in cell_neighbors:
-                    print(neighbor.position)
-                    if neighbor is neuron.cell:
-                        continue
-                    neighbor.sphere.c("yellow")
-
-                self.update_drawings()
-                time.sleep(5)
-                for neighbor in cell_neighbors:
-                    neighbor.sphere.c("red")
-                self.update_drawings()
-                neuron.clocks.cycle_clock.division_signal = False
-                neuron.clocks.cycle_clock.cycle_block = True
-                continue
-
             # Create a new neuron next to the old one
-            position = neuron.cell.position + get_random_unit_vector(two_dimensions=self.simulation_2d) * neuron.cell_radius * 2.1
+            position = get_random_unit_vector(two_dimensions=self.simulation_2d) * neuron.cell_radius * 2.05
+            position += neuron.cell.position
             new_neuron = self.create_new_neuron(position)
             new_neuron.set_clocks_from_mother(neuron)
             # Update the cell cycle state of the old neuron to arrest
