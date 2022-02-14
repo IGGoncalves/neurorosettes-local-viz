@@ -61,7 +61,7 @@ class Animator:
 
     def draw_sphere(self, center: np.ndarray, radius: float, **kwargs) -> Sphere:
         """Plots a sphere to represent a soma cell in vedo."""
-        sphere = Sphere(pos=center, r=radius, alpha=0.9, **kwargs)
+        sphere = Sphere(pos=center, r=radius, alpha=1.0, **kwargs)
         self.plotter += sphere
 
         return sphere

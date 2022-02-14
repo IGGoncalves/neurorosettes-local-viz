@@ -101,6 +101,7 @@ class Container:
         self.simulation_2d = simulation_2d
         self.sphere_int = SphereSphereInteractions(default_potentials_adhesion,
                                                    default_potentials_repulsion)
+
         self.sphere_cylinder_int = SphereCylinderInteractions(PotentialsRepulsion(repulsion_coefficient=200.0,
                                                                                   smoothness_factor=1))
         self.cylinder_int = CylinderCylinderInteractions(default_potentials_adhesion,
@@ -111,7 +112,8 @@ class Container:
         self.animator = Animator()
         self.grid = UniformGrid(*grid)
 
-        self.animator.add_grid(self.grid.grid_values, self.grid.grid_values)
+        if self.simulation_2d:
+            self.animator.add_grid(self.grid.grid_values, self.grid.grid_values)
 
     def register_neuron(self, neuron: Neuron, color="red") -> None:
         """Registers a neuron and its representation into the container"""
