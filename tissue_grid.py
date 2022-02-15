@@ -5,6 +5,7 @@ import vedo
 from neurorosettes.neurons import Neuron
 from neurorosettes.simulation import Container
 from neurorosettes import utilities
+from neurorosettes.grid import OneLevelDensityCheck
 
 
 def create_tissue() -> list:
@@ -24,14 +25,15 @@ clock = vedo.Text2D("Simulation step: 0", pos="top right", c="black")
 container = Container(timestep=timestep,
                       simulation_2d=False,
                       viscosity=7.96,
-                      grid=[-160, 160, 20])
+                      grid=[-160, 160, 20],
+                      density_check=OneLevelDensityCheck(max_neighbors=19))
 
 for position in create_tissue():
     # Populate environment with cells
     neuron = Neuron()
     neuron.create_cell(coordinates=np.array(position))
     neuron.set_outgrowth_axis(utilities.get_random_unit_vector(two_dimensions=False))
-    neuron.clocks.set_clocks(0.00008, 0.0001, 0.002)
+    neuron.clocks.set_clocks(0.08, 0.0001, 0.002)
     container.register_neuron(neuron)
 
 container.animator.plotter += clock

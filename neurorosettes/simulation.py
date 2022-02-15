@@ -1,7 +1,6 @@
 """This module deals with the neuron structure and functions"""
 import time
-from typing import List, Tuple, Union
-from dataclasses import dataclass, field
+from typing import List, Optional
 
 import numpy as np
 
@@ -10,78 +9,7 @@ from neurorosettes.physics import SphereSphereInteractions, SphereCylinderIntera
 from neurorosettes.subcellular import CellBody, Neurite
 from neurorosettes.neurons import Neuron
 from neurorosettes.utilities import Animator, get_random_unit_vector
-
-
-@dataclass
-class UniformGrid:
-    min: float
-    max: float
-    step: float
-    grid_values: np.ndarray = field(init=False)
-    idx_values: np.ndarray = field(init=False)
-    grid: np.ndarray = field(init=False)
-
-    def __post_init__(self) -> None:
-        self.grid_values = np.arange(self.min, self.max, self.step)
-        self.idx_values = np.arange(self.grid_values.shape[0])
-
-        self.grid = np.empty(shape=[self.grid_values.shape[0],
-                                    self.grid_values.shape[0],
-                                    self.grid_values.shape[0]], dtype=object)
-
-        self.grid[...] = [[[[] for _ in range(self.grid.shape[0])]
-                           for _ in range(self.grid.shape[1])]
-                          for _ in range(self.grid.shape[2])]
-
-    @property
-    def representation_grid_values(self) -> np.ndarray:
-        return np.arange(self.min, self.max + 1, self.step)
-
-    def interpolate_idx(self, position: np.ndarray) -> Tuple[int, int, int]:
-        idxx = np.floor(np.interp(position[0], self.grid_values, self.idx_values)).astype(int)
-        idxy = np.floor(np.interp(position[1], self.grid_values, self.idx_values)).astype(int)
-        idxz = np.floor(np.interp(position[2], self.grid_values, self.idx_values)).astype(int)
-
-        return idxx, idxy, idxz
-
-    def register_cell(self, cell: CellBody) -> None:
-        idxx, idxy, idxz = self.interpolate_idx(cell.position)
-        self.grid[idxz][idxy][idxx].append(cell)
-
-    def register_neurite(self, neurite: Neurite) -> None:
-        idxx, idxy, idxz = self.interpolate_idx(neurite.distal_point)
-        self.grid[idxz][idxy][idxx].append(neurite)
-
-    def remove_cell(self, cell: CellBody) -> None:
-        idxx, idxy, idxz = self.interpolate_idx(cell.position)
-        self.grid[idxz][idxy][idxx].remove(cell)
-
-    def remove_neurite(self, neurite: Neurite) -> None:
-        idxx, idxy, idxz = self.interpolate_idx(neurite.distal_point)
-        self.grid[idxz][idxy][idxx].remove(neurite)
-
-    def get_objects_in_voxel(self, idxx: int, idxy: int, idxz: int) -> List[Union[CellBody, Neurite]]:
-        return self.grid[idxz][idxy][idxx]
-
-    def get_close_objects(self, position: np.ndarray) -> List[Union[CellBody, Neurite]]:
-        idxx, idxy, idxz = self.interpolate_idx(position)
-        neighbors = list()
-
-        x_neighbors = [idxx + value for value in [-1, 0, 1]
-                       if 0 < idxx + value < len(self.idx_values) - 1]
-
-        y_neighbors = [idxy + value for value in [-1, 0, 1]
-                       if 0 < idxy + value < len(self.idx_values) - 1]
-
-        z_neighbors = [idxz + value for value in [-1, 0, 1]
-                       if 0 < idxz + value < len(self.idx_values) - 1]
-
-        for z in z_neighbors:
-            for y in y_neighbors:
-                for x in x_neighbors:
-                    neighbors.extend(self.get_objects_in_voxel(x, y, z))
-
-        return neighbors
+from neurorosettes.grid import UniformGrid, CellDensityCheck
 
 
 class Container:
@@ -95,7 +23,8 @@ class Container:
     animator: Animator
     grid: UniformGrid
 
-    def __init__(self, timestep: float, simulation_2d: bool, viscosity: float, grid: List[float]):
+    def __init__(self, timestep: float, simulation_2d: bool, viscosity: float,
+                 grid: List[float], density_check: Optional[CellDensityCheck] = None) -> None:
 
         self.timestep = timestep
         self.simulation_2d = simulation_2d
@@ -111,6 +40,7 @@ class Container:
         self.neurons = []
         self.animator = Animator()
         self.grid = UniformGrid(*grid)
+        self.density_check = density_check
 
         if self.simulation_2d:
             self.animator.add_grid(self.grid.grid_values, self.grid.grid_values)
@@ -157,7 +87,6 @@ class Container:
             if neuron.neurites:
                 neuron.create_secondary_neurite()
                 neurite = neuron.neurites[-1]
-                #neurite.move_distal_point(neurite.proximal_point - neurite.spring_axis*0.99999999)
                 neurite.create_neurite_representation(self.animator)
                 neighbors = self.grid.get_close_objects(neurite.distal_point)
                 neighbor_ok = [False for _ in neighbors]
@@ -288,14 +217,28 @@ class Container:
             if not neuron.ready_for_division:
                 continue
 
-            # Create a new neuron next to the old one
-            position = get_random_unit_vector(two_dimensions=self.simulation_2d) * neuron.cell_radius * 2.05
-            position += neuron.cell.position
-            new_neuron = self.create_new_neuron(position)
-            new_neuron.set_clocks_from_mother(neuron)
-            # Update the cell cycle state of the old neuron to arrest
-            neuron.clocks.cycle_clock.remove_proliferation_flag()
-            self.update_drawings()
+            if self.density_check:
+                if self.density_check.check_max_density(neuron.cell, self.grid):
+                    neuron.clocks.cycle_clock.remove_proliferation_flag()
+                    neuron.clocks.cycle_clock.block_proliferation()
+                else:
+                    # Create a new neuron next to the old one
+                    position = get_random_unit_vector(two_dimensions=self.simulation_2d) * neuron.cell_radius * 2.05
+                    position += neuron.cell.position
+                    new_neuron = self.create_new_neuron(position)
+                    new_neuron.set_clocks_from_mother(neuron)
+                    # Update the cell cycle state of the old neuron to arrest
+                    neuron.clocks.cycle_clock.remove_proliferation_flag()
+                    self.update_drawings()
+            else:
+                # Create a new neuron next to the old one
+                position = get_random_unit_vector(two_dimensions=self.simulation_2d) * neuron.cell_radius * 2.05
+                position += neuron.cell.position
+                new_neuron = self.create_new_neuron(position)
+                new_neuron.set_clocks_from_mother(neuron)
+                # Update the cell cycle state of the old neuron to arrest
+                neuron.clocks.cycle_clock.remove_proliferation_flag()
+                self.update_drawings()
 
     def get_displacement_from_force(self, force: np.ndarray) -> np.ndarray:
         """Returns a velocity from the passed force"""
