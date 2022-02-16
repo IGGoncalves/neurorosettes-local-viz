@@ -4,8 +4,7 @@ from typing import List, Optional
 
 import numpy as np
 
-from neurorosettes.physics import SphereSphereInteractions, SphereCylinderInteractions, default_potentials_repulsion, \
-    CylinderCylinderInteractions, default_potentials_adhesion, PotentialsRepulsion
+from neurorosettes.physics import SphereInteractions, SphereCylinderInteractions, CylinderInteractions
 from neurorosettes.subcellular import CellBody, Neurite
 from neurorosettes.neurons import Neuron
 from neurorosettes.utilities import Animator, get_random_unit_vector
@@ -16,26 +15,22 @@ class Container:
     """Represents the environment where neurons exist"""
     timestep: float
     simulation_2d: bool
-    sphere_int: SphereSphereInteractions
+    sphere_int: SphereInteractions
     sphere_cylinder_int: SphereCylinderInteractions
-    cylinder_int: CylinderCylinderInteractions
+    cylinder_int: CylinderInteractions
     neurons: List[Neuron]
     animator: Animator
     grid: UniformGrid
 
-    def __init__(self, timestep: float, simulation_2d: bool, viscosity: float,
-                 grid: List[float], density_check: Optional[CellDensityCheck] = None) -> None:
+    def __init__(self, timestep: float, simulation_2d: bool, sphere_int: SphereInteractions,
+                 sphere_cylinder_int: SphereCylinderInteractions, cylinder_int: CylinderInteractions,
+                 viscosity: float, grid: List[float], density_check: Optional[CellDensityCheck] = None) -> None:
 
         self.timestep = timestep
         self.simulation_2d = simulation_2d
-        self.sphere_int = SphereSphereInteractions(default_potentials_adhesion,
-                                                   default_potentials_repulsion)
-
-        self.sphere_cylinder_int = SphereCylinderInteractions(PotentialsRepulsion(repulsion_coefficient=200.0,
-                                                                                  smoothness_factor=1))
-        self.cylinder_int = CylinderCylinderInteractions(default_potentials_adhesion,
-                                                         PotentialsRepulsion(repulsion_coefficient=200.0,
-                                                                             smoothness_factor=1))
+        self.sphere_int = sphere_int
+        self.sphere_cylinder_int = sphere_cylinder_int
+        self.cylinder_int = cylinder_int
         self.viscosity = viscosity
         self.neurons = []
         self.animator = Animator()

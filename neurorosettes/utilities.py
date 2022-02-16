@@ -34,7 +34,7 @@ class RectangularTissue(Tissue):
 
 
 class HexagonalTissue(Tissue):
-    def __init__(self, size: float, spacing: float = 16.0, use_2d: bool = True):
+    def __init__(self, size: float, spacing: float = 20.0, use_2d: bool = True):
         super().__init__(use_2d)
         self.size = size
         self.spacing = spacing
@@ -42,7 +42,7 @@ class HexagonalTissue(Tissue):
     def get_coordinates(self) -> np.ndarray:
         """Returns the initial cell coordinates according to the tissue geometry"""
         if self.use_2d:
-            return np.array([[x + 8 * (i % 2), y, 0]
+            return np.array([[x + 12 * (i % 2), y, 0]
                              for x in np.arange(-self.size / 2, self.size / 2, self.spacing)
                              for i, y in enumerate(np.arange(-self.size / 2, self.size / 2, self.spacing))])
 

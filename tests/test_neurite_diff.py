@@ -8,7 +8,7 @@ from neurorosettes.neurons import Neuron
 from neurorosettes.subcellular import Neurite
 from neurorosettes.simulation import Container
 from neurorosettes import utilities
-from neurorosettes.physics import default_potentials_repulsion, CylinderCylinderInteractions, default_potentials_adhesion
+from neurorosettes.physics import default_potentials_repulsion, CylinderInteractions, default_potentials_adhesion
 
 text_align = "center"
 text_font = "Courier"

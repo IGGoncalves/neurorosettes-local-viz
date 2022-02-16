@@ -4,7 +4,7 @@ from typing import Optional, Tuple
 import numpy as np
 from vedo import Sphere, Spring
 
-from neurorosettes.physics import SphereSphereInteractions, SphereCylinderInteractions, SphereMechanics, CylinderMechanics, CylinderCylinderInteractions
+from neurorosettes.physics import SphereInteractions, SphereCylinderInteractions, SphereMechanics, CylinderMechanics, CylinderInteractions
 from neurorosettes.utilities import Animator
 
 
@@ -43,7 +43,7 @@ class CellBody:
         """Updates the sphere representation of the cell"""
         self.sphere.pos(self.position)
 
-    def get_neighbor_force(self, neighbor: "CellBody", interaction: SphereSphereInteractions) -> np.ndarray:
+    def get_neighbor_force(self, neighbor: "CellBody", interaction: SphereInteractions) -> np.ndarray:
         """Returns the interaction force between two cells"""
         # Compute the vector that connects the centers of the two cells
         distance_vector = np.array(self.position) - np.array(neighbor.position)
@@ -144,7 +144,7 @@ class Neurite:
 
         return force, fraction
 
-    def get_neurite_neighbor_force(self, neighbor: "Neurite", interaction: CylinderCylinderInteractions):
+    def get_neurite_neighbor_force(self, neighbor: "Neurite", interaction: CylinderInteractions):
         """Returns the interaction force between two cells"""
         force, fraction = interaction.compute_interactions(self.mechanics.radius,
                                                            self.proximal_point, self.distal_point,

@@ -2,36 +2,66 @@
 import numpy as np
 import vedo
 
-from neurorosettes.neurons import Neuron
+from neurorosettes.physics import PotentialsFactory as PF
 from neurorosettes.simulation import Container
 from neurorosettes import utilities
 from neurorosettes.grid import OneLevelDensityCheck
 
-
-# Define time variables
+# Simulation time
 timestep = 0.1
 total_time = 1440
-pb = utilities.get_progress_bar(total_time, timestep)
 
-clock = vedo.Text2D("Simulation step: 0", pos="top right", c="black")
+# Tissue initial configuration
+tissue_size = 120.0
+tissue_geometry = utilities.HexagonalTissue(tissue_size)
+
+# Cell cycling
+proliferation_rate = 0.008
+death_rate = 0.0001
+differentiation_rate = 0.002
+
+# Physics
+# Cell-cell interactions
+sphere_sphere_adhesion = 4.0
+sphere_sphere_repulsion = 40.0
+smoothness_factor = 1.0
+sphere_sphere_interactions = PF.create_sphere_interactions(sphere_sphere_adhesion,
+                                                           sphere_sphere_repulsion,
+                                                           smoothness_factor)
+# Cell-neurite interactions
+sphere_cylinder_adhesion = 0.4
+sphere_cylinder_repulsion = 400.0
+sphere_cylinder_interactions = PF.create_sphere_cylinder_interactions(sphere_cylinder_repulsion,
+                                                                      smoothness_factor)
+
+# Neurite-neurite interaction
+cylinder_cylinder_adhesion = 40.0
+cylinder_cylinder_repulsion = 400.0
+cylinder_cylinder_interactions = PF.create_cylinder_interactions(cylinder_cylinder_adhesion,
+                                                                 cylinder_cylinder_repulsion,
+                                                                 smoothness_factor)
 
 # Initialize simulation objects
 container = Container(timestep=timestep,
-                      simulation_2d=False,
+                      simulation_2d=True,
+                      sphere_int=sphere_sphere_interactions,
+                      sphere_cylinder_int=sphere_cylinder_interactions,
+                      cylinder_int=cylinder_cylinder_interactions,
                       viscosity=7.96,
                       grid=[-160, 160, 20],
                       density_check=OneLevelDensityCheck(max_neighbors=19))
 
-for position in utilities.HexagonalTissue(size=80).get_coordinates():
+for position in tissue_geometry.get_coordinates():
     # Populate environment with cells
-    neuron = Neuron()
-    neuron.create_cell(coordinates=np.array(position))
-    neuron.set_outgrowth_axis(utilities.get_random_unit_vector(two_dimensions=False))
-    neuron.clocks.set_clocks(0.00008, 0.0001, 0.002)
-    container.register_neuron(neuron)
+    neuron = container.create_new_neuron(coordinates=np.array(position))
+    neuron.set_outgrowth_axis(utilities.get_random_unit_vector(two_dimensions=True))
+    neuron.clocks.set_clocks(proliferation_rate, death_rate, differentiation_rate)
 
+clock = vedo.Text2D("Simulation step: 0", pos="top right", c="black")
 container.animator.plotter += clock
+
 container.animator.plotter.show(resetcam=False, interactive=False)
+pb = utilities.get_progress_bar(total_time, timestep)
 
 # Run and plot simulation
 for t in pb.range():

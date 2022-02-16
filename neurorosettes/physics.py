@@ -132,7 +132,7 @@ class PotentialsAdhesion(Adhesion):
         return self.adhesion_coefficient * adhesion_component
 
 
-class SphereSphereInteractions:
+class SphereInteractions:
     def __init__(self, adhesion: Adhesion, repulsion: Repulsion):
         self.adhesion = adhesion
         self.repulsion = repulsion
@@ -188,7 +188,7 @@ class SphereCylinderInteractions:
         return force, fraction_to_mother
 
 
-class CylinderCylinderInteractions:
+class CylinderInteractions:
     def __init__(self, adhesion: Adhesion, repulsion: Repulsion) -> None:
         self.adhesion = adhesion
         self.repulsion = repulsion
@@ -268,12 +268,25 @@ default_cylinder_mechanics = CylinderMechanics(radius=0.5,
                                                default_length=10.0,
                                                max_length=25.0)
 
+
 # Default interactions
-default_potentials_adhesion = PotentialsAdhesion(adhesion_coefficient=4.0,
-                                                 smoothness_factor=1)
+class PotentialsFactory:
+    @staticmethod
+    def create_sphere_interactions(adhesion_coefficient, repulsion_coefficient, smoothness_factor):
+        adhesion = PotentialsAdhesion(adhesion_coefficient, smoothness_factor)
+        repulsion = PotentialsRepulsion(repulsion_coefficient, smoothness_factor)
 
-default_potentials_repulsion = PotentialsRepulsion(repulsion_coefficient=100.0,
-                                                   smoothness_factor=1)
+        return SphereInteractions(adhesion, repulsion)
 
-default_sphere_interactions = SphereSphereInteractions(default_potentials_adhesion,
-                                                       default_potentials_repulsion)
+    @staticmethod
+    def create_sphere_cylinder_interactions(repulsion_coefficient, smoothness_factor):
+        repulsion = PotentialsRepulsion(repulsion_coefficient, smoothness_factor)
+
+        return SphereCylinderInteractions(repulsion)
+
+    @staticmethod
+    def create_cylinder_interactions(adhesion_coefficient, repulsion_coefficient, smoothness_factor):
+        adhesion = PotentialsAdhesion(adhesion_coefficient, smoothness_factor)
+        repulsion = PotentialsRepulsion(repulsion_coefficient, smoothness_factor)
+
+        return SphereInteractions(adhesion, repulsion)
