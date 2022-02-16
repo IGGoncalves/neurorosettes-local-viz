@@ -1,13 +1,58 @@
+from abc import ABC, abstractmethod
+
 import numpy as np
 from vedo import Plotter, Sphere, Spring, ProgressBar, Grid
+
+
+class Tissue(ABC):
+    def __init__(self, use_2d: bool = True):
+        self.use_2d = use_2d
+
+    @abstractmethod
+    def get_coordinates(self) -> np.ndarray:
+        """Returns the initial cell coordinates according to the tissue geometry"""
+        pass
+
+
+class RectangularTissue(Tissue):
+    def __init__(self, size: float, spacing: float = 16.0, use_2d: bool = True):
+        super().__init__(use_2d)
+        self.size = size
+        self.spacing = spacing
+
+    def get_coordinates(self) -> np.ndarray:
+        """Returns the initial cell coordinates according to the tissue geometry"""
+        if self.use_2d:
+            return np.array([[x, y, 0]
+                             for x in np.arange(-self.size / 2, self.size / 2, self.spacing)
+                             for y in np.arange(-self.size / 2, self.size / 2, self.spacing)])
+
+        return np.array([[x, y, z]
+                         for x in np.arange(-self.size / 2, self.size / 2, self.spacing)
+                         for y in np.arange(-self.size / 2, self.size / 2, self.spacing)
+                         for z in np.arange(-self.size / 2, self.size / 2, self.spacing)])
+
+
+class HexagonalTissue(Tissue):
+    def __init__(self, size: float, spacing: float = 16.0, use_2d: bool = True):
+        super().__init__(use_2d)
+        self.size = size
+        self.spacing = spacing
+
+    def get_coordinates(self) -> np.ndarray:
+        """Returns the initial cell coordinates according to the tissue geometry"""
+        if self.use_2d:
+            return np.array([[x + 8 * (i % 2), y, 0]
+                             for x in np.arange(-self.size / 2, self.size / 2, self.spacing)
+                             for i, y in enumerate(np.arange(-self.size / 2, self.size / 2, self.spacing))])
 
 
 def get_random_position(scaling_factor: float) -> np.ndarray:
     """Returns the coordinates for a random position between -scaling_factor and scaling factor."""
 
-    return np.array([(np.random.random()-0.5)*scaling_factor,
-                     (np.random.random()-0.5)*scaling_factor,
-                     (np.random.random()-0.5)*scaling_factor])
+    return np.array([(np.random.random() - 0.5) * scaling_factor,
+                     (np.random.random() - 0.5) * scaling_factor,
+                     (np.random.random() - 0.5) * scaling_factor])
 
 
 def get_random_unit_vector(two_dimensions=False) -> np.ndarray:
@@ -41,14 +86,14 @@ class Animator:
 
     def add_grid(self, x_grid, y_grid):
         self.plotter += Grid(sx=x_grid, sy=y_grid, c='lightgrey')
-        #self.plotter += Grid(sx=x_grid, sy=y_grid, c='lightgrey', normal=(0, 1, 0))
+        # self.plotter += Grid(sx=x_grid, sy=y_grid, c='lightgrey', normal=(0, 1, 0))
 
     def set_camera(self):
         self.plotter.camera.SetPosition([0., 0., 500.])
-        #self.plotter.camera.SetFocalPoint([0., 0., 0.])
-        #self.plotter.camera.SetViewUp([0., 1., 0.])
-        #self.plotter.camera.SetDistance(200.)
-        #self.plotter.camera.SetClippingRange([180., 220.])
+        # self.plotter.camera.SetFocalPoint([0., 0., 0.])
+        # self.plotter.camera.SetViewUp([0., 1., 0.])
+        # self.plotter.camera.SetDistance(200.)
+        # self.plotter.camera.SetClippingRange([180., 220.])
 
     def draw_spring(self, base_point: np.ndarray, top_point: np.ndarray, radius: float):
         """Plots a spring and a sphere to represent a neurite in vedo."""

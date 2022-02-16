@@ -8,12 +8,6 @@ from neurorosettes import utilities
 from neurorosettes.grid import OneLevelDensityCheck
 
 
-def create_tissue() -> list:
-    """Returns a list of randomly distributed positions for a given number of cells"""
-    coordinates = [utilities.get_random_position(100) for _ in range(50)]
-    return coordinates
-
-
 # Define time variables
 timestep = 0.1
 total_time = 1440
@@ -28,12 +22,12 @@ container = Container(timestep=timestep,
                       grid=[-160, 160, 20],
                       density_check=OneLevelDensityCheck(max_neighbors=19))
 
-for position in create_tissue():
+for position in utilities.HexagonalTissue(size=80).get_coordinates():
     # Populate environment with cells
     neuron = Neuron()
     neuron.create_cell(coordinates=np.array(position))
     neuron.set_outgrowth_axis(utilities.get_random_unit_vector(two_dimensions=False))
-    neuron.clocks.set_clocks(0.08, 0.0001, 0.002)
+    neuron.clocks.set_clocks(0.00008, 0.0001, 0.002)
     container.register_neuron(neuron)
 
 container.animator.plotter += clock
