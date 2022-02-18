@@ -17,34 +17,77 @@ def get_sphere_overlap(distance: float, radius1: float, radius2: float) -> float
 
 
 @dataclass
-class CylinderMechanics:
+class PhysicalProperties:
+    """
+    Class with the mechanical properties of a physical object.
+
+    Attributes:
+    -----------
+    radius: float
+        The radius of the physical object.
+    interaction_factor: float
+        The factor used to compute physical interactions between two objects.
+        Objects inside the interaction radius will be considered.
+    """
+
+    radius: float
+    interaction_factor: float
+
+    @property
+    def interaction_radius(self) -> float:
+        """Returns the radius of interaction of the physical object."""
+        return self.interaction_factor * self.radius
+
+
+@dataclass
+class SphereProperties(PhysicalProperties):
+    """
+    Class with the mechanical properties of a sphere.
+
+    Attributes:
+    -----------
+    radius: float
+        The radius of the sphere.
+    interaction_factor: float
+        The factor used to compute physical interactions between two objects.
+    adhesiveness: float
+        The adhesiveness factor to be used when computing potential interactions.
+    """
+
+    radius: float = 8.0
+    interaction_factor: float = 1.25
+    adhesiveness: float = 1.0
+
+
+@dataclass
+class CylinderProperties(PhysicalProperties):
+    """
+    Class with the mechanical properties of a cylinder with a spring axis.
+
+    Attributes:
+    -----------
+    radius: float
+        The radius of the cylinder.
+    interaction_factor: float
+        The factor used to compute physical interactions between two spheres.
+    spring_factor: float
+        The spring constant used to compute the tension inside the cylinder.
+    default_length: float
+        The default and initial length of a cylinder.
+    max_length: float
+        The maximum length of a cylinder.
+    """
+    
     radius: float = 0.5
     interaction_factor: float = 1.25
     spring_constant: float = 5.0
     default_length: float = 10.0
-
-    @property
-    def interaction_radius(self) -> float:
-        """Returns the radius of interaction between two spheres"""
-        return self.interaction_factor * self.radius
+    max_length: float = 15.0
 
     def get_spring_tension(self, cylinder_length: float) -> float:
-        """Returns the spring tension"""
+        """Returns the tension in the spring for a given spring length."""
         length_difference = (cylinder_length - self.default_length)
         return self.spring_constant * length_difference / self.default_length
-
-
-@dataclass
-class SphereMechanics:
-    """Stores the physical properties that characterize a sphere"""
-    radius: float
-    interaction_factor: float
-    adhesiveness: float
-
-    @property
-    def interaction_radius(self) -> float:
-        """Returns the radius of interaction between two spheres"""
-        return self.interaction_factor * self.radius
 
 
 @dataclass
