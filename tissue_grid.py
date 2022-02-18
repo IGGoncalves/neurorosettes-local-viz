@@ -2,9 +2,9 @@
 import numpy as np
 import vedo
 
-from neurorosettes.physics import PotentialsFactory as PF
-from neurorosettes.simulation import Container
+from neurorosettes import physics
 from neurorosettes import utilities
+from neurorosettes.simulation import Container
 from neurorosettes.grid import OneLevelDensityCheck
 
 # Simulation time
@@ -25,21 +25,21 @@ differentiation_rate = 0.002
 sphere_sphere_adhesion = 4.0
 sphere_sphere_repulsion = 40.0
 smoothness_factor = 1.0
-sphere_sphere_interactions = PF.create_sphere_interactions(sphere_sphere_adhesion,
-                                                           sphere_sphere_repulsion,
-                                                           smoothness_factor)
+sphere_sphere_interactions = physics.get_sphere_potentials_interactions(sphere_sphere_adhesion,
+                                                                        sphere_sphere_repulsion,
+                                                                        smoothness_factor)
 # Cell-neurite interactions
 sphere_cylinder_adhesion = 0.4
 sphere_cylinder_repulsion = 400.0
-sphere_cylinder_interactions = PF.create_sphere_cylinder_interactions(sphere_cylinder_repulsion,
-                                                                      smoothness_factor)
+sphere_cylinder_interactions = physics.get_sphere_cylinder_potentials_interactions(sphere_cylinder_repulsion,
+                                                                                   smoothness_factor)
 
 # Neurite-neurite interaction
 cylinder_cylinder_adhesion = 40.0
 cylinder_cylinder_repulsion = 400.0
-cylinder_cylinder_interactions = PF.create_cylinder_interactions(cylinder_cylinder_adhesion,
-                                                                 cylinder_cylinder_repulsion,
-                                                                 smoothness_factor)
+cylinder_cylinder_interactions = physics.get_cylinder_potentials_interactions(cylinder_cylinder_adhesion,
+                                                                              cylinder_cylinder_repulsion,
+                                                                              smoothness_factor)
 
 # Initialize simulation objects
 container = Container(timestep=timestep,

@@ -18,12 +18,17 @@ def get_sphere_overlap(distance: float, radius1: float, radius2: float) -> float
 
 @dataclass
 class CylinderMechanics:
-    radius: float
-    spring_constant: float
-    default_length: float
-    max_length: float
+    radius: float = 0.5
+    interaction_factor: float = 1.25
+    spring_constant: float = 5.0
+    default_length: float = 10.0
 
-    def get_tension(self, cylinder_length: float) -> float:
+    @property
+    def interaction_radius(self) -> float:
+        """Returns the radius of interaction between two spheres"""
+        return self.interaction_factor * self.radius
+
+    def get_spring_tension(self, cylinder_length: float) -> float:
         """Returns the spring tension"""
         length_difference = (cylinder_length - self.default_length)
         return self.spring_constant * length_difference / self.default_length
@@ -258,35 +263,22 @@ class CylinderInteractions:
         return force, fraction_to_mother
 
 
-# Default objects
-default_sphere_mechanics = SphereMechanics(radius=8.0,
-                                           interaction_factor=1.25,
-                                           adhesiveness=1.0)
-
-default_cylinder_mechanics = CylinderMechanics(radius=0.5,
-                                               spring_constant=10.0,
-                                               default_length=10.0,
-                                               max_length=25.0)
-
-
 # Default interactions
-class PotentialsFactory:
-    @staticmethod
-    def create_sphere_interactions(adhesion_coefficient, repulsion_coefficient, smoothness_factor):
-        adhesion = PotentialsAdhesion(adhesion_coefficient, smoothness_factor)
-        repulsion = PotentialsRepulsion(repulsion_coefficient, smoothness_factor)
+def get_sphere_potentials_interactions(adhesion_coefficient, repulsion_coefficient, smoothness_factor):
+    adhesion = PotentialsAdhesion(adhesion_coefficient, smoothness_factor)
+    repulsion = PotentialsRepulsion(repulsion_coefficient, smoothness_factor)
 
-        return SphereInteractions(adhesion, repulsion)
+    return SphereInteractions(adhesion, repulsion)
 
-    @staticmethod
-    def create_sphere_cylinder_interactions(repulsion_coefficient, smoothness_factor):
-        repulsion = PotentialsRepulsion(repulsion_coefficient, smoothness_factor)
 
-        return SphereCylinderInteractions(repulsion)
+def get_sphere_cylinder_potentials_interactions(repulsion_coefficient, smoothness_factor):
+    repulsion = PotentialsRepulsion(repulsion_coefficient, smoothness_factor)
 
-    @staticmethod
-    def create_cylinder_interactions(adhesion_coefficient, repulsion_coefficient, smoothness_factor):
-        adhesion = PotentialsAdhesion(adhesion_coefficient, smoothness_factor)
-        repulsion = PotentialsRepulsion(repulsion_coefficient, smoothness_factor)
+    return SphereCylinderInteractions(repulsion)
 
-        return SphereInteractions(adhesion, repulsion)
+
+def get_cylinder_potentials_interactions(adhesion_coefficient, repulsion_coefficient, smoothness_factor):
+    adhesion = PotentialsAdhesion(adhesion_coefficient, smoothness_factor)
+    repulsion = PotentialsRepulsion(repulsion_coefficient, smoothness_factor)
+
+    return CylinderInteractions(adhesion, repulsion)
