@@ -100,3 +100,4 @@ class Neuron:
         self.create_first_neurite()
         for _ in range(1, differentiation_grade):
             self.create_secondary_neurite()
+

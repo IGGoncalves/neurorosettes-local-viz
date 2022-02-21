@@ -13,7 +13,7 @@ from neurorosettes.grid import UniformGrid, CellDensityCheck
 
 class Container:
     """Represents the environment where neurons exist"""
-    timestep: float
+    time_step: float
     simulation_2d: bool
     sphere_int: SphereInteractions
     sphere_cylinder_int: SphereCylinderInteractions
@@ -26,7 +26,7 @@ class Container:
                  sphere_cylinder_int: SphereCylinderInteractions, cylinder_int: CylinderInteractions,
                  viscosity: float, grid: List[float], density_check: Optional[CellDensityCheck] = None) -> None:
 
-        self.timestep = timestep
+        self.time_step = timestep
         self.simulation_2d = simulation_2d
         self.sphere_int = sphere_int
         self.sphere_cylinder_int = sphere_cylinder_int
@@ -61,7 +61,7 @@ class Container:
 
     def advance_cycles(self):
         for neuron in self.neurons:
-            neuron.clocks.advance_clocks(self.timestep)
+            neuron.clocks.advance_clocks(self.time_step)
 
     def create_new_neuron(self, coordinates: np.ndarray, color="red") -> Neuron:
         """Creates a new neuron and registers it to the container"""
@@ -239,7 +239,7 @@ class Container:
         """Returns a velocity from the passed force"""
         # Compute cell velocity
         velocity = force / self.viscosity
-        return velocity * self.timestep
+        return velocity * self.time_step
 
     def update_cell_positions(self) -> None:
         """Updates the cell positions and representations based on object interactions"""
