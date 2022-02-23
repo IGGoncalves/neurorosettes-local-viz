@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>neurorosettes.clocks &mdash; tespkg  documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/togglebutton.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/mystnb.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script>let toggleHintShow = 'Click to show';</script>
+        <script>let toggleHintHide = 'Click to hide';</script>
+        <script>let toggleOpenOnPrint = 'true';</script>
+        <script src="../../../_static/togglebutton.js"></script>
+        <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="neurorosettes.grid" href="../grid/index.html" />
+    <link rel="prev" title="neurorosettes" href="../index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../index.html" class="icon icon-home"> tespkg
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../example.html">Example usage</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../index.html">API Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">neurorosettes</span></code></a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="../index.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l4 current"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">neurorosettes.clocks</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../grid/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">neurorosettes.grid</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../neurons/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">neurorosettes.neurons</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../physics/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">neurorosettes.physics</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../simulation/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">neurorosettes.simulation</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../subcellular/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">neurorosettes.subcellular</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../utilities/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">neurorosettes.utilities</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../index.html#package-contents">Package Contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">tespkg</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../index.html">API Reference</a> &raquo;</li>
+          <li><a href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">neurorosettes</span></code></a> &raquo;</li>
+      <li><code class="xref py py-mod docutils literal notranslate"><span class="pre">neurorosettes.clocks</span></code></li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../_sources/autoapi/neurorosettes/clocks/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-neurorosettes.clocks">
+<span id="neurorosettes-clocks"></span><h1><a class="reference internal" href="#module-neurorosettes.clocks" title="neurorosettes.clocks"><code class="xref py py-mod docutils literal notranslate"><span class="pre">neurorosettes.clocks</span></code></a><a class="headerlink" href="#module-neurorosettes.clocks" title="Permalink to this headline"></a></h1>
+<p>This module deals with the proliferation, differentiation and death cycles</p>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this headline"></a></h2>
+<section id="classes">
+<h3>Classes<a class="headerlink" href="#classes" title="Permalink to this headline"></a></h3>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#neurorosettes.clocks.Cycle" title="neurorosettes.clocks.Cycle"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Cycle</span></code></a></p></td>
+<td><p>Represents the cell cycle (arrest/proliferation)</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#neurorosettes.clocks.Death" title="neurorosettes.clocks.Death"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Death</span></code></a></p></td>
+<td><p>Represents the cell death status (alive/dead)</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#neurorosettes.clocks.Differentiation" title="neurorosettes.clocks.Differentiation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Differentiation</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#neurorosettes.clocks.CellClocks" title="neurorosettes.clocks.CellClocks"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CellClocks</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py class">
+<dt class="sig sig-object py" id="neurorosettes.clocks.Cycle">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neurorosettes.clocks.</span></span><span class="sig-name descname"><span class="pre">Cycle</span></span><a class="headerlink" href="#neurorosettes.clocks.Cycle" title="Permalink to this definition"></a></dt>
+<dd><p>Represents the cell cycle (arrest/proliferation)</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="neurorosettes.clocks.Cycle.proliferation_rate">
+<span class="sig-name descname"><span class="pre">proliferation_rate</span></span><em class="property"><span class="w"> </span><span class="pre">:Optional[float]</span></em><a class="headerlink" href="#neurorosettes.clocks.Cycle.proliferation_rate" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="neurorosettes.clocks.Cycle.division_signal">
+<span class="sig-name descname"><span class="pre">division_signal</span></span><em class="property"><span class="w"> </span><span class="pre">:bool</span></em><a class="headerlink" href="#neurorosettes.clocks.Cycle.division_signal" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="neurorosettes.clocks.Cycle.cycle_block">
+<span class="sig-name descname"><span class="pre">cycle_block</span></span><em class="property"><span class="w"> </span><span class="pre">:bool</span></em><a class="headerlink" href="#neurorosettes.clocks.Cycle.cycle_block" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neurorosettes.clocks.Cycle.set_proliferation_rate">
+<span class="sig-name descname"><span class="pre">set_proliferation_rate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">proliferation_rate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neurorosettes.clocks.Cycle.set_proliferation_rate" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neurorosettes.clocks.Cycle.advance_cycle_clock">
+<span class="sig-name descname"><span class="pre">advance_cycle_clock</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timestep</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#neurorosettes.clocks.Cycle.advance_cycle_clock" title="Permalink to this definition"></a></dt>
+<dd><p>Updates the cell cycle status based on the proliferation rate (may happen or not)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neurorosettes.clocks.Cycle.flag_for_proliferation">
+<span class="sig-name descname"><span class="pre">flag_for_proliferation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#neurorosettes.clocks.Cycle.flag_for_proliferation" title="Permalink to this definition"></a></dt>
+<dd><p>Updates the cell cycle to proliferation (will always happen)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neurorosettes.clocks.Cycle.remove_proliferation_flag">
+<span class="sig-name descname"><span class="pre">remove_proliferation_flag</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#neurorosettes.clocks.Cycle.remove_proliferation_flag" title="Permalink to this definition"></a></dt>
+<dd><p>Updates the cell cycle to arrest (will always happen)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neurorosettes.clocks.Cycle.block_proliferation">
+<span class="sig-name descname"><span class="pre">block_proliferation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#neurorosettes.clocks.Cycle.block_proliferation" title="Permalink to this definition"></a></dt>
+<dd><p>Activates the cycle block to avoid proliferation</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="neurorosettes.clocks.Death">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neurorosettes.clocks.</span></span><span class="sig-name descname"><span class="pre">Death</span></span><a class="headerlink" href="#neurorosettes.clocks.Death" title="Permalink to this definition"></a></dt>
+<dd><p>Represents the cell death status (alive/dead)</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="neurorosettes.clocks.Death.death_rate">
+<span class="sig-name descname"><span class="pre">death_rate</span></span><em class="property"><span class="w"> </span><span class="pre">:Optional[float]</span></em><a class="headerlink" href="#neurorosettes.clocks.Death.death_rate" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="neurorosettes.clocks.Death.death_signal">
+<span class="sig-name descname"><span class="pre">death_signal</span></span><em class="property"><span class="w"> </span><span class="pre">:bool</span></em><a class="headerlink" href="#neurorosettes.clocks.Death.death_signal" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="neurorosettes.clocks.Death.death_block">
+<span class="sig-name descname"><span class="pre">death_block</span></span><em class="property"><span class="w"> </span><span class="pre">:bool</span></em><a class="headerlink" href="#neurorosettes.clocks.Death.death_block" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neurorosettes.clocks.Death.set_death_rate">
+<span class="sig-name descname"><span class="pre">set_death_rate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">death_rate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#neurorosettes.clocks.Death.set_death_rate" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neurorosettes.clocks.Death.advance_death_clock">
+<span class="sig-name descname"><span class="pre">advance_death_clock</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timestep</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#neurorosettes.clocks.Death.advance_death_clock" title="Permalink to this definition"></a></dt>
+<dd><p>Updates the cell status based on the death rate (may happen or not)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neurorosettes.clocks.Death.flag_for_death">
+<span class="sig-name descname"><span class="pre">flag_for_death</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#neurorosettes.clocks.Death.flag_for_death" title="Permalink to this definition"></a></dt>
+<dd><p>Updates the cell status to death (will always happen)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neurorosettes.clocks.Death.block_death">
+<span class="sig-name descname"><span class="pre">block_death</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#neurorosettes.clocks.Death.block_death" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="neurorosettes.clocks.Differentiation">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neurorosettes.clocks.</span></span><span class="sig-name descname"><span class="pre">Differentiation</span></span><a class="headerlink" href="#neurorosettes.clocks.Differentiation" title="Permalink to this definition"></a></dt>
+<dd><dl class="py attribute">
+<dt class="sig sig-object py" id="neurorosettes.clocks.Differentiation.differentiation_rate">
+<span class="sig-name descname"><span class="pre">differentiation_rate</span></span><em class="property"><span class="w"> </span><span class="pre">:Optional[float]</span></em><a class="headerlink" href="#neurorosettes.clocks.Differentiation.differentiation_rate" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="neurorosettes.clocks.Differentiation.differentiation_signal">
+<span class="sig-name descname"><span class="pre">differentiation_signal</span></span><em class="property"><span class="w"> </span><span class="pre">:bool</span></em><a class="headerlink" href="#neurorosettes.clocks.Differentiation.differentiation_signal" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="neurorosettes.clocks.Differentiation.differentiation_grade">
+<span class="sig-name descname"><span class="pre">differentiation_grade</span></span><em class="property"><span class="w"> </span><span class="pre">:int</span></em><a class="headerlink" href="#neurorosettes.clocks.Differentiation.differentiation_grade" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="neurorosettes.clocks.Differentiation.differentiation_block">
+<span class="sig-name descname"><span class="pre">differentiation_block</span></span><em class="property"><span class="w"> </span><span class="pre">:bool</span></em><a class="headerlink" href="#neurorosettes.clocks.Differentiation.differentiation_block" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neurorosettes.clocks.Differentiation.set_differentiation_rate">
+<span class="sig-name descname"><span class="pre">set_differentiation_rate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">differentiation_rate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neurorosettes.clocks.Differentiation.set_differentiation_rate" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neurorosettes.clocks.Differentiation.advance_differentiation_clock">
+<span class="sig-name descname"><span class="pre">advance_differentiation_clock</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timestep</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#neurorosettes.clocks.Differentiation.advance_differentiation_clock" title="Permalink to this definition"></a></dt>
+<dd><p>Updates the cell status based on the death rate (may happen or not)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neurorosettes.clocks.Differentiation.increase_differentiation_grade">
+<span class="sig-name descname"><span class="pre">increase_differentiation_grade</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neurorosettes.clocks.Differentiation.increase_differentiation_grade" title="Permalink to this definition"></a></dt>
+<dd><p>Updates the differentiation grade and resets the signal to allow differentiation</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neurorosettes.clocks.Differentiation.block_differentiation">
+<span class="sig-name descname"><span class="pre">block_differentiation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#neurorosettes.clocks.Differentiation.block_differentiation" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="neurorosettes.clocks.CellClocks">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neurorosettes.clocks.</span></span><span class="sig-name descname"><span class="pre">CellClocks</span></span><a class="headerlink" href="#neurorosettes.clocks.CellClocks" title="Permalink to this definition"></a></dt>
+<dd><dl class="py attribute">
+<dt class="sig sig-object py" id="neurorosettes.clocks.CellClocks.cycle_clock">
+<span class="sig-name descname"><span class="pre">cycle_clock</span></span><em class="property"><span class="w"> </span><span class="pre">:Cycle</span></em><a class="headerlink" href="#neurorosettes.clocks.CellClocks.cycle_clock" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="neurorosettes.clocks.CellClocks.death_clock">
+<span class="sig-name descname"><span class="pre">death_clock</span></span><em class="property"><span class="w"> </span><span class="pre">:Death</span></em><a class="headerlink" href="#neurorosettes.clocks.CellClocks.death_clock" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="neurorosettes.clocks.CellClocks.differentiation_clock">
+<span class="sig-name descname"><span class="pre">differentiation_clock</span></span><em class="property"><span class="w"> </span><span class="pre">:Differentiation</span></em><a class="headerlink" href="#neurorosettes.clocks.CellClocks.differentiation_clock" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neurorosettes.clocks.CellClocks.set_proliferation_clock">
+<span class="sig-name descname"><span class="pre">set_proliferation_clock</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">proliferation_rate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neurorosettes.clocks.CellClocks.set_proliferation_clock" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neurorosettes.clocks.CellClocks.set_death_clock">
+<span class="sig-name descname"><span class="pre">set_death_clock</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">death_rate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neurorosettes.clocks.CellClocks.set_death_clock" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neurorosettes.clocks.CellClocks.set_differentiation_clock">
+<span class="sig-name descname"><span class="pre">set_differentiation_clock</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">differentiation_rate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neurorosettes.clocks.CellClocks.set_differentiation_clock" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neurorosettes.clocks.CellClocks.set_clocks">
+<span class="sig-name descname"><span class="pre">set_clocks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">proliferation_rate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">death_rate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">differentiation_rate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#neurorosettes.clocks.CellClocks.set_clocks" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neurorosettes.clocks.CellClocks.get_clock_rates">
+<span class="sig-name descname"><span class="pre">get_clock_rates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#neurorosettes.clocks.CellClocks.get_clock_rates" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neurorosettes.clocks.CellClocks.advance_clocks">
+<span class="sig-name descname"><span class="pre">advance_clocks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timestep</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neurorosettes.clocks.CellClocks.advance_clocks" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neurorosettes.clocks.CellClocks.block_all_clocks">
+<span class="sig-name descname"><span class="pre">block_all_clocks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neurorosettes.clocks.CellClocks.block_all_clocks" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../index.html" class="btn btn-neutral float-left" title="neurorosettes" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../grid/index.html" class="btn btn-neutral float-right" title="neurorosettes.grid" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, yes.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

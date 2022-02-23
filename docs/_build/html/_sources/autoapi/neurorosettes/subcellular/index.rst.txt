@@ -1,0 +1,173 @@
+:py:mod:`neurorosettes.subcellular`
+===================================
+
+.. py:module:: neurorosettes.subcellular
+
+.. autoapi-nested-parse::
+
+   This module deals with the two components of the neurons: soma cells and neurites
+
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   neurorosettes.subcellular.CellBody
+   neurorosettes.subcellular.Neurite
+   neurorosettes.subcellular.ObjectFactory
+
+
+
+
+.. py:class:: CellBody(position: numpy.ndarray, mechanics: neurorosettes.physics.PhysicalProperties)
+
+   Represents a cell with physical properties
+
+   .. py:method:: set_center_position(self, coordinates: numpy.ndarray) -> None
+
+      Sets the cell position
+
+
+   .. py:method:: set_force_from_daughter(self, force: numpy.ndarray) -> None
+
+      Sets the force transmitted by daughter
+
+
+   .. py:method:: set_mechanics(self, mechanics: neurorosettes.physics.PhysicalProperties) -> None
+
+      Sets the physical properties of the cell
+
+
+   .. py:method:: set_sphere_representation(self, animator: neurorosettes.utilities.Animator, color='red') -> None
+
+      Creates and sets the sphere representation of the cell
+
+
+   .. py:method:: update_representation(self) -> None
+
+      Updates the sphere representation of the cell
+
+
+   .. py:method:: get_neighbor_force(self, neighbor: CellBody, interaction: neurorosettes.physics.ContactForces) -> numpy.ndarray
+
+      Returns the interaction force between two cells
+
+
+
+.. py:class:: Neurite(proximal_point: numpy.ndarray, axis: numpy.ndarray, cylinder_mechanics: neurorosettes.physics.CylinderProperties)
+
+   Represents a neurite with physical properties
+
+   .. py:method:: set_force_from_daughter(self, force)
+
+      Sets the force transmitted by daughter
+
+
+   .. py:method:: create_neurite_representation(self, animator: neurorosettes.utilities.Animator)
+
+      Creates a spring+sphere representation of the neurite
+
+
+   .. py:method:: update_representation(self)
+
+      Updates the representation of the neurite
+
+
+   .. py:method:: tension(self) -> float
+      :property:
+
+      Returns the tension of the spring
+
+
+   .. py:method:: spring_axis(self) -> numpy.ndarray
+      :property:
+
+      Returns the vector that defines the spring
+
+
+   .. py:method:: current_length(self) -> float
+      :property:
+
+      Returns the current length of the spring
+
+
+   .. py:method:: move_distal_point(self, coordinates: numpy.ndarray) -> None
+
+      Moves the distal point of the spring
+
+
+   .. py:method:: move_proximal_point(self, coordinates) -> None
+
+      Moves the proximal point of the spring
+
+
+   .. py:method:: get_growth_force(self, magnitude: float)
+
+      Returns the force created by neurite growth
+
+
+   .. py:method:: get_spring_force(self) -> numpy.ndarray
+
+      Returns the force created by spring tension
+
+
+   .. py:method:: get_cell_neighbor_force(self, neighbor: CellBody, interaction: neurorosettes.physics.ContactForces) -> Tuple[numpy.ndarray, float]
+
+      Returns the interaction force between two cells
+
+
+   .. py:method:: get_neurite_neighbor_force(self, neighbor: Neurite, interaction: neurorosettes.physics.ContactForces)
+
+      Returns the interaction force between two cells
+
+
+
+.. py:class:: ObjectFactory
+
+   .. py:attribute:: cell_radius
+      :annotation: :float = 8.0
+
+      
+
+   .. py:attribute:: cell_interaction_factor
+      :annotation: :float = 1.25
+
+      
+
+   .. py:attribute:: neurite_radius
+      :annotation: :float = 0.5
+
+      
+
+   .. py:attribute:: neurite_interaction_factor
+      :annotation: :float = 1.25
+
+      
+
+   .. py:attribute:: neurite_spring_constant
+      :annotation: :float = 5.0
+
+      
+
+   .. py:attribute:: neurite_default_length
+      :annotation: :float = 10.0
+
+      
+
+   .. py:attribute:: neurite_max_length
+      :annotation: :float = 15.0
+
+      
+
+   .. py:method:: get_cell_body(self, center_position: numpy.ndarray) -> CellBody
+
+
+   .. py:method:: get_neurite(self, proximal_position: numpy.ndarray, axis: numpy.ndarray) -> Neurite
+
+
+
