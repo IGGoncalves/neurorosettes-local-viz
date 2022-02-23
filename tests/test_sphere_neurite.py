@@ -1,40 +1,58 @@
 """Script to test sphere-neurite interactions"""
 import time
 
-import numpy as np
-
-from neurorosettes.neurons import Neuron
 from neurorosettes.simulation import Container
-import neurorosettes.utilities as utilities
+from neurorosettes.utilities import get_simulation_timer
 
 
-# Define time variables
-timestep = 0.1
-total_time = 10.0
-pb = utilities.get_simulation_timer(total_time, timestep)
+# Time constants
+STEP: float = 0.1
+TOTAL_TIME: float = 20.0
 
-# Initialize simulation objects
-container = Container(timestep=0.1,
-                      viscosity=7.96,
-                      grid=[-80, 80, 20])
+# Domain constants
+GRID_MIN: float = -60.0
+GRID_MAX: float = 60.0
+GRID_STEP: float = 20.0
 
-# Populate environment with cells
-neuron = Neuron()
-neuron.create_cell(coordinates=np.array([0.0, 0.0, 0.0]))
-neuron.set_outgrowth_axis(np.array([0.0, 1.0, 0.0]))
-neuron.create_neurites_based_on_differentiation(differentiation_grade=2)
-container.register_neuron(neuron)
 
-neuron = Neuron()
-neuron.create_cell(coordinates=np.array([4.0, 40.0, 0.0]))
-container.register_neuron(neuron)
+def create_tissue(container: Container) -> None:
+    # Populate environment with cells
+    container.create_new_neuron(coordinates=[0.0, 10.0, 0.0],
+                                outgrowth_axis=[0.0, 1.0, 0.0],
+                                differentiation_grade=2)
 
-container.animator.plotter.show(resetcam=False, interactive=False)
-time.sleep(1)
-# Run and plot simulation
-for t in pb.range():
-    container.update_cell_positions()
-    container.update_drawings()
-    pb.print()
+    container.create_new_neuron(coordinates=[4.0, 40.0, 0.0],
+                                differentiation_grade=0)
 
-container.animator.plotter.show(interactive=True)
+    # Plot the current state of the simulation
+    container.animator.set_camera(height=200.0)
+    container.animator.show()
+    time.sleep(1)
+
+
+def run_simulation(time_step: float, total_time: float, container: Container) -> None:
+    """Runs the entire simulation by solving the mechanics at each time point."""
+    sim_time = get_simulation_timer(total_time, time_step)
+
+    for t in sim_time.range():
+        # Solve interactions and draw the new object positions
+        container.solve_mechanics(time_step)
+        container.update_drawings()
+
+        # Update the simulation time on the simulation window
+        if t % 10 == 0:
+            container.animator.update_clock(t)
+
+        # Print time to the console as a progressbar
+        sim_time.print()
+
+
+if __name__ == "__main__":
+    # Initialize simulation objects
+    sim_world = Container(grid_range=[GRID_MIN, GRID_MAX, GRID_STEP])
+    # Create initial configuration
+    create_tissue(sim_world)
+    # Run the simulation to check if springs work
+    run_simulation(STEP, TOTAL_TIME, sim_world)
+    # Plot the results (mark interactive as False to automatically  close the window)
+    sim_world.animator.show(interactive=True)
