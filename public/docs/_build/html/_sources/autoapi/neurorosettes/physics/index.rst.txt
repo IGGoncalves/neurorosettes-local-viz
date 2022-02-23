@@ -1,0 +1,400 @@
+:py:mod:`neurorosettes.physics`
+===============================
+
+.. py:module:: neurorosettes.physics
+
+.. autoapi-nested-parse::
+
+   This module deals with physical interactions between objects.
+
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   neurorosettes.physics.PhysicalProperties
+   neurorosettes.physics.CylinderProperties
+   neurorosettes.physics.ContactForces
+   neurorosettes.physics.SimpleContact
+   neurorosettes.physics.PotentialsContact
+   neurorosettes.physics.ContactFactory
+   neurorosettes.physics.PotentialsFactory
+
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   neurorosettes.physics.get_distance_components
+   neurorosettes.physics.get_sphere_overlap
+   neurorosettes.physics.get_sphere_cylinder_intersection
+   neurorosettes.physics.get_cylinder_intersection
+   neurorosettes.physics.get_sphere_sphere_contact
+
+
+
+.. py:function:: get_distance_components(point1: numpy.ndarray, point2: numpy.ndarray) -> Tuple[numpy.ndarray, float]
+
+   Returns the direction and magnitude components of a vector that connects two points.
+
+   :param point1: The coordinates of the first point.
+   :type point1: np.ndarray
+   :param point2: The coordinates of the second point.
+   :type point2: np.ndarray
+
+   :returns: * *np.ndarray* -- The unit vector that defines the direction between the two points.
+             * *float* -- The distance between the two points.
+
+
+.. py:function:: get_sphere_overlap(radius1: float, radius2: float, distance: float) -> float
+
+   Returns the overlap between two objects represented as spheres.
+
+   :param radius1: The radius of the first object (represented as a sphere).
+   :type radius1: float
+   :param radius2: The radius of the second object (represented as a sphere).
+   :type radius2: float
+   :param distance: The distance between the centres of the two objects.
+   :type distance: float
+
+   :returns: The overlap between the two objects.
+   :rtype: float
+
+
+.. py:function:: get_sphere_cylinder_intersection(sphere_center: numpy.ndarray, cylinder_base: numpy.ndarray, cylinder_top: numpy.ndarray) -> numpy.ndarray
+
+   Returns the closest point on the cylinder axis to the sphere. The intersection is given by
+   the dot product. Taking the dot product between the cylinder axis and the axis that connects
+   the cylinder base to the sphere, the dot product gives us the projection of the cylinder-sphere
+   axis on the cylinder axis. For dot products between 0 and 1, the closest point is on the
+   cylinder axis. For dot products below 0 or above 1, the closest points are the base and the
+   extremity of the cylinder, respectively.
+
+   :param sphere_center: The coordinates for the center of the sphere object.
+   :type sphere_center: np.ndarray
+   :param cylinder_base: The coordinates for the base of the cylinder object.
+   :type cylinder_base: np.ndarray
+   :param cylinder_top: The coordinates for the extremity of the cylinder object.
+   :type cylinder_top: np.ndarray
+
+   :returns: The coordinates of the closest point to the sphere on the cylinder axis
+   :rtype: np.ndarray
+
+
+.. py:function:: get_cylinder_intersection(cylinder_base_1: numpy.ndarray, cylinder_top_1: numpy.ndarray, cylinder_base_2: numpy.ndarray, cylinder_top_2: numpy.ndarray) -> Tuple[numpy.ndarray, numpy.ndarray]
+
+   Returns the closest point between two cylinders. The cross product is used to evaluate
+   if the cylinder axes are parallel. If they are, the closest points between the two objects
+   are considered to be their middle points. If not, the projection of each axis on the other
+   axis is computed to find the closest point on each axis.
+
+   :param cylinder_base_1: The coordinates for the base of the first cylinder object.
+   :type cylinder_base_1: np.ndarray
+   :param cylinder_top_1: The coordinates for the extremity of the first cylinder object.
+   :type cylinder_top_1: np.ndarray
+   :param cylinder_base_2: The coordinates for the base of the second cylinder object.
+   :type cylinder_base_2: np.ndarray
+   :param cylinder_top_2: The coordinates for the extremity of the second cylinder object.
+   :type cylinder_top_2: np.ndarray
+
+   :returns: * *np.ndarray* -- The closest point on the axis of the first cylinder.
+             * *np.ndarray* -- The closest point on the axis of the second cylinder.
+
+
+.. py:class:: PhysicalProperties
+
+   Class with the mechanical properties of a physical object.
+
+   Attributes:
+   -----------
+   radius: float
+       The radius of the physical object.
+   interaction_factor: float
+       The factor used to compute physical interactions between two objects.
+       Objects inside the interaction radius will be considered.
+
+   .. py:attribute:: radius
+      :annotation: :float
+
+      
+
+   .. py:attribute:: interaction_factor
+      :annotation: :float
+
+      
+
+   .. py:method:: interaction_radius(self) -> float
+      :property:
+
+      Returns the radius of interaction of the physical object.
+
+
+
+.. py:class:: CylinderProperties
+
+   Bases: :py:obj:`PhysicalProperties`
+
+   Class with the mechanical properties of a cylinder with a spring axis.
+
+   Attributes:
+   -----------
+   radius: float
+       The radius of the cylinder.
+   interaction_factor: float
+       The factor used to compute physical interactions between two spheres.
+   spring_factor: float
+       The spring constant used to compute the tension inside the cylinder.
+   default_length: float
+       The default and initial length of a cylinder.
+   max_length: float
+       The maximum length of a cylinder.
+
+   .. py:attribute:: radius
+      :annotation: :float
+
+      
+
+   .. py:attribute:: interaction_factor
+      :annotation: :float
+
+      
+
+   .. py:attribute:: spring_constant
+      :annotation: :float
+
+      
+
+   .. py:attribute:: default_length
+      :annotation: :float
+
+      
+
+   .. py:attribute:: max_length
+      :annotation: :float
+
+      
+
+   .. py:method:: get_spring_tension(self, cylinder_length: float) -> float
+
+      Returns the tension in the spring for a given spring length.
+
+
+
+.. py:class:: ContactForces
+
+   Bases: :py:obj:`abc.ABC`
+
+   Class to compute the contact forces between two objects, represented as spheres.
+
+   .. attribute:: adhesion_coefficient
+
+      The coefficient of adhesion between the two objects.
+
+      :type: float
+
+   .. attribute:: repulsion_coefficient
+
+      The coefficient of repulsion between two objects.
+
+      :type: float
+
+   .. py:attribute:: adhesion_coefficient
+      :annotation: :float
+
+      
+
+   .. py:attribute:: repulsion_coefficient
+      :annotation: :float
+
+      
+
+   .. py:method:: compute_adhesion(self, distance: float, radius1: float, radius2: float) -> float
+      :abstractmethod:
+
+      Returns the magnitude of the adhesion force between two objects
+
+      :param distance: The distance between two spheres.
+      :type distance: float
+      :param radius1: The radius of the first sphere object.
+      :type radius1: float
+      :param radius2: The radius of the second sphere object.
+      :type radius2: float
+
+      :returns: The magnitude of the adhesion contact forces.
+      :rtype: float
+
+
+   .. py:method:: compute_repulsion(self, distance: float, radius1: float, radius2: float) -> float
+      :abstractmethod:
+
+      Returns the magnitude of the repulsion force between two objects
+
+      :param distance: The distance between two spheres.
+      :type distance: float
+      :param radius1: The radius of the first sphere object.
+      :type radius1: float
+      :param radius2: The radius of the second sphere object.
+      :type radius2: float
+
+      :returns: The magnitude of the repulsion contact forces.
+      :rtype: float
+
+
+
+.. py:class:: SimpleContact
+
+   Bases: :py:obj:`ContactForces`
+
+   Class to compute simple contact forces between two spheres. The force components
+   are proportional to the adhesion/repulsion coefficients, the overlap between the spheres and,
+   in the case of adhesion forces, the equivalent radius of the spheres.
+   Same approach as done in Cx3D.
+
+   .. py:method:: compute_adhesion(self, distance: float, radius1: float, radius2: float) -> float
+
+      Returns a force proportional to the adhesion coefficient, cell overlap and cell radii
+
+
+   .. py:method:: compute_repulsion(self, distance: float, radius1: float, radius2: float) -> float
+
+      Returns a force proportional to the repulsion coefficient and cell overlap
+
+
+
+.. py:class:: PotentialsContact
+
+   Bases: :py:obj:`ContactForces`
+
+   Class to compute contact forces between two spheres based on potentials. The force components
+   take into account the adhesion/coefficient coefficients, a smoothness factor and the distance
+   between two objects.
+   Same approach as done in PhysiCell.
+
+   .. py:attribute:: smoothness_factor
+      :annotation: :int
+
+      
+
+   .. py:method:: compute_adhesion(self, distance: float, radius1: float, radius2: float) -> float
+
+      Returns a force based on adhesion potentials
+
+
+   .. py:method:: compute_repulsion(self, distance: float, radius1: float, radius2: float) -> float
+
+      Returns a force based on repulsion potentials
+
+
+
+.. py:function:: get_sphere_sphere_contact(radius1: float, radius2: float, distance: float, interaction: ContactForces, get_adhesion: bool = True, get_repulsion: bool = True) -> float
+
+   Gets the magnitude of the contact forces between two objects represented as spheres.
+
+   :param radius1: The radius of the first object (represented as a sphere).
+   :type radius1: float
+   :param radius2: The radius of the second object (represented as a sphere).
+   :type radius2: float
+   :param distance: The distance between the centres of the two objects.
+   :type distance: float
+   :param interaction: The contact function to use to compute adhesion and/or repulsion forces.
+   :type interaction: ContactForces
+   :param get_adhesion: If adhesion forces should be computed.
+   :type get_adhesion: bool, default True
+   :param get_repulsion: If repulsion forces should be computed.
+   :type get_repulsion: bool, default True
+
+   :returns: The magnitude of the contact forces between the two objects.
+   :rtype: float
+
+   :raises ValueError: If neither adhesion nor repulsion interactions are selected.
+
+
+.. py:class:: ContactFactory
+
+   Bases: :py:obj:`abc.ABC`
+
+   Helper class that provides a standard way to create an ABC using
+   inheritance.
+
+   .. py:method:: get_sphere_sphere_interactions(self) -> ContactForces
+      :abstractmethod:
+
+
+   .. py:method:: get_sphere_cylinder_interactions(self) -> ContactForces
+      :abstractmethod:
+
+
+   .. py:method:: get_cylinder_cylinder_interactions(self) -> ContactForces
+      :abstractmethod:
+
+
+
+.. py:class:: PotentialsFactory
+
+   Bases: :py:obj:`ContactFactory`
+
+   Helper class that provides a standard way to create an ABC using
+   inheritance.
+
+   .. py:attribute:: sphere_sphere_adhesion
+      :annotation: :float = 4.0
+
+      
+
+   .. py:attribute:: sphere_sphere_repulsion
+      :annotation: :float = 10.0
+
+      
+
+   .. py:attribute:: sphere_sphere_smoothness
+      :annotation: :int = 1
+
+      
+
+   .. py:attribute:: sphere_cylinder_adhesion
+      :annotation: :float = 0.0
+
+      
+
+   .. py:attribute:: sphere_cylinder_repulsion
+      :annotation: :float = 100.0
+
+      
+
+   .. py:attribute:: sphere_cylinder_smoothness
+      :annotation: :int = 1
+
+      
+
+   .. py:attribute:: cylinder_cylinder_adhesion
+      :annotation: :float = 40.0
+
+      
+
+   .. py:attribute:: cylinder_cylinder_repulsion
+      :annotation: :float = 10.0
+
+      
+
+   .. py:attribute:: cylinder_cylinder_smoothness
+      :annotation: :int = 1
+
+      
+
+   .. py:method:: get_sphere_sphere_interactions(self) -> PotentialsContact
+
+
+   .. py:method:: get_sphere_cylinder_interactions(self) -> PotentialsContact
+
+
+   .. py:method:: get_cylinder_cylinder_interactions(self) -> PotentialsContact
+
+
+
