@@ -11,7 +11,7 @@ import neurorosettes.utilities as utilities
 # Define time variables
 timestep = 0.1
 total_time = 10.0
-pb = utilities.get_progress_bar(total_time, timestep)
+pb = utilities.get_simulation_timer(total_time, timestep)
 
 # Initialize simulation objects
 container = Container(timestep=0.1,

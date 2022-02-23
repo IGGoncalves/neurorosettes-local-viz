@@ -1,11 +1,10 @@
 """This module deals with the neuron structure and functions"""
-import time
-from typing import List, Optional
+from typing import List, Optional, Union
 
 import numpy as np
 
-from neurorosettes.physics import SphereInteractions, SphereCylinderInteractions, CylinderInteractions
-from neurorosettes.subcellular import CellBody, Neurite
+from neurorosettes.physics import ContactFactory, PotentialsFactory
+from neurorosettes.subcellular import CellBody, Neurite, ObjectFactory
 from neurorosettes.neurons import Neuron
 from neurorosettes.utilities import Animator, get_random_unit_vector
 from neurorosettes.grid import UniformGrid, CellDensityCheck
@@ -13,32 +12,29 @@ from neurorosettes.grid import UniformGrid, CellDensityCheck
 
 class Container:
     """Represents the environment where neurons exist"""
-    time_step: float
-    simulation_2d: bool
-    sphere_int: SphereInteractions
-    sphere_cylinder_int: SphereCylinderInteractions
-    cylinder_int: CylinderInteractions
-    neurons: List[Neuron]
-    animator: Animator
-    grid: UniformGrid
 
-    def __init__(self, timestep: float, simulation_2d: bool, sphere_int: SphereInteractions,
-                 sphere_cylinder_int: SphereCylinderInteractions, cylinder_int: CylinderInteractions,
-                 viscosity: float, grid: List[float], density_check: Optional[CellDensityCheck] = None) -> None:
+    def __init__(self,
+                 grid_range: List[float],
+                 simulation_2d: bool = True,
+                 contact_factory: ContactFactory = PotentialsFactory(),
+                 object_factory: ObjectFactory = ObjectFactory(),
+                 drag_coefficient: float = 10.0,
+                 density_check: Optional[CellDensityCheck] = None) -> None:
 
-        self.time_step = timestep
         self.simulation_2d = simulation_2d
-        self.sphere_int = sphere_int
-        self.sphere_cylinder_int = sphere_cylinder_int
-        self.cylinder_int = cylinder_int
-        self.viscosity = viscosity
+        self.sphere_int = contact_factory.get_sphere_sphere_interactions()
+        self.sphere_cylinder_int = contact_factory.get_sphere_cylinder_interactions()
+        self.cylinder_int = contact_factory.get_sphere_sphere_interactions()
+        self.factory = object_factory
+        self.drag_coefficient = drag_coefficient
         self.neurons = []
         self.animator = Animator()
-        self.grid = UniformGrid(*grid)
+        self.grid = UniformGrid(*grid_range)
         self.density_check = density_check
 
         if self.simulation_2d:
-            self.animator.add_grid(self.grid.grid_values, self.grid.grid_values)
+            self.animator.add_grid(self.grid.representation_grid_values,
+                                   self.grid.representation_grid_values)
 
     def register_neuron(self, neuron: Neuron, color="red") -> None:
         """Registers a neuron and its representation into the container"""
@@ -59,16 +55,24 @@ class Container:
 
         self.animator.plotter.show()
 
-    def advance_cycles(self):
+    def advance_cycles(self, time_step: float) -> None:
         for neuron in self.neurons:
-            neuron.clocks.advance_clocks(self.time_step)
+            neuron.clocks.advance_clocks(time_step)
 
-    def create_new_neuron(self, coordinates: np.ndarray, color="red") -> Neuron:
+    def create_new_neuron(self, coordinates: Union[np.ndarray, List[float]],
+                          outgrowth_axis: Optional[Union[List[float], np.ndarray]] = None,
+                          differentiation_grade: int = 0, color="red") -> Neuron:
         """Creates a new neuron and registers it to the container"""
-        new_neuron = Neuron()
-        new_neuron.create_cell(coordinates)
-        new_neuron.set_outgrowth_axis(get_random_unit_vector(two_dimensions=self.simulation_2d))
+        if isinstance(coordinates, list):
+            coordinates = np.array(coordinates)
 
+        if not isinstance(outgrowth_axis, np.ndarray):
+            if isinstance(outgrowth_axis, list):
+                outgrowth_axis = np.array(outgrowth_axis)
+            else:
+                outgrowth_axis = get_random_unit_vector(two_dimensions=self.simulation_2d)
+
+        new_neuron = Neuron(coordinates, self.factory, outgrowth_axis, differentiation_grade)
         self.register_neuron(new_neuron, color=color)
 
         return new_neuron
@@ -80,7 +84,7 @@ class Container:
                 continue
             # Decide whether to create a new neurite or extend an existing one
             if neuron.neurites:
-                neuron.create_secondary_neurite()
+                neuron.create_secondary_neurite(self.factory)
                 neurite = neuron.neurites[-1]
                 neurite.create_neurite_representation(self.animator)
                 neighbors = self.grid.get_close_objects(neurite.distal_point)
@@ -235,13 +239,30 @@ class Container:
                 neuron.clocks.cycle_clock.remove_proliferation_flag()
                 self.update_drawings()
 
-    def get_displacement_from_force(self, force: np.ndarray) -> np.ndarray:
+    def get_displacement_from_force(self, force: np.ndarray, time_step: float) -> np.ndarray:
         """Returns a velocity from the passed force"""
         # Compute cell velocity
-        velocity = force / self.viscosity
-        return velocity * self.time_step
+        velocity = force / self.drag_coefficient
+        return velocity * time_step
 
-    def update_cell_positions(self) -> None:
+    def move_cell(self, neuron: Neuron, new_coordinates: Union[np.ndarray, List[float]]) -> None:
+        """Moves the cell to a new position and updates the proximal point of the first neurite"""
+        if isinstance(new_coordinates, list):
+            new_coordinates = np.array(new_coordinates)
+
+        self.grid.remove_cell(neuron.cell)
+        neuron.cell.set_center_position(new_coordinates)
+        self.grid.register_cell(neuron.cell)
+
+        if neuron.neurites:
+            neuron.place_neurite_on_cell_surface(neuron.neurites[0])
+
+    def move_neurite(self, neurite: Neurite, new_coordinates: np.ndarray) -> None:
+        self.grid.remove_neurite(neurite)
+        neurite.move_distal_point(new_coordinates)
+        self.grid.register_neurite(neurite)
+
+    def compute_displacements(self, time_step) -> None:
         """Updates the cell positions and representations based on object interactions"""
         for i, neuron in enumerate(self.neurons):
             reversed_order = range(len(neuron.neurites) - 1, -1, -1)
@@ -294,7 +315,7 @@ class Container:
                     else:
                         neuron.cell.force_from_daughter -= neurite_force * (1 - fraction)
 
-                displacement = self.get_displacement_from_force(force)
+                displacement = self.get_displacement_from_force(force, time_step)
                 self.neurons[i].neurites[j].displacement = displacement
 
                 if j > 0:
@@ -316,27 +337,23 @@ class Container:
             force += neuron.cell.force_from_neighbors
 
             # Convert force value to displacement to assign new position
-            displacement = self.get_displacement_from_force(force)
+            displacement = self.get_displacement_from_force(force, time_step)
             neuron.cell.displacement = displacement
 
+    def update_cell_positions(self) -> None:
         for neuron in self.neurons:
             neuron.cell.force_from_neighbors = np.zeros(3)
             neuron.cell.force_from_daughter = np.zeros(3)
 
-            self.grid.remove_cell(neuron.cell)
-            neuron.cell.set_center_position(neuron.cell.position + neuron.cell.displacement)
-            self.grid.register_cell(neuron.cell)
-
             for j, neurite in enumerate(neuron.neurites):
                 neurite.force_from_daughter = np.zeros(3)
-                new_point = neurite.distal_point + neurite.displacement
-
-                self.grid.remove_neurite(neurite)
-                neurite.move_distal_point(new_point)
-                self.grid.register_neurite(neurite)
+                self.move_neurite(neurite, neurite.distal_point + neurite.displacement)
                 if j < len(neuron.neurites) - 1:
                     neuron.neurites[j + 1].move_proximal_point(neuron.neurites[j].distal_point)
 
             # Update the proximal position of the first neurite
-            if neuron.neurites:
-                neuron.place_neurite_on_cell_surface(neuron.neurites[0])
+            self.move_cell(neuron, neuron.cell.position + neuron.cell.displacement)
+
+    def solve_mechanics(self, time_step) -> None:
+        self.compute_displacements(time_step)
+        self.update_cell_positions()

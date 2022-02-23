@@ -29,7 +29,7 @@ def create_legend_item(status: str, color: str, pos: Tuple[int]) -> Tuple[vedo.C
 # Define time variables
 timestep = 0.1
 total_time = 300
-pb = utilities.get_progress_bar(total_time, timestep)
+pb = utilities.get_simulation_timer(total_time, timestep)
 
 clock = vedo.Text2D("Simulation step: 0", pos="top right", c="black", font="Courier")
 legend = vedo.shapes.Rectangle(p1=(70, 50, 0), p2=(122, -30), c='gray7', alpha=1)

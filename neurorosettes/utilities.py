@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
 import numpy as np
-from vedo import Plotter, Sphere, Spring, ProgressBar, Grid
+from vedo import Plotter, Sphere, Spring, ProgressBar, Grid, Text2D
 
 
 class Tissue(ABC):
@@ -65,16 +65,7 @@ def get_random_unit_vector(two_dimensions=False) -> np.ndarray:
     return vector / np.linalg.norm(vector)
 
 
-def get_distance_unit_vector_and_norm(point1, point2):
-    """Returns the direction and magnitude of a vector that connects two points."""
-    distance_vector = point1 - point2
-    norm = np.linalg.norm(distance_vector)
-    unit_vector = distance_vector / norm
-
-    return unit_vector, norm
-
-
-def get_progress_bar(total_time: float, timestep: float) -> ProgressBar:
+def get_simulation_timer(total_time: float, timestep: float) -> ProgressBar:
     """Returns a progress bar with the simulation time"""
     return ProgressBar(0, total_time / timestep, c="r")
 
@@ -82,18 +73,22 @@ def get_progress_bar(total_time: float, timestep: float) -> ProgressBar:
 class Animator:
     def __init__(self):
         self.plotter = Plotter(interactive=False, axes=0)
-        self.set_camera()
+        self.clock = Text2D("Simulation step: 0", pos="top right", c="black", font="Courier")
+        self.plotter += self.clock
+
+    def show(self, interactive: bool = False):
+        self.plotter.show(interactive=interactive, resetcam=False)
+
+    def update_clock(self, time_point: float) -> None:
+        self.clock.text(f"Simulation step: {time_point}")
 
     def add_grid(self, x_grid, y_grid):
         self.plotter += Grid(sx=x_grid, sy=y_grid, c='lightgrey')
-        # self.plotter += Grid(sx=x_grid, sy=y_grid, c='lightgrey', normal=(0, 1, 0))
 
-    def set_camera(self):
-        self.plotter.camera.SetPosition([0., 0., 500.])
-        # self.plotter.camera.SetFocalPoint([0., 0., 0.])
-        # self.plotter.camera.SetViewUp([0., 1., 0.])
-        # self.plotter.camera.SetDistance(200.)
-        # self.plotter.camera.SetClippingRange([180., 220.])
+    def set_camera(self, height: float):
+        self.plotter.camera.SetPosition([0., 0., height])
+        self.plotter.camera.SetFocalPoint([0., 0., 0.])
+        self.plotter.camera.SetViewUp([0., 1., 0.])
 
     def draw_spring(self, base_point: np.ndarray, top_point: np.ndarray, radius: float):
         """Plots a spring and a sphere to represent a neurite in vedo."""

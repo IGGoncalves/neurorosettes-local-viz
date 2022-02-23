@@ -19,7 +19,7 @@ timestep = 0.1
 total_time = 100.0
 
 
-pb = utilities.get_progress_bar(total_time, timestep)
+pb = utilities.get_simulation_timer(total_time, timestep)
 
 txt = vedo.Text2D(f"Simulation", pos="top right", font=text_font)
 

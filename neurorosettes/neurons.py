@@ -1,27 +1,26 @@
 """This module deals with the neuron structure and functions"""
-from typing import List, Optional, Tuple
-
 import numpy as np
 
-from neurorosettes.physics import default_sphere_mechanics, default_cylinder_mechanics
-from neurorosettes.subcellular import CellBody, Neurite
+from neurorosettes.subcellular import CellBody, Neurite, ObjectFactory
 from neurorosettes.clocks import CellClocks
 
 
 class Neuron:
     """Represents a neuron that has a cell and neurites"""
-    cell: Optional[CellBody]
-    clocks: CellClocks
-    neurites: List[Neurite]
-    outgrowth_axis: np.ndarray
-    max_number_of_neurites: int
 
-    def __init__(self):
-        self.cell = None
+    def __init__(self, position: np.ndarray, factory: ObjectFactory,
+                 outgrowth_axis: np.ndarray = np.array([1.0, 0.0, 0.0]),
+                 differentiation_grade: int = 0) -> None:
+        self.cell = factory.get_cell_body(position)
+        self.outgrowth_axis = outgrowth_axis
         self.clocks = CellClocks()
-        self.neurites = []
-        self.outgrowth_axis = np.zeros(3)
         self.max_number_of_neurites = 4
+        self.neurites = []
+
+        if differentiation_grade != 0:
+            self.create_first_neurite(factory)
+            for _ in range(1, differentiation_grade):
+                self.create_secondary_neurite(factory)
 
     @property
     def cell_radius(self):
@@ -62,42 +61,18 @@ class Neuron:
         neurite_attachment_coordinates = self.get_neurite_position_on_cell_surface()
         neurite.move_proximal_point(neurite_attachment_coordinates)
 
-    def move_cell(self, coordinates: np.ndarray) -> None:
-        """Moves the cell to a new position and updates the proximal point of the first neurite"""
-        self.cell.set_center_position(coordinates)
-        if self.neurites:
-            self.place_neurite_on_cell_surface(self.neurites[0])
-
-    def create_cell(self, coordinates: np.ndarray) -> None:
-        """Creates the soma cell of the neuron at the given position"""
-        self.cell = CellBody()
-        self.cell.set_center_position(coordinates)
-        self.cell.set_force_from_daughter(np.zeros(3))
-        self.cell.set_mechanics(default_sphere_mechanics)
-
-    def create_first_neurite(self) -> None:
+    def create_first_neurite(self, factory: ObjectFactory) -> None:
         """Creates a neurite attached to the soma cell"""
         proximal_point = self.cell.position + self.outgrowth_axis * self.cell.mechanics.radius
-        neurite = Neurite(proximal_point, self.outgrowth_axis, default_cylinder_mechanics)
-        # TODO: This should be done automatically
-        neurite.force_from_daughter = np.zeros(3)
+        neurite = factory.get_neurite(proximal_point, self.outgrowth_axis)
         self.neurites.append(neurite)
         self.clocks.cycle_clock.cycle_block = True
 
-    def create_secondary_neurite(self) -> None:
+    def create_secondary_neurite(self, factory: ObjectFactory) -> None:
         """Creates a neurite attached to the most recent neurite"""
         if len(self.neurites) >= self.max_number_of_neurites:
             return
 
         proximal_point = self.neurites[-1].distal_point
-        neurite = Neurite(proximal_point, self.outgrowth_axis, default_cylinder_mechanics)
-        # TODO: This should be done automatically
-        neurite.force_from_daughter = np.zeros(3)
+        neurite = factory.get_neurite(proximal_point, self.outgrowth_axis)
         self.neurites.append(neurite)
-
-    def create_neurites_based_on_differentiation(self, differentiation_grade: int) -> None:
-        """Creates neurites based on the differentiation grade"""
-        self.create_first_neurite()
-        for _ in range(1, differentiation_grade):
-            self.create_secondary_neurite()
-

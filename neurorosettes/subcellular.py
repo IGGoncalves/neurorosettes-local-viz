@@ -1,23 +1,24 @@
 """This module deals with the two components of the neurons: soma cells and neurites"""
 from typing import Optional, Tuple
+from dataclasses import dataclass
 
 import numpy as np
 from vedo import Sphere, Spring
 
-from neurorosettes.physics import SphereInteractions, SphereCylinderInteractions, SphereMechanics, CylinderMechanics, CylinderInteractions
+from neurorosettes import physics
 from neurorosettes.utilities import Animator
 
 
 class CellBody:
     """Represents a cell with physical properties"""
 
-    def __init__(self) -> None:
-        self.position: np.ndarray = np.zeros(3)
-        self.force_from_daughter: np.ndarray = np.zeros(3)
-        self.force_from_neighbors: np.ndarray = np.zeros(3)
-        self.mechanics: Optional[SphereMechanics] = None
-        self.sphere: Optional[Sphere] = None
-        self.displacement: np.ndarray = np.zeros(3)
+    def __init__(self, position: np.ndarray, mechanics: physics.PhysicalProperties) -> None:
+        self.position = position
+        self.mechanics = mechanics
+        self.force_from_daughter = np.zeros(3)
+        self.force_from_neighbors = np.zeros(3)
+        self.displacement = np.zeros(3)
+        self.sphere = None
 
     def set_center_position(self, coordinates: np.ndarray) -> None:
         """Sets the cell position"""
@@ -31,7 +32,7 @@ class CellBody:
         self.force_from_daughter[1] = force[1]
         self.force_from_daughter[2] = force[2]
 
-    def set_mechanics(self, mechanics: SphereMechanics) -> None:
+    def set_mechanics(self, mechanics: physics.PhysicalProperties) -> None:
         """Sets the physical properties of the cell"""
         self.mechanics = mechanics
 
@@ -43,42 +44,32 @@ class CellBody:
         """Updates the sphere representation of the cell"""
         self.sphere.pos(self.position)
 
-    def get_neighbor_force(self, neighbor: "CellBody", interaction: SphereInteractions) -> np.ndarray:
+    def get_neighbor_force(self, neighbor: "CellBody", interaction: physics.ContactForces) -> np.ndarray:
         """Returns the interaction force between two cells"""
         # Compute the vector that connects the centers of the two cells
-        distance_vector = np.array(self.position) - np.array(neighbor.position)
-        norm = np.linalg.norm(distance_vector)
+        distance_vector, norm = physics.get_distance_components(self.position, neighbor.position)
         distance_vector_normalized = distance_vector / norm
 
         # Calculate cell-cell adhesion forces
-        adhesion_magnitude = interaction.get_adhesion_component(radius1=self.mechanics.interaction_radius,
-                                                                radius2=neighbor.mechanics.interaction_radius,
-                                                                distance=norm)
+        magnitude = physics.get_sphere_sphere_contact(self.mechanics.interaction_radius,
+                                                      neighbor.mechanics.interaction_radius,
+                                                      distance=norm,
+                                                      interaction=interaction)
 
-        adhesion_magnitude *= self.mechanics.adhesiveness * neighbor.mechanics.adhesiveness
-
-        # Calculate cell-cell repulsion forces
-        repulsion_magnitude = interaction.get_repulsion_component(radius1=self.mechanics.radius,
-                                                                  radius2=neighbor.mechanics.radius,
-                                                                  distance=norm)
-
-        # Calculate resulting force
-        force_magnitude = repulsion_magnitude - adhesion_magnitude
-
-        return force_magnitude * distance_vector_normalized
+        return magnitude * distance_vector_normalized
 
 
 class Neurite:
     """Represents a neurite with physical properties"""
 
-    def __init__(self, proximal_point: np.ndarray, axis: np.ndarray, cylinder_mechanics: CylinderMechanics):
+    def __init__(self, proximal_point: np.ndarray, axis: np.ndarray, cylinder_mechanics: physics.CylinderProperties):
         """Initializes the neurite"""
         self.proximal_point: np.ndarray = proximal_point
         self.distal_point: np.ndarray = proximal_point + axis * cylinder_mechanics.default_length
-        self.mechanics: CylinderMechanics = cylinder_mechanics
+        self.mechanics = cylinder_mechanics
         self.cylinder: Optional[Tuple[Spring, Sphere]] = None
-        self.force_from_daughter: Optional[np.ndarray] = None
-        self.displacement: np.ndarray = np.zeros(3)
+        self.force_from_daughter = np.zeros(3)
+        self.displacement = np.zeros(3)
 
     def set_force_from_daughter(self, force):
         """Sets the force transmitted by daughter"""
@@ -97,7 +88,7 @@ class Neurite:
     @property
     def tension(self) -> float:
         """Returns the tension of the spring"""
-        return self.mechanics.get_tension(self.current_length)
+        return self.mechanics.get_spring_tension(self.current_length)
 
     @property
     def spring_axis(self) -> np.ndarray:
@@ -126,29 +117,67 @@ class Neurite:
         return -self.tension / self.current_length * self.spring_axis
 
     def get_cell_neighbor_force(self, neighbor: CellBody,
-                                interaction: SphereCylinderInteractions) -> Tuple[np.ndarray, float]:
+                                interaction: physics.ContactForces) -> Tuple[np.ndarray, float]:
         """Returns the interaction force between two cells"""
-        # Compute the vector that connects the centers of the two cells
-        distance_vector = np.array(self.distal_point) - np.array(neighbor.position)
-        norm = np.linalg.norm(distance_vector)
-        distance_vector_normalized = distance_vector / norm
+        point = physics.get_sphere_cylinder_intersection(sphere_center=neighbor.position,
+                                                         cylinder_base=self.proximal_point,
+                                                         cylinder_top=self.distal_point)
 
-        # Calculate cell-cell repulsion forces
-        force_magnitude, fraction = interaction.compute_interactions(cylinder_radius=self.mechanics.radius,
-                                                                     cylinder_base=self.proximal_point,
-                                                                     cylinder_top=self.distal_point,
-                                                                     sphere_center=neighbor.position,
-                                                                     sphere_radius=neighbor.mechanics.radius)
+        distance_to_point = np.linalg.norm(np.subtract(point, self.proximal_point))
+        fraction_to_mother = distance_to_point / self.current_length
 
-        force = force_magnitude
+        distance_vector, norm = physics.get_distance_components(neighbor.position, point)
+        unit_vector = distance_vector / norm
 
-        return force, fraction
+        magnitude = physics.get_sphere_sphere_contact(radius1=self.mechanics.interaction_radius,
+                                                      radius2=neighbor.mechanics.interaction_radius,
+                                                      distance=norm,
+                                                      interaction=interaction)
 
-    def get_neurite_neighbor_force(self, neighbor: "Neurite", interaction: CylinderInteractions):
+        return magnitude * unit_vector, fraction_to_mother
+
+    def get_neurite_neighbor_force(self, neighbor: "Neurite", interaction: physics.ContactForces):
         """Returns the interaction force between two cells"""
-        force, fraction = interaction.compute_interactions(self.mechanics.radius,
-                                                           self.proximal_point, self.distal_point,
-                                                           neighbor.mechanics.radius,
-                                                           neighbor.proximal_point, neighbor.distal_point)
+        point1, point2 = physics.get_cylinder_intersection(cylinder_base_1=self.proximal_point,
+                                                           cylinder_top_1=self.distal_point,
+                                                           cylinder_base_2=neighbor.proximal_point,
+                                                           cylinder_top_2=neighbor.distal_point)
 
-        return force, fraction
+        distance_to_point = np.linalg.norm(np.subtract(point1, self.proximal_point))
+        fraction_to_mother = distance_to_point / self.current_length
+
+        distance_vector, norm = physics.get_distance_components(point2, point1)
+        unit_vector = distance_vector / norm
+
+        magnitude = physics.get_sphere_sphere_contact(radius1=self.mechanics.interaction_radius,
+                                                      radius2=neighbor.mechanics.interaction_radius,
+                                                      distance=norm,
+                                                      interaction=interaction)
+
+        return magnitude * unit_vector, fraction_to_mother
+
+
+@dataclass
+class ObjectFactory:
+    cell_radius: float = 8.0
+    cell_interaction_factor: float = 1.25
+    neurite_radius: float = 0.5
+    neurite_interaction_factor: float = 1.25
+    neurite_spring_constant: float = 5.0
+    neurite_default_length: float = 10.0
+    neurite_max_length: float = 15.0
+
+    def get_cell_body(self, center_position: np.ndarray) -> CellBody:
+        cell_mechanics = physics.PhysicalProperties(self.cell_radius,
+                                                    self.cell_interaction_factor)
+
+        return CellBody(center_position, cell_mechanics)
+
+    def get_neurite(self, proximal_position: np.ndarray, axis: np.ndarray) -> Neurite:
+        cylinder_mechanics = physics.CylinderProperties(self.neurite_radius,
+                                                        self.neurite_interaction_factor,
+                                                        self.neurite_spring_constant,
+                                                        self.neurite_default_length,
+                                                        self.neurite_max_length)
+
+        return Neurite(proximal_position, axis, cylinder_mechanics)

@@ -61,7 +61,7 @@ clock = vedo.Text2D("Simulation step: 0", pos="top right", c="black")
 container.animator.plotter += clock
 
 container.animator.plotter.show(resetcam=False, interactive=False)
-pb = utilities.get_progress_bar(total_time, timestep)
+pb = utilities.get_simulation_timer(total_time, timestep)
 
 # Run and plot simulation
 for t in pb.range():
