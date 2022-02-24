@@ -7,7 +7,7 @@ from neurorosettes.utilities import get_simulation_timer
 
 # Time constants
 STEP: float = 0.1
-TOTAL_TIME: float = 100.0
+TOTAL_TIME: float = 40.0
 
 # Domain constants
 GRID_MIN: float = -60.0
