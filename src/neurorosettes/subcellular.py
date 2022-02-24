@@ -1,4 +1,5 @@
 """This module deals with the two components of the neurons: soma cells and neurites"""
+import time
 from typing import Optional, Tuple
 from dataclasses import dataclass
 
@@ -47,16 +48,15 @@ class CellBody:
     def get_neighbor_force(self, neighbor: "CellBody", interaction: physics.ContactForces) -> np.ndarray:
         """Returns the interaction force between two cells"""
         # Compute the vector that connects the centers of the two cells
-        distance_vector, norm = physics.get_distance_components(self.position, neighbor.position)
-        distance_vector_normalized = distance_vector / norm
+        distance_vector, norm = physics.get_distance_components(neighbor.position, self.position)
 
         # Calculate cell-cell adhesion forces
-        magnitude = physics.get_sphere_sphere_contact(self.mechanics.interaction_radius,
-                                                      neighbor.mechanics.interaction_radius,
-                                                      distance=norm,
-                                                      interaction=interaction)
+        magnitude = interaction.compute_adhesion(distance=norm, radius1=self.mechanics.interaction_radius,
+                                                 radius2=neighbor.mechanics.interaction_radius)
 
-        return magnitude * distance_vector_normalized
+        magnitude -= interaction.compute_repulsion(norm, self.mechanics.radius, neighbor.mechanics.radius)
+
+        return magnitude * distance_vector
 
 
 class Neurite:
@@ -127,14 +127,14 @@ class Neurite:
         fraction_to_mother = distance_to_point / self.current_length
 
         distance_vector, norm = physics.get_distance_components(neighbor.position, point)
-        unit_vector = distance_vector / norm
 
-        magnitude = physics.get_sphere_sphere_contact(radius1=self.mechanics.interaction_radius,
-                                                      radius2=neighbor.mechanics.interaction_radius,
-                                                      distance=norm,
-                                                      interaction=interaction)
+        # Calculate cell-cell adhesion forces
+        magnitude = interaction.compute_adhesion(distance=norm, radius1=self.mechanics.interaction_radius,
+                                                 radius2=neighbor.mechanics.interaction_radius)
 
-        return magnitude * unit_vector, fraction_to_mother
+        magnitude -= interaction.compute_repulsion(norm, self.mechanics.radius, neighbor.mechanics.radius)
+
+        return magnitude * distance_vector, fraction_to_mother
 
     def get_neurite_neighbor_force(self, neighbor: "Neurite", interaction: physics.ContactForces):
         """Returns the interaction force between two cells"""
@@ -147,14 +147,15 @@ class Neurite:
         fraction_to_mother = distance_to_point / self.current_length
 
         distance_vector, norm = physics.get_distance_components(point2, point1)
-        unit_vector = distance_vector / norm
 
-        magnitude = physics.get_sphere_sphere_contact(radius1=self.mechanics.interaction_radius,
-                                                      radius2=neighbor.mechanics.interaction_radius,
-                                                      distance=norm,
-                                                      interaction=interaction)
+        # Calculate cell-cell adhesion forces
+        magnitude = interaction.compute_adhesion(distance=norm, radius1=self.mechanics.interaction_radius,
+                                                 radius2=neighbor.mechanics.interaction_radius)
 
-        return magnitude * unit_vector, fraction_to_mother
+        magnitude -= interaction.compute_repulsion(distance=norm, radius1=self.mechanics.radius,
+                                                   radius2=neighbor.mechanics.radius)
+
+        return magnitude * distance_vector, fraction_to_mother
 
 
 @dataclass
@@ -162,8 +163,8 @@ class ObjectFactory:
     cell_radius: float = 8.0
     cell_interaction_factor: float = 1.25
     neurite_radius: float = 0.5
-    neurite_interaction_factor: float = 1.25
-    neurite_spring_constant: float = 5.0
+    neurite_interaction_factor: float = 2.5
+    neurite_spring_constant: float = 10.0
     neurite_default_length: float = 10.0
     neurite_max_length: float = 15.0
 

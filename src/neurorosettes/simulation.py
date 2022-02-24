@@ -1,5 +1,6 @@
 """This module deals with the neuron structure and functions"""
 from typing import List, Optional, Union
+import time
 
 import numpy as np
 
@@ -18,13 +19,13 @@ class Container:
                  simulation_2d: bool = True,
                  contact_factory: ContactFactory = PotentialsFactory(),
                  object_factory: ObjectFactory = ObjectFactory(),
-                 drag_coefficient: float = 10.0,
+                 drag_coefficient: float = 5.0,
                  density_check: Optional[CellDensityCheck] = None) -> None:
 
         self.simulation_2d = simulation_2d
         self.sphere_int = contact_factory.get_sphere_sphere_interactions()
         self.sphere_cylinder_int = contact_factory.get_sphere_cylinder_interactions()
-        self.cylinder_int = contact_factory.get_sphere_sphere_interactions()
+        self.cylinder_int = contact_factory.get_cylinder_cylinder_interactions()
         self.factory = object_factory
         self.drag_coefficient = drag_coefficient
         self.neurons = []
@@ -291,14 +292,14 @@ class Container:
                     cell_force, fraction = neurite.get_cell_neighbor_force(neighbor,
                                                                            self.sphere_cylinder_int)
 
-                    neighbor.force_from_neighbors += cell_force
-                    force -= cell_force * fraction
+                    neighbor.force_from_neighbors -= cell_force
+                    force += cell_force * fraction
 
                     # Transmit the force from cell to proximal part of the neurite
                     if j > 0:
-                        neuron.neurites[j - 1].force_from_daughter -= cell_force * (1 - fraction)
+                        neuron.neurites[j - 1].force_from_daughter += cell_force * (1 - fraction)
                     else:
-                        neuron.cell.force_from_daughter -= cell_force * (1 - fraction)
+                        neuron.cell.force_from_daughter += cell_force * (1 - fraction)
 
                 # Neurites force
                 for neighbor in nearby_neurites:
@@ -307,13 +308,13 @@ class Container:
 
                     neurite_force, fraction = neurite.get_neurite_neighbor_force(neighbor,
                                                                                  self.cylinder_int)
-                    force -= neurite_force * fraction
+                    force += neurite_force * fraction
 
                     # Transmit the force from cell to proximal part of the neurite
                     if j > 0:
-                        neuron.neurites[j - 1].force_from_daughter -= neurite_force * (1 - fraction)
+                        neuron.neurites[j - 1].force_from_daughter += neurite_force * (1 - fraction)
                     else:
-                        neuron.cell.force_from_daughter -= neurite_force * (1 - fraction)
+                        neuron.cell.force_from_daughter += neurite_force * (1 - fraction)
 
                 displacement = self.get_displacement_from_force(force, time_step)
                 self.neurons[i].neurites[j].displacement = displacement

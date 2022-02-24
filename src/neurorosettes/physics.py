@@ -293,7 +293,7 @@ class SimpleContact(ContactForces):
     def compute_adhesion(self, distance: float, radius1: float, radius2: float) -> float:
         """Returns a force proportional to the adhesion coefficient, cell overlap and cell radii"""
         # Compute the cells' overlap, taking into account an interaction radius
-        adhesion_overlap = get_sphere_overlap(distance, radius1, radius2)
+        adhesion_overlap = get_sphere_overlap(radius1, radius2, distance)
         # Return no force if there is no interaction
         if adhesion_overlap == 0.0:
             return 0.0
@@ -306,7 +306,7 @@ class SimpleContact(ContactForces):
     def compute_repulsion(self, distance: float, radius1: float, radius2: float) -> float:
         """Returns a force proportional to the repulsion coefficient and cell overlap"""
         # Check if cells overlap (real radius)
-        overlap = get_sphere_overlap(distance, radius1, radius2)
+        overlap = get_sphere_overlap(radius1, radius2, distance)
 
         return self.repulsion_coefficient * overlap
 
@@ -324,7 +324,7 @@ class PotentialsContact(ContactForces):
     def compute_adhesion(self, distance: float, radius1: float, radius2: float) -> float:
         """Returns a force based on adhesion potentials"""
         # Check if cells interact (interaction radius)
-        adhesion_overlap = get_sphere_overlap(distance, radius1, radius2)
+        adhesion_overlap = get_sphere_overlap(radius1, radius2, distance)
         # Return no force if there is no interaction
         if adhesion_overlap == 0.0:
             return 0.0
@@ -338,7 +338,7 @@ class PotentialsContact(ContactForces):
     def compute_repulsion(self, distance: float, radius1: float, radius2: float) -> float:
         """Returns a force based on repulsion potentials"""
         # Check if cells overlap (real radius)
-        overlap = get_sphere_overlap(distance, radius1, radius2)
+        overlap = get_sphere_overlap(radius1, radius2, distance)
         if overlap == 0.0:
             return 0.0
         # Compute repulsion force
@@ -346,50 +346,6 @@ class PotentialsContact(ContactForces):
         repulsion_component = repulsion_component ** (self.smoothness_factor + 1)
 
         return self.repulsion_coefficient * repulsion_component
-
-
-def get_sphere_sphere_contact(radius1: float, radius2: float, distance: float, interaction: ContactForces,
-                              get_adhesion: bool = True, get_repulsion: bool = True) -> float:
-    """
-    Gets the magnitude of the contact forces between two objects represented as spheres.
-
-    Parameters
-    ----------
-    radius1: float
-        The radius of the first object (represented as a sphere).
-    radius2: float
-        The radius of the second object (represented as a sphere).
-    distance: float
-        The distance between the centres of the two objects.
-    interaction: ContactForces
-        The contact function to use to compute adhesion and/or repulsion forces.
-    get_adhesion: bool, default True
-        If adhesion forces should be computed.
-    get_repulsion: bool, default True
-        If repulsion forces should be computed.
-
-    Returns
-    -------
-    float
-        The magnitude of the contact forces between the two objects.
-
-    Raises
-    ------
-    ValueError
-        If neither adhesion nor repulsion interactions are selected.
-    """
-
-    try:
-        if not get_adhesion and not get_repulsion:
-            raise ValueError
-
-        force = interaction.compute_adhesion(radius1, radius2, distance) if get_adhesion else 0.0
-        force -= interaction.compute_repulsion(radius1, radius2, distance) if get_repulsion else 0.0
-
-        return force
-
-    except ValueError:
-        print(ValueError("Neither repulsion nor adhesion were selected."))
 
 
 @dataclass
@@ -410,15 +366,15 @@ class ContactFactory(ABC):
 @dataclass
 class PotentialsFactory(ContactFactory):
     sphere_sphere_adhesion: float = 4.0
-    sphere_sphere_repulsion: float = 10.0
+    sphere_sphere_repulsion: float = 50.0
     sphere_sphere_smoothness: int = 1
 
     sphere_cylinder_adhesion: float = 0.0
     sphere_cylinder_repulsion: float = 100.0
     sphere_cylinder_smoothness: int = 1
 
-    cylinder_cylinder_adhesion: float = 40.0
-    cylinder_cylinder_repulsion: float = 10.0
+    cylinder_cylinder_adhesion: float = 4.0
+    cylinder_cylinder_repulsion: float = 100.0
     cylinder_cylinder_smoothness: int = 1
 
     def get_sphere_sphere_interactions(self) -> PotentialsContact:

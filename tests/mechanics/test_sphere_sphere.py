@@ -1,4 +1,4 @@
-"""Script to test sphere-neurite interactions"""
+"""Script to test sphere-sphere interactions"""
 import time
 
 from neurorosettes.simulation import Container
@@ -7,7 +7,7 @@ from neurorosettes.utilities import get_simulation_timer
 
 # Time constants
 STEP: float = 0.1
-TOTAL_TIME: float = 20.0
+TOTAL_TIME: float = 40.0
 
 # Domain constants
 GRID_MIN: float = -60.0
@@ -16,16 +16,15 @@ GRID_STEP: float = 20.0
 
 
 def create_tissue(container: Container) -> None:
-    # Populate environment with cells
-    container.create_new_neuron(coordinates=[0.0, 10.0, 0.0],
-                                outgrowth_axis=[0.0, 1.0, 0.0],
-                                differentiation_grade=2)
+    """Creates and registers new neurons in the simulation world."""
+    # Create a neuron with two neurites
+    container.create_new_neuron(coordinates=[0.0, 10.0, 0.0])
 
-    container.create_new_neuron(coordinates=[4.0, 40.0, 0.0],
-                                differentiation_grade=0)
+    # Create a neuron with one neurite
+    container.create_new_neuron(coordinates=[-5.0, 10.0, 0.0])
 
     # Plot the current state of the simulation
-    container.animator.set_camera(height=200.0)
+    container.animator.set_camera(height=150.0)
     container.animator.show()
     time.sleep(1)
 

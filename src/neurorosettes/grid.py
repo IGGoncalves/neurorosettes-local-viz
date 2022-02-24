@@ -63,13 +63,13 @@ class UniformGrid:
         neighbors = list()
 
         x_neighbors = [idxx + value for value in [-1, 0, 1]
-                       if 0 < idxx + value < len(self.idx_values) - 1]
+                       if 0 < idxx + value < len(self.idx_values)]
 
         y_neighbors = [idxy + value for value in [-1, 0, 1]
-                       if 0 < idxy + value < len(self.idx_values) - 1]
+                       if 0 < idxy + value < len(self.idx_values)]
 
         z_neighbors = [idxz + value for value in [-1, 0, 1]
-                       if 0 < idxz + value < len(self.idx_values) - 1]
+                       if 0 < idxz + value < len(self.idx_values)]
 
         for z in z_neighbors:
             for y in y_neighbors:
