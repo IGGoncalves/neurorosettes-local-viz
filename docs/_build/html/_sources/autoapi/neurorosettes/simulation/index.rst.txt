@@ -22,65 +22,65 @@ Classes
 
 
 
-.. py:class:: Container(grid_range: List[float], simulation_2d: bool = True, contact_factory: neurorosettes.physics.ContactFactory = PotentialsFactory(), object_factory: neurorosettes.subcellular.ObjectFactory = ObjectFactory(), drag_coefficient: float = 10.0, density_check: Optional[neurorosettes.grid.CellDensityCheck] = None)
+.. py:class:: Container(grid_range, simulation_2d = True, contact_factory = PotentialsFactory(), object_factory = ObjectFactory(), drag_coefficient = 5.0, density_check = None)
 
    Represents the environment where neurons exist
 
-   .. py:method:: register_neuron(self, neuron: neurorosettes.neurons.Neuron, color='red') -> None
+   .. py:method:: register_neuron(self, neuron, color='red')
 
       Registers a neuron and its representation into the container
 
 
-   .. py:method:: update_drawings(self) -> None
+   .. py:method:: update_drawings(self)
 
       Updates the representations of the neurons
 
 
-   .. py:method:: advance_cycles(self, time_step: float) -> None
+   .. py:method:: advance_cycles(self, time_step)
 
 
-   .. py:method:: create_new_neuron(self, coordinates: Union[numpy.ndarray, List[float]], outgrowth_axis: Optional[Union[List[float], numpy.ndarray]] = None, differentiation_grade: int = 0, color='red') -> neurorosettes.neurons.Neuron
+   .. py:method:: create_new_neuron(self, coordinates, outgrowth_axis = None, differentiation_grade = 0, color='red')
 
       Creates a new neuron and registers it to the container
 
 
-   .. py:method:: differentiate(self) -> None
+   .. py:method:: differentiate(self)
 
       Checks for neurons that are flagged for differentiation and deals with differentiation
 
 
-   .. py:method:: kill(self) -> None
+   .. py:method:: kill(self)
 
       Checks for neurons that are flagged for death and removes them from the container
 
 
-   .. py:method:: divide(self) -> None
+   .. py:method:: divide(self)
 
       Checks for neurons that are flagged for division and deals with division
 
 
-   .. py:method:: get_displacement_from_force(self, force: numpy.ndarray, time_step: float) -> numpy.ndarray
+   .. py:method:: get_displacement_from_force(self, force, time_step)
 
       Returns a velocity from the passed force
 
 
-   .. py:method:: move_cell(self, neuron: neurorosettes.neurons.Neuron, new_coordinates: Union[numpy.ndarray, List[float]]) -> None
+   .. py:method:: move_cell(self, neuron, new_coordinates)
 
       Moves the cell to a new position and updates the proximal point of the first neurite
 
 
-   .. py:method:: move_neurite(self, neurite: neurorosettes.subcellular.Neurite, new_coordinates: numpy.ndarray) -> None
+   .. py:method:: move_neurite(self, neurite, new_coordinates)
 
 
-   .. py:method:: compute_displacements(self, time_step) -> None
+   .. py:method:: compute_displacements(self, time_step)
 
       Updates the cell positions and representations based on object interactions
 
 
-   .. py:method:: update_cell_positions(self) -> None
+   .. py:method:: update_cell_positions(self)
 
 
-   .. py:method:: solve_mechanics(self, time_step) -> None
+   .. py:method:: solve_mechanics(self, time_step)
 
 
 

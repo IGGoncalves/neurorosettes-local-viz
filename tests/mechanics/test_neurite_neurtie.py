@@ -17,18 +17,17 @@ GRID_STEP: float = 20.0
 
 def create_tissue(container: Container) -> None:
     # Populate environment with cells
-    container.create_new_neuron(coordinates=[0.0, 10.0, 0.0],
-                                outgrowth_axis=[0.0, -1.0, 0.0],
+    container.create_new_neuron(coordinates=[0.0, -10.0, 0.0],
+                                outgrowth_axis=[0.0, 1.0, 0.0],
                                 differentiation_grade=2)
 
-    container.create_new_neuron(coordinates=[15.0, -20.5, 0.0],
-                                outgrowth_axis=[-0.77, 0.77, 0.0],
+    container.create_new_neuron(coordinates=[19.0, 16.5, 0.0],
+                                outgrowth_axis=[-1, 0, 0.0],
                                 differentiation_grade=1)
 
     # Plot the current state of the simulation
     container.animator.set_camera(height=200.0)
     container.animator.show()
-    time.sleep(1)
 
 
 def run_simulation(time_step: float, total_time: float, container: Container) -> None:
@@ -50,7 +49,7 @@ def run_simulation(time_step: float, total_time: float, container: Container) ->
 
 if __name__ == "__main__":
     # Initialize simulation objects
-    sim_world = Container(grid_range=[GRID_MIN, GRID_MAX, GRID_STEP])
+    sim_world = Container(grid_range=[GRID_MIN, GRID_MAX, GRID_STEP], simulation_2d=False)
     # Create initial configuration
     create_tissue(sim_world)
     # Run the simulation to check if springs work

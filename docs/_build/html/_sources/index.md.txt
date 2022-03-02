@@ -5,9 +5,8 @@
 :maxdepth: 1
 :hidden:
 
-example.ipynb
-changelog.md
-contributing.md
-conduct.md
+simulation.md
+cycle.md
+mechanics.md
 autoapi/index
 ```

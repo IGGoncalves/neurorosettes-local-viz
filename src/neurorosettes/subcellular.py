@@ -132,28 +132,29 @@ class Neurite:
         magnitude = interaction.compute_adhesion(distance=norm, radius1=self.mechanics.interaction_radius,
                                                  radius2=neighbor.mechanics.interaction_radius)
 
-        magnitude -= interaction.compute_repulsion(norm, self.mechanics.radius, neighbor.mechanics.radius)
+        magnitude -= interaction.compute_repulsion(norm, self.mechanics.interaction_radius,
+                                                   neighbor.mechanics.interaction_radius)
 
         return magnitude * distance_vector, fraction_to_mother
 
     def get_neurite_neighbor_force(self, neighbor: "Neurite", interaction: physics.ContactForces):
         """Returns the interaction force between two cells"""
-        point1, point2 = physics.get_cylinder_intersection(cylinder_base_1=self.proximal_point,
-                                                           cylinder_top_1=self.distal_point,
-                                                           cylinder_base_2=neighbor.proximal_point,
-                                                           cylinder_top_2=neighbor.distal_point)
+
+        point1, point2 = physics.get_cylinder_intersection(cylinder_base_1=self.distal_point,
+                                                           cylinder_top_1=self.proximal_point,
+                                                           cylinder_base_2=neighbor.distal_point,
+                                                           cylinder_top_2=neighbor.proximal_point)
 
         distance_to_point = np.linalg.norm(np.subtract(point1, self.proximal_point))
         fraction_to_mother = distance_to_point / self.current_length
-
         distance_vector, norm = physics.get_distance_components(point2, point1)
 
         # Calculate cell-cell adhesion forces
         magnitude = interaction.compute_adhesion(distance=norm, radius1=self.mechanics.interaction_radius,
                                                  radius2=neighbor.mechanics.interaction_radius)
 
-        magnitude -= interaction.compute_repulsion(distance=norm, radius1=self.mechanics.radius,
-                                                   radius2=neighbor.mechanics.radius)
+        magnitude -= interaction.compute_repulsion(distance=norm, radius1=self.mechanics.interaction_radius,
+                                                   radius2=neighbor.mechanics.interaction_radius)
 
         return magnitude * distance_vector, fraction_to_mother
 
@@ -163,7 +164,7 @@ class ObjectFactory:
     cell_radius: float = 8.0
     cell_interaction_factor: float = 1.25
     neurite_radius: float = 0.5
-    neurite_interaction_factor: float = 2.5
+    neurite_interaction_factor: float = 1.5
     neurite_spring_constant: float = 10.0
     neurite_default_length: float = 10.0
     neurite_max_length: float = 15.0
@@ -175,6 +176,9 @@ class ObjectFactory:
         return CellBody(center_position, cell_mechanics)
 
     def get_neurite(self, proximal_position: np.ndarray, axis: np.ndarray) -> Neurite:
+        if np.linalg.norm(axis) > 1.0:
+            axis = physics.normalize_vector(axis)
+
         cylinder_mechanics = physics.CylinderProperties(self.neurite_radius,
                                                         self.neurite_interaction_factor,
                                                         self.neurite_spring_constant,

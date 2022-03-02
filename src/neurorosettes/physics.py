@@ -26,12 +26,29 @@ def get_distance_components(point1: np.ndarray, point2: np.ndarray) -> Tuple[np.
     """
     distance_vector = point1 - point2
     norm = np.linalg.norm(distance_vector)
-    unit_vector = distance_vector / norm
+    unit_vector = distance_vector / np.linalg.norm(distance_vector)
 
     return unit_vector, norm
 
 
-def get_sphere_overlap(radius1: float, radius2: float, distance: float, ) -> float:
+def normalize_vector(vector: np.ndarray) -> np.ndarray:
+    """
+    Returns the input array normalized to a unit vector.
+
+    Parameters
+    ----------
+    vector
+        The array to be normalized.
+
+    Returns
+    -------
+    np.ndarray
+        The normalized vector.
+    """
+    return vector / np.linalg.norm(vector)
+
+
+def get_sphere_overlap(radius1: float, radius2: float, distance: float) -> float:
     """
     Returns the overlap between two objects represented as spheres.
 
@@ -123,65 +140,81 @@ def get_cylinder_intersection(cylinder_base_1: np.ndarray,
     np.ndarray
         The closest point on the axis of the second cylinder.
     """
-    base_axis = np.subtract(cylinder_base_1, cylinder_base_2)
     cylinder_axis_2 = np.subtract(cylinder_top_2, cylinder_base_2)
     cylinder_axis_1 = np.subtract(cylinder_top_1, cylinder_base_1)
 
-    d1343 = np.dot(base_axis, cylinder_axis_2)
-    d4321 = np.dot(cylinder_axis_2, cylinder_axis_1)
-    d1321 = np.dot(base_axis, cylinder_axis_1)
-    d4343 = np.dot(cylinder_axis_2, cylinder_axis_2)
-    d2121 = np.dot(cylinder_axis_1, cylinder_axis_1)
+    unit_vector_2, norm2 = get_distance_components(cylinder_top_2, cylinder_base_2)
+    unit_vector_1, norm1 = get_distance_components(cylinder_top_1, cylinder_base_1)
 
-    denominator = d2121 * d4343 - d4321 * d4321
+    cross = np.cross(unit_vector_1, unit_vector_2)
+
+    denominator = np.linalg.norm(cross) ** 2
 
     # If cylinder axes are parallel, set the closest points as the middle points
-    if denominator < 0.00000001:
-        projection_1 = cylinder_base_1 + 0.5 * cylinder_axis_1
-        projection_2 = cylinder_base_2 + 0.5 * cylinder_axis_2
+    if not denominator:
+        d0 = np.dot(unit_vector_1, (cylinder_base_2 - cylinder_base_1))
+        d1 = np.dot(unit_vector_1, (cylinder_top_2 - cylinder_base_1))
 
-        return projection_1, projection_2
+        if d0 <= 0 >= d1:
+            if np.absolute(d0) < np.absolute(d1):
+                return cylinder_base_1, cylinder_base_2
+            return cylinder_base_1, cylinder_top_2
 
-    # Calculate the projection of the cylinder axes on each other
-    numer = d1343 * d4321 - d1321 * d4343
-    mua = numer / denominator
-    mub = (d1343 + mua * d4321) / d4343
+        elif d0 >= norm1 <= d1:
+            if np.absolute(d0) < np.absolute(d1):
+                return cylinder_top_1, cylinder_base_2
+            return cylinder_top_1, cylinder_top_2
 
-    # Assess if the point on cylinder 1 is on the axis
-    # If the projection is smaller than 0, the closest point should be the base point
-    # If the projection is larger than 1, the closet point should be the extremity
-    if mua < 0:
-        projection_1 = cylinder_base_1
-    elif mua > 1:
-        projection_1 = cylinder_top_1
-    else:
-        projection_1 = cylinder_base_1 + mua * cylinder_axis_1
+        p1 = cylinder_base_1 + 0.5 * cylinder_axis_1
+        p2 = cylinder_base_2 + 0.5 * cylinder_axis_2
 
-    # Assess if the point on cylinder 2 is on the axis. Use same approach as before
-    #
-    if mub < 0:
-        projection_2 = cylinder_base_2
-    elif mub > 1:
-        projection_2 = cylinder_top_2
-    else:
-        projection_2 = cylinder_base_2 + mub * cylinder_axis_2
+        return p1, p2
 
-    return projection_1, projection_2
+    t = (cylinder_base_2 - cylinder_base_1)
+    detA = np.linalg.det([t, unit_vector_2, cross])
+    detB = np.linalg.det([t, unit_vector_1, cross])
+
+    t0 = detA / denominator
+    t1 = detB / denominator
+
+    pA = cylinder_base_1 + (unit_vector_1 * t0)  # Projected closest point on segment A
+    pB = cylinder_base_1 + (unit_vector_2 * t1)  # Projected closest point on segment B
+
+    # Clamp projections
+    if t0 < 0:
+        pA = cylinder_base_1
+    elif t0 > norm1:
+        pA = cylinder_top_2
+
+    if t1 < 0:
+        pB = cylinder_base_2
+    elif t1 > norm2:
+        pB = cylinder_top_2
+
+    # Clamp projection A
+    if t0 < 0 or t0 > norm1:
+        dot = np.dot(unit_vector_2, (pA - cylinder_base_2))
+        if dot < 0:
+            dot = 0
+        elif dot > norm2:
+            dot = norm2
+        pB = cylinder_base_2 + (unit_vector_2 * dot)
+
+    # Clamp projection B
+    if t1 < 0 or t1 > norm2:
+        dot = np.dot(unit_vector_1, (pB - cylinder_base_1))
+        if dot < 0:
+            dot = 0
+        elif dot > norm1:
+            dot = norm1
+        pA = cylinder_base_1 + (unit_vector_1 * dot)
+
+    return pA, pB
 
 
 @dataclass
 class PhysicalProperties:
-    """
-    Class with the mechanical properties of a physical object.
-
-    Attributes:
-    -----------
-    radius: float
-        The radius of the physical object.
-    interaction_factor: float
-        The factor used to compute physical interactions between two objects.
-        Objects inside the interaction radius will be considered.
-    """
+    """Class with the mechanical properties of a physical object."""
 
     radius: float
     interaction_factor: float
@@ -194,25 +227,8 @@ class PhysicalProperties:
 
 @dataclass
 class CylinderProperties(PhysicalProperties):
-    """
-    Class with the mechanical properties of a cylinder with a spring axis.
+    """Class with the mechanical properties of a cylinder with a spring axis."""
 
-    Attributes:
-    -----------
-    radius: float
-        The radius of the cylinder.
-    interaction_factor: float
-        The factor used to compute physical interactions between two spheres.
-    spring_factor: float
-        The spring constant used to compute the tension inside the cylinder.
-    default_length: float
-        The default and initial length of a cylinder.
-    max_length: float
-        The maximum length of a cylinder.
-    """
-
-    radius: float
-    interaction_factor: float
     spring_constant: float
     default_length: float
     max_length: float
@@ -225,16 +241,7 @@ class CylinderProperties(PhysicalProperties):
 
 @dataclass
 class ContactForces(ABC):
-    """
-    Class to compute the contact forces between two objects, represented as spheres.
-
-    Attributes
-    ----------
-    adhesion_coefficient: float
-        The coefficient of adhesion between the two objects.
-    repulsion_coefficient: float
-        The coefficient of repulsion between two objects.
-    """
+    """Class to compute the contact forces between two objects, represented as spheres."""
     adhesion_coefficient: float
     repulsion_coefficient: float
 
@@ -369,12 +376,12 @@ class PotentialsFactory(ContactFactory):
     sphere_sphere_repulsion: float = 50.0
     sphere_sphere_smoothness: int = 1
 
-    sphere_cylinder_adhesion: float = 0.0
-    sphere_cylinder_repulsion: float = 100.0
+    sphere_cylinder_adhesion: float = 5.0
+    sphere_cylinder_repulsion: float = 10.0
     sphere_cylinder_smoothness: int = 1
 
-    cylinder_cylinder_adhesion: float = 4.0
-    cylinder_cylinder_repulsion: float = 100.0
+    cylinder_cylinder_adhesion: float = 10.0
+    cylinder_cylinder_repulsion: float = 10.0
     cylinder_cylinder_smoothness: int = 1
 
     def get_sphere_sphere_interactions(self) -> PotentialsContact:

@@ -24,42 +24,42 @@ Classes
 
 
 
-.. py:class:: CellBody(position: numpy.ndarray, mechanics: neurorosettes.physics.PhysicalProperties)
+.. py:class:: CellBody(position, mechanics)
 
    Represents a cell with physical properties
 
-   .. py:method:: set_center_position(self, coordinates: numpy.ndarray) -> None
+   .. py:method:: set_center_position(self, coordinates)
 
       Sets the cell position
 
 
-   .. py:method:: set_force_from_daughter(self, force: numpy.ndarray) -> None
+   .. py:method:: set_force_from_daughter(self, force)
 
       Sets the force transmitted by daughter
 
 
-   .. py:method:: set_mechanics(self, mechanics: neurorosettes.physics.PhysicalProperties) -> None
+   .. py:method:: set_mechanics(self, mechanics)
 
       Sets the physical properties of the cell
 
 
-   .. py:method:: set_sphere_representation(self, animator: neurorosettes.utilities.Animator, color='red') -> None
+   .. py:method:: set_sphere_representation(self, animator, color='red')
 
       Creates and sets the sphere representation of the cell
 
 
-   .. py:method:: update_representation(self) -> None
+   .. py:method:: update_representation(self)
 
       Updates the sphere representation of the cell
 
 
-   .. py:method:: get_neighbor_force(self, neighbor: CellBody, interaction: neurorosettes.physics.ContactForces) -> numpy.ndarray
+   .. py:method:: get_neighbor_force(self, neighbor, interaction)
 
       Returns the interaction force between two cells
 
 
 
-.. py:class:: Neurite(proximal_point: numpy.ndarray, axis: numpy.ndarray, cylinder_mechanics: neurorosettes.physics.CylinderProperties)
+.. py:class:: Neurite(proximal_point, axis, cylinder_mechanics)
 
    Represents a neurite with physical properties
 
@@ -68,7 +68,7 @@ Classes
       Sets the force transmitted by daughter
 
 
-   .. py:method:: create_neurite_representation(self, animator: neurorosettes.utilities.Animator)
+   .. py:method:: create_neurite_representation(self, animator)
 
       Creates a spring+sphere representation of the neurite
 
@@ -78,50 +78,50 @@ Classes
       Updates the representation of the neurite
 
 
-   .. py:method:: tension(self) -> float
+   .. py:method:: tension(self)
       :property:
 
       Returns the tension of the spring
 
 
-   .. py:method:: spring_axis(self) -> numpy.ndarray
+   .. py:method:: spring_axis(self)
       :property:
 
       Returns the vector that defines the spring
 
 
-   .. py:method:: current_length(self) -> float
+   .. py:method:: current_length(self)
       :property:
 
       Returns the current length of the spring
 
 
-   .. py:method:: move_distal_point(self, coordinates: numpy.ndarray) -> None
+   .. py:method:: move_distal_point(self, coordinates)
 
       Moves the distal point of the spring
 
 
-   .. py:method:: move_proximal_point(self, coordinates) -> None
+   .. py:method:: move_proximal_point(self, coordinates)
 
       Moves the proximal point of the spring
 
 
-   .. py:method:: get_growth_force(self, magnitude: float)
+   .. py:method:: get_growth_force(self, magnitude)
 
       Returns the force created by neurite growth
 
 
-   .. py:method:: get_spring_force(self) -> numpy.ndarray
+   .. py:method:: get_spring_force(self)
 
       Returns the force created by spring tension
 
 
-   .. py:method:: get_cell_neighbor_force(self, neighbor: CellBody, interaction: neurorosettes.physics.ContactForces) -> Tuple[numpy.ndarray, float]
+   .. py:method:: get_cell_neighbor_force(self, neighbor, interaction)
 
       Returns the interaction force between two cells
 
 
-   .. py:method:: get_neurite_neighbor_force(self, neighbor: Neurite, interaction: neurorosettes.physics.ContactForces)
+   .. py:method:: get_neurite_neighbor_force(self, neighbor, interaction)
 
       Returns the interaction force between two cells
 
@@ -145,12 +145,12 @@ Classes
       
 
    .. py:attribute:: neurite_interaction_factor
-      :annotation: :float = 1.25
+      :annotation: :float = 1.5
 
       
 
    .. py:attribute:: neurite_spring_constant
-      :annotation: :float = 5.0
+      :annotation: :float = 10.0
 
       
 
@@ -164,10 +164,10 @@ Classes
 
       
 
-   .. py:method:: get_cell_body(self, center_position: numpy.ndarray) -> CellBody
+   .. py:method:: get_cell_body(self, center_position)
 
 
-   .. py:method:: get_neurite(self, proximal_position: numpy.ndarray, axis: numpy.ndarray) -> Neurite
+   .. py:method:: get_neurite(self, proximal_position, axis)
 
 
 

@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>neurorosettes.simulation &mdash; tespkg  documentation</title>
+  <title>neurorosettes.simulation &mdash; neurorosettes  documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/togglebutton.css" type="text/css" />
@@ -35,7 +35,7 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../../../index.html" class="icon icon-home"> tespkg
+            <a href="../../../index.html" class="icon icon-home"> neurorosettes
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -46,7 +46,9 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../../../example.html">Example usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../simulation.html">Creating a model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../cycle.html">Cell cycle and differentiation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../mechanics.html">Physical objects and interactions</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../../index.html">API Reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">neurorosettes</span></code></a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="../index.html#submodules">Submodules</a><ul class="current">
@@ -72,7 +74,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../../index.html">tespkg</a>
+          <a href="../../../index.html">neurorosettes</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -112,81 +114,189 @@
 </table>
 <dl class="py class">
 <dt class="sig sig-object py" id="neurorosettes.simulation.Container">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neurorosettes.simulation.</span></span><span class="sig-name descname"><span class="pre">Container</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grid_range</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">simulation_2d</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">contact_factory</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../physics/index.html#neurorosettes.physics.ContactFactory" title="neurorosettes.physics.ContactFactory"><span class="pre">neurorosettes.physics.ContactFactory</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">PotentialsFactory()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">object_factory</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../subcellular/index.html#neurorosettes.subcellular.ObjectFactory" title="neurorosettes.subcellular.ObjectFactory"><span class="pre">neurorosettes.subcellular.ObjectFactory</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">ObjectFactory()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">drag_coefficient</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">density_check</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../grid/index.html#neurorosettes.grid.CellDensityCheck" title="neurorosettes.grid.CellDensityCheck"><span class="pre">neurorosettes.grid.CellDensityCheck</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neurorosettes.simulation.Container" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neurorosettes.simulation.</span></span><span class="sig-name descname"><span class="pre">Container</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grid_range</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">simulation_2d</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">contact_factory</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">PotentialsFactory()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">object_factory</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">ObjectFactory()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">drag_coefficient</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">density_check</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/neurorosettes/simulation.html#Container"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurorosettes.simulation.Container" title="Permalink to this definition"></a></dt>
 <dd><p>Represents the environment where neurons exist</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>grid_range</strong> (<em>List</em><em>[</em><em>float</em><em>]</em>) – </p></li>
+<li><p><strong>simulation_2d</strong> (<em>bool</em>) – </p></li>
+<li><p><strong>contact_factory</strong> (<a class="reference internal" href="../physics/index.html#neurorosettes.physics.ContactFactory" title="neurorosettes.physics.ContactFactory"><em>neurorosettes.physics.ContactFactory</em></a>) – </p></li>
+<li><p><strong>object_factory</strong> (<a class="reference internal" href="../subcellular/index.html#neurorosettes.subcellular.ObjectFactory" title="neurorosettes.subcellular.ObjectFactory"><em>neurorosettes.subcellular.ObjectFactory</em></a>) – </p></li>
+<li><p><strong>drag_coefficient</strong> (<em>float</em>) – </p></li>
+<li><p><strong>density_check</strong> (<em>Optional</em><em>[</em><a class="reference internal" href="../grid/index.html#neurorosettes.grid.CellDensityCheck" title="neurorosettes.grid.CellDensityCheck"><em>neurorosettes.grid.CellDensityCheck</em></a><em>]</em>) – </p></li>
+</ul>
+</dd>
+</dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="neurorosettes.simulation.Container.register_neuron">
-<span class="sig-name descname"><span class="pre">register_neuron</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">neuron</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../neurons/index.html#neurorosettes.neurons.Neuron" title="neurorosettes.neurons.Neuron"><span class="pre">neurorosettes.neurons.Neuron</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'red'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#neurorosettes.simulation.Container.register_neuron" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">register_neuron</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">neuron</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'red'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/neurorosettes/simulation.html#Container.register_neuron"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurorosettes.simulation.Container.register_neuron" title="Permalink to this definition"></a></dt>
 <dd><p>Registers a neuron and its representation into the container</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>neuron</strong> (<a class="reference internal" href="../neurons/index.html#neurorosettes.neurons.Neuron" title="neurorosettes.neurons.Neuron"><em>neurorosettes.neurons.Neuron</em></a>) – </p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="neurorosettes.simulation.Container.update_drawings">
-<span class="sig-name descname"><span class="pre">update_drawings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#neurorosettes.simulation.Container.update_drawings" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">update_drawings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/neurorosettes/simulation.html#Container.update_drawings"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurorosettes.simulation.Container.update_drawings" title="Permalink to this definition"></a></dt>
 <dd><p>Updates the representations of the neurons</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="neurorosettes.simulation.Container.advance_cycles">
-<span class="sig-name descname"><span class="pre">advance_cycles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_step</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#neurorosettes.simulation.Container.advance_cycles" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">advance_cycles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_step</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/neurorosettes/simulation.html#Container.advance_cycles"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurorosettes.simulation.Container.advance_cycles" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>time_step</strong> (<em>float</em>) – </p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="neurorosettes.simulation.Container.create_new_neuron">
-<span class="sig-name descname"><span class="pre">create_new_neuron</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coordinates</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outgrowth_axis</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">differentiation_grade</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'red'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../neurons/index.html#neurorosettes.neurons.Neuron" title="neurorosettes.neurons.Neuron"><span class="pre">neurorosettes.neurons.Neuron</span></a></span></span><a class="headerlink" href="#neurorosettes.simulation.Container.create_new_neuron" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">create_new_neuron</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coordinates</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outgrowth_axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">differentiation_grade</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'red'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/neurorosettes/simulation.html#Container.create_new_neuron"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurorosettes.simulation.Container.create_new_neuron" title="Permalink to this definition"></a></dt>
 <dd><p>Creates a new neuron and registers it to the container</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>coordinates</strong> (<em>Union</em><em>[</em><em>numpy.ndarray</em><em>, </em><em>List</em><em>[</em><em>float</em><em>]</em><em>]</em>) – </p></li>
+<li><p><strong>outgrowth_axis</strong> (<em>Optional</em><em>[</em><em>Union</em><em>[</em><em>List</em><em>[</em><em>float</em><em>]</em><em>, </em><em>numpy.ndarray</em><em>]</em><em>]</em>) – </p></li>
+<li><p><strong>differentiation_grade</strong> (<em>int</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="../neurons/index.html#neurorosettes.neurons.Neuron" title="neurorosettes.neurons.Neuron">neurorosettes.neurons.Neuron</a></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="neurorosettes.simulation.Container.differentiate">
-<span class="sig-name descname"><span class="pre">differentiate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#neurorosettes.simulation.Container.differentiate" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">differentiate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/neurorosettes/simulation.html#Container.differentiate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurorosettes.simulation.Container.differentiate" title="Permalink to this definition"></a></dt>
 <dd><p>Checks for neurons that are flagged for differentiation and deals with differentiation</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="neurorosettes.simulation.Container.kill">
-<span class="sig-name descname"><span class="pre">kill</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#neurorosettes.simulation.Container.kill" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">kill</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/neurorosettes/simulation.html#Container.kill"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurorosettes.simulation.Container.kill" title="Permalink to this definition"></a></dt>
 <dd><p>Checks for neurons that are flagged for death and removes them from the container</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="neurorosettes.simulation.Container.divide">
-<span class="sig-name descname"><span class="pre">divide</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#neurorosettes.simulation.Container.divide" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">divide</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/neurorosettes/simulation.html#Container.divide"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurorosettes.simulation.Container.divide" title="Permalink to this definition"></a></dt>
 <dd><p>Checks for neurons that are flagged for division and deals with division</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="neurorosettes.simulation.Container.get_displacement_from_force">
-<span class="sig-name descname"><span class="pre">get_displacement_from_force</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_step</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.ndarray</span></span></span><a class="headerlink" href="#neurorosettes.simulation.Container.get_displacement_from_force" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">get_displacement_from_force</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_step</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/neurorosettes/simulation.html#Container.get_displacement_from_force"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurorosettes.simulation.Container.get_displacement_from_force" title="Permalink to this definition"></a></dt>
 <dd><p>Returns a velocity from the passed force</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>force</strong> (<em>numpy.ndarray</em>) – </p></li>
+<li><p><strong>time_step</strong> (<em>float</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>numpy.ndarray</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="neurorosettes.simulation.Container.move_cell">
-<span class="sig-name descname"><span class="pre">move_cell</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">neuron</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../neurons/index.html#neurorosettes.neurons.Neuron" title="neurorosettes.neurons.Neuron"><span class="pre">neurorosettes.neurons.Neuron</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_coordinates</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#neurorosettes.simulation.Container.move_cell" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">move_cell</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">neuron</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_coordinates</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/neurorosettes/simulation.html#Container.move_cell"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurorosettes.simulation.Container.move_cell" title="Permalink to this definition"></a></dt>
 <dd><p>Moves the cell to a new position and updates the proximal point of the first neurite</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>neuron</strong> (<a class="reference internal" href="../neurons/index.html#neurorosettes.neurons.Neuron" title="neurorosettes.neurons.Neuron"><em>neurorosettes.neurons.Neuron</em></a>) – </p></li>
+<li><p><strong>new_coordinates</strong> (<em>Union</em><em>[</em><em>numpy.ndarray</em><em>, </em><em>List</em><em>[</em><em>float</em><em>]</em><em>]</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="neurorosettes.simulation.Container.move_neurite">
-<span class="sig-name descname"><span class="pre">move_neurite</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">neurite</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../subcellular/index.html#neurorosettes.subcellular.Neurite" title="neurorosettes.subcellular.Neurite"><span class="pre">neurorosettes.subcellular.Neurite</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_coordinates</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#neurorosettes.simulation.Container.move_neurite" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">move_neurite</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">neurite</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_coordinates</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/neurorosettes/simulation.html#Container.move_neurite"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurorosettes.simulation.Container.move_neurite" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>neurite</strong> (<a class="reference internal" href="../subcellular/index.html#neurorosettes.subcellular.Neurite" title="neurorosettes.subcellular.Neurite"><em>neurorosettes.subcellular.Neurite</em></a>) – </p></li>
+<li><p><strong>new_coordinates</strong> (<em>numpy.ndarray</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="neurorosettes.simulation.Container.compute_displacements">
-<span class="sig-name descname"><span class="pre">compute_displacements</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_step</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#neurorosettes.simulation.Container.compute_displacements" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">compute_displacements</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_step</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/neurorosettes/simulation.html#Container.compute_displacements"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurorosettes.simulation.Container.compute_displacements" title="Permalink to this definition"></a></dt>
 <dd><p>Updates the cell positions and representations based on object interactions</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="neurorosettes.simulation.Container.update_cell_positions">
-<span class="sig-name descname"><span class="pre">update_cell_positions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#neurorosettes.simulation.Container.update_cell_positions" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">update_cell_positions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/neurorosettes/simulation.html#Container.update_cell_positions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurorosettes.simulation.Container.update_cell_positions" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="neurorosettes.simulation.Container.solve_mechanics">
-<span class="sig-name descname"><span class="pre">solve_mechanics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_step</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#neurorosettes.simulation.Container.solve_mechanics" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">solve_mechanics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_step</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/neurorosettes/simulation.html#Container.solve_mechanics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurorosettes.simulation.Container.solve_mechanics" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 
@@ -205,7 +315,7 @@
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2022, yes.</p>
+    <p>&#169; Copyright 2022, Inês G. Gonçalves.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

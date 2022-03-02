@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>neurorosettes.physics &mdash; tespkg  documentation</title>
+  <title>neurorosettes.physics &mdash; neurorosettes  documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/togglebutton.css" type="text/css" />
@@ -35,7 +35,7 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../../../index.html" class="icon icon-home"> tespkg
+            <a href="../../../index.html" class="icon icon-home"> neurorosettes
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -46,7 +46,9 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../../../example.html">Example usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../simulation.html">Creating a model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../cycle.html">Cell cycle and differentiation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../mechanics.html">Physical objects and interactions</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../../index.html">API Reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">neurorosettes</span></code></a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="../index.html#submodules">Submodules</a><ul class="current">
@@ -72,7 +74,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../../index.html">tespkg</a>
+          <a href="../../../index.html">neurorosettes</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -137,26 +139,26 @@
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#neurorosettes.physics.get_distance_components" title="neurorosettes.physics.get_distance_components"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_distance_components</span></code></a>(point1: numpy.ndarray, point2: numpy.ndarray) → Tuple[numpy.ndarray, float]</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#neurorosettes.physics.get_distance_components" title="neurorosettes.physics.get_distance_components"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_distance_components</span></code></a>(point1, point2)</p></td>
 <td><p>Returns the direction and magnitude components of a vector that connects two points.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#neurorosettes.physics.get_sphere_overlap" title="neurorosettes.physics.get_sphere_overlap"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_sphere_overlap</span></code></a>(radius1: float, radius2: float, distance: float) → float</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#neurorosettes.physics.normalize_vector" title="neurorosettes.physics.normalize_vector"><code class="xref py py-obj docutils literal notranslate"><span class="pre">normalize_vector</span></code></a>(vector)</p></td>
+<td><p>Returns the input array normalized to a unit vector.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#neurorosettes.physics.get_sphere_overlap" title="neurorosettes.physics.get_sphere_overlap"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_sphere_overlap</span></code></a>(radius1, radius2, distance)</p></td>
 <td><p>Returns the overlap between two objects represented as spheres.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#neurorosettes.physics.get_sphere_cylinder_intersection" title="neurorosettes.physics.get_sphere_cylinder_intersection"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_sphere_cylinder_intersection</span></code></a>(sphere_center: numpy.ndarray, cylinder_base: numpy.ndarray, cylinder_top: numpy.ndarray) → numpy.ndarray</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#neurorosettes.physics.get_sphere_cylinder_intersection" title="neurorosettes.physics.get_sphere_cylinder_intersection"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_sphere_cylinder_intersection</span></code></a>(sphere_center, cylinder_base, cylinder_top)</p></td>
 <td><p>Returns the closest point on the cylinder axis to the sphere. The intersection is given by</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#neurorosettes.physics.get_cylinder_intersection" title="neurorosettes.physics.get_cylinder_intersection"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_cylinder_intersection</span></code></a>(cylinder_base_1: numpy.ndarray, cylinder_top_1: numpy.ndarray, cylinder_base_2: numpy.ndarray, cylinder_top_2: numpy.ndarray) → Tuple[numpy.ndarray, numpy.ndarray]</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#neurorosettes.physics.get_cylinder_intersection" title="neurorosettes.physics.get_cylinder_intersection"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_cylinder_intersection</span></code></a>(cylinder_base_1, cylinder_top_1, cylinder_base_2, cylinder_top_2)</p></td>
 <td><p>Returns the closest point between two cylinders. The cross product is used to evaluate</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#neurorosettes.physics.get_sphere_sphere_contact" title="neurorosettes.physics.get_sphere_sphere_contact"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_sphere_sphere_contact</span></code></a>(radius1: float, radius2: float, distance: float, interaction: ContactForces, get_adhesion: bool = True, get_repulsion: bool = True) → float</p></td>
-<td><p>Gets the magnitude of the contact forces between two objects represented as spheres.</p></td>
 </tr>
 </tbody>
 </table>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurorosettes.physics.get_distance_components">
-<span class="sig-prename descclassname"><span class="pre">neurorosettes.physics.</span></span><span class="sig-name descname"><span class="pre">get_distance_components</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">point1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">point2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#neurorosettes.physics.get_distance_components" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">neurorosettes.physics.</span></span><span class="sig-name descname"><span class="pre">get_distance_components</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">point1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">point2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/neurorosettes/physics.html#get_distance_components"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurorosettes.physics.get_distance_components" title="Permalink to this definition"></a></dt>
 <dd><p>Returns the direction and magnitude components of a vector that connects two points.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -172,12 +174,32 @@
 </ul>
 </p>
 </dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Tuple[numpy.ndarray, float]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="neurorosettes.physics.normalize_vector">
+<span class="sig-prename descclassname"><span class="pre">neurorosettes.physics.</span></span><span class="sig-name descname"><span class="pre">normalize_vector</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vector</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/neurorosettes/physics.html#normalize_vector"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurorosettes.physics.normalize_vector" title="Permalink to this definition"></a></dt>
+<dd><p>Returns the input array normalized to a unit vector.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>vector</strong> (<em>numpy.ndarray</em>) – The array to be normalized.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The normalized vector.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="neurorosettes.physics.get_sphere_overlap">
-<span class="sig-prename descclassname"><span class="pre">neurorosettes.physics.</span></span><span class="sig-name descname"><span class="pre">get_sphere_overlap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">radius1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#neurorosettes.physics.get_sphere_overlap" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">neurorosettes.physics.</span></span><span class="sig-name descname"><span class="pre">get_sphere_overlap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">radius1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distance</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/neurorosettes/physics.html#get_sphere_overlap"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurorosettes.physics.get_sphere_overlap" title="Permalink to this definition"></a></dt>
 <dd><p>Returns the overlap between two objects represented as spheres.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -198,7 +220,7 @@
 
 <dl class="py function">
 <dt class="sig sig-object py" id="neurorosettes.physics.get_sphere_cylinder_intersection">
-<span class="sig-prename descclassname"><span class="pre">neurorosettes.physics.</span></span><span class="sig-name descname"><span class="pre">get_sphere_cylinder_intersection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sphere_center</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cylinder_base</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cylinder_top</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.ndarray</span></span></span><a class="headerlink" href="#neurorosettes.physics.get_sphere_cylinder_intersection" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">neurorosettes.physics.</span></span><span class="sig-name descname"><span class="pre">get_sphere_cylinder_intersection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sphere_center</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cylinder_base</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cylinder_top</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/neurorosettes/physics.html#get_sphere_cylinder_intersection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurorosettes.physics.get_sphere_cylinder_intersection" title="Permalink to this definition"></a></dt>
 <dd><p>Returns the closest point on the cylinder axis to the sphere. The intersection is given by
 the dot product. Taking the dot product between the cylinder axis and the axis that connects
 the cylinder base to the sphere, the dot product gives us the projection of the cylinder-sphere
@@ -224,7 +246,7 @@ extremity of the cylinder, respectively.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="neurorosettes.physics.get_cylinder_intersection">
-<span class="sig-prename descclassname"><span class="pre">neurorosettes.physics.</span></span><span class="sig-name descname"><span class="pre">get_cylinder_intersection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cylinder_base_1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cylinder_top_1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cylinder_base_2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cylinder_top_2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#neurorosettes.physics.get_cylinder_intersection" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">neurorosettes.physics.</span></span><span class="sig-name descname"><span class="pre">get_cylinder_intersection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cylinder_base_1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cylinder_top_1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cylinder_base_2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cylinder_top_2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/neurorosettes/physics.html#get_cylinder_intersection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurorosettes.physics.get_cylinder_intersection" title="Permalink to this definition"></a></dt>
 <dd><p>Returns the closest point between two cylinders. The cross product is used to evaluate
 if the cylinder axes are parallel. If they are, the closest points between the two objects
 are considered to be their middle points. If not, the projection of each axis on the other
@@ -245,20 +267,16 @@ axis is computed to find the closest point on each axis.</p>
 </ul>
 </p>
 </dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Tuple[numpy.ndarray, numpy.ndarray]</p>
+</dd>
 </dl>
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="neurorosettes.physics.PhysicalProperties">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neurorosettes.physics.</span></span><span class="sig-name descname"><span class="pre">PhysicalProperties</span></span><a class="headerlink" href="#neurorosettes.physics.PhysicalProperties" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neurorosettes.physics.</span></span><span class="sig-name descname"><span class="pre">PhysicalProperties</span></span><a class="reference internal" href="../../../_modules/neurorosettes/physics.html#PhysicalProperties"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurorosettes.physics.PhysicalProperties" title="Permalink to this definition"></a></dt>
 <dd><p>Class with the mechanical properties of a physical object.</p>
-<dl class="simple">
-<dt>radius: float</dt><dd><p>The radius of the physical object.</p>
-</dd>
-<dt>interaction_factor: float</dt><dd><p>The factor used to compute physical interactions between two objects.
-Objects inside the interaction radius will be considered.</p>
-</dd>
-</dl>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="neurorosettes.physics.PhysicalProperties.radius">
 <span class="sig-name descname"><span class="pre">radius</span></span><em class="property"><span class="w"> </span><span class="pre">:float</span></em><a class="headerlink" href="#neurorosettes.physics.PhysicalProperties.radius" title="Permalink to this definition"></a></dt>
@@ -271,39 +289,22 @@ Objects inside the interaction radius will be considered.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="neurorosettes.physics.PhysicalProperties.interaction_radius">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">interaction_radius</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#neurorosettes.physics.PhysicalProperties.interaction_radius" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">interaction_radius</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neurorosettes.physics.PhysicalProperties.interaction_radius" title="Permalink to this definition"></a></dt>
 <dd><p>Returns the radius of interaction of the physical object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="neurorosettes.physics.CylinderProperties">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neurorosettes.physics.</span></span><span class="sig-name descname"><span class="pre">CylinderProperties</span></span><a class="headerlink" href="#neurorosettes.physics.CylinderProperties" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neurorosettes.physics.</span></span><span class="sig-name descname"><span class="pre">CylinderProperties</span></span><a class="reference internal" href="../../../_modules/neurorosettes/physics.html#CylinderProperties"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurorosettes.physics.CylinderProperties" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#neurorosettes.physics.PhysicalProperties" title="neurorosettes.physics.PhysicalProperties"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PhysicalProperties</span></code></a></p>
 <p>Class with the mechanical properties of a cylinder with a spring axis.</p>
-<dl class="simple">
-<dt>radius: float</dt><dd><p>The radius of the cylinder.</p>
-</dd>
-<dt>interaction_factor: float</dt><dd><p>The factor used to compute physical interactions between two spheres.</p>
-</dd>
-<dt>spring_factor: float</dt><dd><p>The spring constant used to compute the tension inside the cylinder.</p>
-</dd>
-<dt>default_length: float</dt><dd><p>The default and initial length of a cylinder.</p>
-</dd>
-<dt>max_length: float</dt><dd><p>The maximum length of a cylinder.</p>
-</dd>
-</dl>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="neurorosettes.physics.CylinderProperties.radius">
-<span class="sig-name descname"><span class="pre">radius</span></span><em class="property"><span class="w"> </span><span class="pre">:float</span></em><a class="headerlink" href="#neurorosettes.physics.CylinderProperties.radius" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="neurorosettes.physics.CylinderProperties.interaction_factor">
-<span class="sig-name descname"><span class="pre">interaction_factor</span></span><em class="property"><span class="w"> </span><span class="pre">:float</span></em><a class="headerlink" href="#neurorosettes.physics.CylinderProperties.interaction_factor" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
 <dl class="py attribute">
 <dt class="sig sig-object py" id="neurorosettes.physics.CylinderProperties.spring_constant">
 <span class="sig-name descname"><span class="pre">spring_constant</span></span><em class="property"><span class="w"> </span><span class="pre">:float</span></em><a class="headerlink" href="#neurorosettes.physics.CylinderProperties.spring_constant" title="Permalink to this definition"></a></dt>
@@ -321,52 +322,38 @@ Objects inside the interaction radius will be considered.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="neurorosettes.physics.CylinderProperties.get_spring_tension">
-<span class="sig-name descname"><span class="pre">get_spring_tension</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cylinder_length</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#neurorosettes.physics.CylinderProperties.get_spring_tension" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">get_spring_tension</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cylinder_length</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/neurorosettes/physics.html#CylinderProperties.get_spring_tension"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurorosettes.physics.CylinderProperties.get_spring_tension" title="Permalink to this definition"></a></dt>
 <dd><p>Returns the tension in the spring for a given spring length.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>cylinder_length</strong> (<em>float</em>) – </p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>float</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="neurorosettes.physics.ContactForces">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neurorosettes.physics.</span></span><span class="sig-name descname"><span class="pre">ContactForces</span></span><a class="headerlink" href="#neurorosettes.physics.ContactForces" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neurorosettes.physics.</span></span><span class="sig-name descname"><span class="pre">ContactForces</span></span><a class="reference internal" href="../../../_modules/neurorosettes/physics.html#ContactForces"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurorosettes.physics.ContactForces" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">abc.ABC</span></code></p>
 <p>Class to compute the contact forces between two objects, represented as spheres.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="neurorosettes.physics.ContactForces.adhesion_coefficient">
-<span class="sig-name descname"><span class="pre">adhesion_coefficient</span></span><a class="headerlink" href="#neurorosettes.physics.ContactForces.adhesion_coefficient" title="Permalink to this definition"></a></dt>
-<dd><p>The coefficient of adhesion between the two objects.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>float</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="neurorosettes.physics.ContactForces.repulsion_coefficient">
-<span class="sig-name descname"><span class="pre">repulsion_coefficient</span></span><a class="headerlink" href="#neurorosettes.physics.ContactForces.repulsion_coefficient" title="Permalink to this definition"></a></dt>
-<dd><p>The coefficient of repulsion between two objects.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>float</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="id0">
-<span class="sig-name descname"><span class="pre">adhesion_coefficient</span></span><em class="property"><span class="w"> </span><span class="pre">:float</span></em><a class="headerlink" href="#id0" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">adhesion_coefficient</span></span><em class="property"><span class="w"> </span><span class="pre">:float</span></em><a class="headerlink" href="#neurorosettes.physics.ContactForces.adhesion_coefficient" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="id1">
-<span class="sig-name descname"><span class="pre">repulsion_coefficient</span></span><em class="property"><span class="w"> </span><span class="pre">:float</span></em><a class="headerlink" href="#id1" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="neurorosettes.physics.ContactForces.repulsion_coefficient">
+<span class="sig-name descname"><span class="pre">repulsion_coefficient</span></span><em class="property"><span class="w"> </span><span class="pre">:float</span></em><a class="headerlink" href="#neurorosettes.physics.ContactForces.repulsion_coefficient" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="neurorosettes.physics.ContactForces.compute_adhesion">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">compute_adhesion</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#neurorosettes.physics.ContactForces.compute_adhesion" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">compute_adhesion</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distance</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/neurorosettes/physics.html#ContactForces.compute_adhesion"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurorosettes.physics.ContactForces.compute_adhesion" title="Permalink to this definition"></a></dt>
 <dd><p>Returns the magnitude of the adhesion force between two objects</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -387,7 +374,7 @@ Objects inside the interaction radius will be considered.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="neurorosettes.physics.ContactForces.compute_repulsion">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">compute_repulsion</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#neurorosettes.physics.ContactForces.compute_repulsion" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">compute_repulsion</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distance</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/neurorosettes/physics.html#ContactForces.compute_repulsion"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurorosettes.physics.ContactForces.compute_repulsion" title="Permalink to this definition"></a></dt>
 <dd><p>Returns the magnitude of the repulsion force between two objects</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -410,7 +397,7 @@ Objects inside the interaction radius will be considered.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="neurorosettes.physics.SimpleContact">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neurorosettes.physics.</span></span><span class="sig-name descname"><span class="pre">SimpleContact</span></span><a class="headerlink" href="#neurorosettes.physics.SimpleContact" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neurorosettes.physics.</span></span><span class="sig-name descname"><span class="pre">SimpleContact</span></span><a class="reference internal" href="../../../_modules/neurorosettes/physics.html#SimpleContact"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurorosettes.physics.SimpleContact" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#neurorosettes.physics.ContactForces" title="neurorosettes.physics.ContactForces"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ContactForces</span></code></a></p>
 <p>Class to compute simple contact forces between two spheres. The force components
 are proportional to the adhesion/repulsion coefficients, the overlap between the spheres and,
@@ -418,21 +405,45 @@ in the case of adhesion forces, the equivalent radius of the spheres.
 Same approach as done in Cx3D.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="neurorosettes.physics.SimpleContact.compute_adhesion">
-<span class="sig-name descname"><span class="pre">compute_adhesion</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#neurorosettes.physics.SimpleContact.compute_adhesion" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">compute_adhesion</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distance</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/neurorosettes/physics.html#SimpleContact.compute_adhesion"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurorosettes.physics.SimpleContact.compute_adhesion" title="Permalink to this definition"></a></dt>
 <dd><p>Returns a force proportional to the adhesion coefficient, cell overlap and cell radii</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>distance</strong> (<em>float</em>) – </p></li>
+<li><p><strong>radius1</strong> (<em>float</em>) – </p></li>
+<li><p><strong>radius2</strong> (<em>float</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>float</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="neurorosettes.physics.SimpleContact.compute_repulsion">
-<span class="sig-name descname"><span class="pre">compute_repulsion</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#neurorosettes.physics.SimpleContact.compute_repulsion" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">compute_repulsion</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distance</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/neurorosettes/physics.html#SimpleContact.compute_repulsion"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurorosettes.physics.SimpleContact.compute_repulsion" title="Permalink to this definition"></a></dt>
 <dd><p>Returns a force proportional to the repulsion coefficient and cell overlap</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>distance</strong> (<em>float</em>) – </p></li>
+<li><p><strong>radius1</strong> (<em>float</em>) – </p></li>
+<li><p><strong>radius2</strong> (<em>float</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>float</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="neurorosettes.physics.PotentialsContact">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neurorosettes.physics.</span></span><span class="sig-name descname"><span class="pre">PotentialsContact</span></span><a class="headerlink" href="#neurorosettes.physics.PotentialsContact" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neurorosettes.physics.</span></span><span class="sig-name descname"><span class="pre">PotentialsContact</span></span><a class="reference internal" href="../../../_modules/neurorosettes/physics.html#PotentialsContact"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurorosettes.physics.PotentialsContact" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#neurorosettes.physics.ContactForces" title="neurorosettes.physics.ContactForces"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ContactForces</span></code></a></p>
 <p>Class to compute contact forces between two spheres based on potentials. The force components
 take into account the adhesion/coefficient coefficients, a smoothness factor and the distance
@@ -445,71 +456,83 @@ Same approach as done in PhysiCell.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="neurorosettes.physics.PotentialsContact.compute_adhesion">
-<span class="sig-name descname"><span class="pre">compute_adhesion</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#neurorosettes.physics.PotentialsContact.compute_adhesion" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">compute_adhesion</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distance</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/neurorosettes/physics.html#PotentialsContact.compute_adhesion"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurorosettes.physics.PotentialsContact.compute_adhesion" title="Permalink to this definition"></a></dt>
 <dd><p>Returns a force based on adhesion potentials</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="neurorosettes.physics.PotentialsContact.compute_repulsion">
-<span class="sig-name descname"><span class="pre">compute_repulsion</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#neurorosettes.physics.PotentialsContact.compute_repulsion" title="Permalink to this definition"></a></dt>
-<dd><p>Returns a force based on repulsion potentials</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="neurorosettes.physics.get_sphere_sphere_contact">
-<span class="sig-prename descclassname"><span class="pre">neurorosettes.physics.</span></span><span class="sig-name descname"><span class="pre">get_sphere_sphere_contact</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">radius1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interaction</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#neurorosettes.physics.ContactForces" title="neurorosettes.physics.ContactForces"><span class="pre">ContactForces</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">get_adhesion</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">get_repulsion</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#neurorosettes.physics.get_sphere_sphere_contact" title="Permalink to this definition"></a></dt>
-<dd><p>Gets the magnitude of the contact forces between two objects represented as spheres.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>radius1</strong> (<em>float</em>) – The radius of the first object (represented as a sphere).</p></li>
-<li><p><strong>radius2</strong> (<em>float</em>) – The radius of the second object (represented as a sphere).</p></li>
-<li><p><strong>distance</strong> (<em>float</em>) – The distance between the centres of the two objects.</p></li>
-<li><p><strong>interaction</strong> (<a class="reference internal" href="#neurorosettes.physics.ContactForces" title="neurorosettes.physics.ContactForces"><em>ContactForces</em></a>) – The contact function to use to compute adhesion and/or repulsion forces.</p></li>
-<li><p><strong>get_adhesion</strong> (<em>bool</em><em>, </em><em>default True</em>) – If adhesion forces should be computed.</p></li>
-<li><p><strong>get_repulsion</strong> (<em>bool</em><em>, </em><em>default True</em>) – If repulsion forces should be computed.</p></li>
+<li><p><strong>distance</strong> (<em>float</em>) – </p></li>
+<li><p><strong>radius1</strong> (<em>float</em>) – </p></li>
+<li><p><strong>radius2</strong> (<em>float</em>) – </p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>The magnitude of the contact forces between the two objects.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>float</p>
-</dd>
-<dt class="field-even">Raises</dt>
-<dd class="field-even"><p><strong>ValueError</strong> – If neither adhesion nor repulsion interactions are selected.</p>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>float</p>
 </dd>
 </dl>
 </dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="neurorosettes.physics.PotentialsContact.compute_repulsion">
+<span class="sig-name descname"><span class="pre">compute_repulsion</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distance</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/neurorosettes/physics.html#PotentialsContact.compute_repulsion"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurorosettes.physics.PotentialsContact.compute_repulsion" title="Permalink to this definition"></a></dt>
+<dd><p>Returns a force based on repulsion potentials</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>distance</strong> (<em>float</em>) – </p></li>
+<li><p><strong>radius1</strong> (<em>float</em>) – </p></li>
+<li><p><strong>radius2</strong> (<em>float</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
 <dl class="py class">
 <dt class="sig sig-object py" id="neurorosettes.physics.ContactFactory">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neurorosettes.physics.</span></span><span class="sig-name descname"><span class="pre">ContactFactory</span></span><a class="headerlink" href="#neurorosettes.physics.ContactFactory" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neurorosettes.physics.</span></span><span class="sig-name descname"><span class="pre">ContactFactory</span></span><a class="reference internal" href="../../../_modules/neurorosettes/physics.html#ContactFactory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurorosettes.physics.ContactFactory" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">abc.ABC</span></code></p>
 <p>Helper class that provides a standard way to create an ABC using
 inheritance.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="neurorosettes.physics.ContactFactory.get_sphere_sphere_interactions">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_sphere_sphere_interactions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#neurorosettes.physics.ContactForces" title="neurorosettes.physics.ContactForces"><span class="pre">ContactForces</span></a></span></span><a class="headerlink" href="#neurorosettes.physics.ContactFactory.get_sphere_sphere_interactions" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_sphere_sphere_interactions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/neurorosettes/physics.html#ContactFactory.get_sphere_sphere_interactions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurorosettes.physics.ContactFactory.get_sphere_sphere_interactions" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#neurorosettes.physics.ContactForces" title="neurorosettes.physics.ContactForces">ContactForces</a></p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="neurorosettes.physics.ContactFactory.get_sphere_cylinder_interactions">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_sphere_cylinder_interactions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#neurorosettes.physics.ContactForces" title="neurorosettes.physics.ContactForces"><span class="pre">ContactForces</span></a></span></span><a class="headerlink" href="#neurorosettes.physics.ContactFactory.get_sphere_cylinder_interactions" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_sphere_cylinder_interactions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/neurorosettes/physics.html#ContactFactory.get_sphere_cylinder_interactions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurorosettes.physics.ContactFactory.get_sphere_cylinder_interactions" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#neurorosettes.physics.ContactForces" title="neurorosettes.physics.ContactForces">ContactForces</a></p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="neurorosettes.physics.ContactFactory.get_cylinder_cylinder_interactions">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_cylinder_cylinder_interactions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#neurorosettes.physics.ContactForces" title="neurorosettes.physics.ContactForces"><span class="pre">ContactForces</span></a></span></span><a class="headerlink" href="#neurorosettes.physics.ContactFactory.get_cylinder_cylinder_interactions" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_cylinder_cylinder_interactions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/neurorosettes/physics.html#ContactFactory.get_cylinder_cylinder_interactions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurorosettes.physics.ContactFactory.get_cylinder_cylinder_interactions" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#neurorosettes.physics.ContactForces" title="neurorosettes.physics.ContactForces">ContactForces</a></p>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="neurorosettes.physics.PotentialsFactory">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neurorosettes.physics.</span></span><span class="sig-name descname"><span class="pre">PotentialsFactory</span></span><a class="headerlink" href="#neurorosettes.physics.PotentialsFactory" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neurorosettes.physics.</span></span><span class="sig-name descname"><span class="pre">PotentialsFactory</span></span><a class="reference internal" href="../../../_modules/neurorosettes/physics.html#PotentialsFactory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurorosettes.physics.PotentialsFactory" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#neurorosettes.physics.ContactFactory" title="neurorosettes.physics.ContactFactory"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ContactFactory</span></code></a></p>
 <p>Helper class that provides a standard way to create an ABC using
 inheritance.</p>
@@ -520,7 +543,7 @@ inheritance.</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="neurorosettes.physics.PotentialsFactory.sphere_sphere_repulsion">
-<span class="sig-name descname"><span class="pre">sphere_sphere_repulsion</span></span><em class="property"><span class="w"> </span><span class="pre">:float</span> <span class="pre">=</span> <span class="pre">10.0</span></em><a class="headerlink" href="#neurorosettes.physics.PotentialsFactory.sphere_sphere_repulsion" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">sphere_sphere_repulsion</span></span><em class="property"><span class="w"> </span><span class="pre">:float</span> <span class="pre">=</span> <span class="pre">50.0</span></em><a class="headerlink" href="#neurorosettes.physics.PotentialsFactory.sphere_sphere_repulsion" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -530,12 +553,12 @@ inheritance.</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="neurorosettes.physics.PotentialsFactory.sphere_cylinder_adhesion">
-<span class="sig-name descname"><span class="pre">sphere_cylinder_adhesion</span></span><em class="property"><span class="w"> </span><span class="pre">:float</span> <span class="pre">=</span> <span class="pre">0.0</span></em><a class="headerlink" href="#neurorosettes.physics.PotentialsFactory.sphere_cylinder_adhesion" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">sphere_cylinder_adhesion</span></span><em class="property"><span class="w"> </span><span class="pre">:float</span> <span class="pre">=</span> <span class="pre">5.0</span></em><a class="headerlink" href="#neurorosettes.physics.PotentialsFactory.sphere_cylinder_adhesion" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="neurorosettes.physics.PotentialsFactory.sphere_cylinder_repulsion">
-<span class="sig-name descname"><span class="pre">sphere_cylinder_repulsion</span></span><em class="property"><span class="w"> </span><span class="pre">:float</span> <span class="pre">=</span> <span class="pre">100.0</span></em><a class="headerlink" href="#neurorosettes.physics.PotentialsFactory.sphere_cylinder_repulsion" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">sphere_cylinder_repulsion</span></span><em class="property"><span class="w"> </span><span class="pre">:float</span> <span class="pre">=</span> <span class="pre">10.0</span></em><a class="headerlink" href="#neurorosettes.physics.PotentialsFactory.sphere_cylinder_repulsion" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -545,7 +568,7 @@ inheritance.</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="neurorosettes.physics.PotentialsFactory.cylinder_cylinder_adhesion">
-<span class="sig-name descname"><span class="pre">cylinder_cylinder_adhesion</span></span><em class="property"><span class="w"> </span><span class="pre">:float</span> <span class="pre">=</span> <span class="pre">40.0</span></em><a class="headerlink" href="#neurorosettes.physics.PotentialsFactory.cylinder_cylinder_adhesion" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">cylinder_cylinder_adhesion</span></span><em class="property"><span class="w"> </span><span class="pre">:float</span> <span class="pre">=</span> <span class="pre">10.0</span></em><a class="headerlink" href="#neurorosettes.physics.PotentialsFactory.cylinder_cylinder_adhesion" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -560,18 +583,33 @@ inheritance.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="neurorosettes.physics.PotentialsFactory.get_sphere_sphere_interactions">
-<span class="sig-name descname"><span class="pre">get_sphere_sphere_interactions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#neurorosettes.physics.PotentialsContact" title="neurorosettes.physics.PotentialsContact"><span class="pre">PotentialsContact</span></a></span></span><a class="headerlink" href="#neurorosettes.physics.PotentialsFactory.get_sphere_sphere_interactions" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">get_sphere_sphere_interactions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/neurorosettes/physics.html#PotentialsFactory.get_sphere_sphere_interactions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurorosettes.physics.PotentialsFactory.get_sphere_sphere_interactions" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#neurorosettes.physics.PotentialsContact" title="neurorosettes.physics.PotentialsContact">PotentialsContact</a></p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="neurorosettes.physics.PotentialsFactory.get_sphere_cylinder_interactions">
-<span class="sig-name descname"><span class="pre">get_sphere_cylinder_interactions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#neurorosettes.physics.PotentialsContact" title="neurorosettes.physics.PotentialsContact"><span class="pre">PotentialsContact</span></a></span></span><a class="headerlink" href="#neurorosettes.physics.PotentialsFactory.get_sphere_cylinder_interactions" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">get_sphere_cylinder_interactions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/neurorosettes/physics.html#PotentialsFactory.get_sphere_cylinder_interactions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurorosettes.physics.PotentialsFactory.get_sphere_cylinder_interactions" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#neurorosettes.physics.PotentialsContact" title="neurorosettes.physics.PotentialsContact">PotentialsContact</a></p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="neurorosettes.physics.PotentialsFactory.get_cylinder_cylinder_interactions">
-<span class="sig-name descname"><span class="pre">get_cylinder_cylinder_interactions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#neurorosettes.physics.PotentialsContact" title="neurorosettes.physics.PotentialsContact"><span class="pre">PotentialsContact</span></a></span></span><a class="headerlink" href="#neurorosettes.physics.PotentialsFactory.get_cylinder_cylinder_interactions" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">get_cylinder_cylinder_interactions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/neurorosettes/physics.html#PotentialsFactory.get_cylinder_cylinder_interactions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurorosettes.physics.PotentialsFactory.get_cylinder_cylinder_interactions" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#neurorosettes.physics.PotentialsContact" title="neurorosettes.physics.PotentialsContact">PotentialsContact</a></p>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 
@@ -590,7 +628,7 @@ inheritance.</p>
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2022, yes.</p>
+    <p>&#169; Copyright 2022, Inês G. Gonçalves.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

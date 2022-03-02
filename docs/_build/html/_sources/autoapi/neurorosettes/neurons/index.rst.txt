@@ -22,7 +22,7 @@ Classes
 
 
 
-.. py:class:: Neuron(position: numpy.ndarray, factory: neurorosettes.subcellular.ObjectFactory, outgrowth_axis: numpy.ndarray = np.array([1.0, 0.0, 0.0]), differentiation_grade: int = 0)
+.. py:class:: Neuron(position, factory, outgrowth_axis = np.array([1.0, 0.0, 0.0]), differentiation_grade = 0)
 
    Represents a neuron that has a cell and neurites
 
@@ -42,30 +42,30 @@ Classes
       :property:
 
 
-   .. py:method:: set_outgrowth_axis(self, coordinates: numpy.ndarray) -> None
+   .. py:method:: set_outgrowth_axis(self, coordinates)
 
       Sets the axis that neurites will follow when new neurites are created
 
 
-   .. py:method:: set_clocks_from_mother(self, mother_neuron: Neuron)
+   .. py:method:: set_clocks_from_mother(self, mother_neuron)
 
 
-   .. py:method:: get_neurite_position_on_cell_surface(self) -> numpy.ndarray
+   .. py:method:: get_neurite_position_on_cell_surface(self)
 
       Returns the coordinates on the cell surface where the first neurite should be placed
 
 
-   .. py:method:: place_neurite_on_cell_surface(self, neurite: neurorosettes.subcellular.Neurite) -> None
+   .. py:method:: place_neurite_on_cell_surface(self, neurite)
 
       Places the neurite base on the cell surface according to the cell-distal vector
 
 
-   .. py:method:: create_first_neurite(self, factory: neurorosettes.subcellular.ObjectFactory) -> None
+   .. py:method:: create_first_neurite(self, factory)
 
       Creates a neurite attached to the soma cell
 
 
-   .. py:method:: create_secondary_neurite(self, factory: neurorosettes.subcellular.ObjectFactory) -> None
+   .. py:method:: create_secondary_neurite(self, factory)
 
       Creates a neurite attached to the most recent neurite
 

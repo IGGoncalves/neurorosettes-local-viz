@@ -6,9 +6,9 @@
 
 # -- Project information -----------------------------------------------------
 
-project = u"tespkg"
-copyright = u"2022, yes"
-author = u"yes"
+project = u"neurorosettes"
+copyright = u"2022, Inês G. Gonçalves"
+author = u"Inês G. Gonçalves"
 
 # -- General configuration ---------------------------------------------------
 
@@ -22,6 +22,7 @@ extensions = [
     "sphinx.ext.viewcode",
 ]
 autoapi_dirs = ["../src"]
+autodoc_typehints = "description"
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.

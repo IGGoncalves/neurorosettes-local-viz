@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>neurorosettes.utilities &mdash; tespkg  documentation</title>
+  <title>neurorosettes.utilities &mdash; neurorosettes  documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/togglebutton.css" type="text/css" />
@@ -34,7 +34,7 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../../../index.html" class="icon icon-home"> tespkg
+            <a href="../../../index.html" class="icon icon-home"> neurorosettes
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -45,7 +45,9 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../../../example.html">Example usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../simulation.html">Creating a model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../cycle.html">Cell cycle and differentiation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../mechanics.html">Physical objects and interactions</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../../index.html">API Reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">neurorosettes</span></code></a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="../index.html#submodules">Submodules</a><ul class="current">
@@ -71,7 +73,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../../index.html">tespkg</a>
+          <a href="../../../index.html">neurorosettes</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -126,110 +128,210 @@
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#neurorosettes.utilities.get_random_position" title="neurorosettes.utilities.get_random_position"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_random_position</span></code></a>(scaling_factor: float) → numpy.ndarray</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#neurorosettes.utilities.get_random_position" title="neurorosettes.utilities.get_random_position"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_random_position</span></code></a>(scaling_factor)</p></td>
 <td><p>Returns the coordinates for a random position between -scaling_factor and scaling factor.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#neurorosettes.utilities.get_random_unit_vector" title="neurorosettes.utilities.get_random_unit_vector"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_random_unit_vector</span></code></a>(two_dimensions=False) → numpy.ndarray</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#neurorosettes.utilities.get_random_unit_vector" title="neurorosettes.utilities.get_random_unit_vector"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_random_unit_vector</span></code></a>(two_dimensions=False)</p></td>
 <td><p>Returns a vector for a random point in a unit sphere.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#neurorosettes.utilities.get_simulation_timer" title="neurorosettes.utilities.get_simulation_timer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_simulation_timer</span></code></a>(total_time: float, timestep: float) → vedo.ProgressBar</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#neurorosettes.utilities.get_simulation_timer" title="neurorosettes.utilities.get_simulation_timer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_simulation_timer</span></code></a>(total_time, timestep)</p></td>
 <td><p>Returns a progress bar with the simulation time</p></td>
 </tr>
 </tbody>
 </table>
 <dl class="py class">
 <dt class="sig sig-object py" id="neurorosettes.utilities.Tissue">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neurorosettes.utilities.</span></span><span class="sig-name descname"><span class="pre">Tissue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">use_2d</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neurorosettes.utilities.Tissue" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neurorosettes.utilities.</span></span><span class="sig-name descname"><span class="pre">Tissue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">use_2d</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/neurorosettes/utilities.html#Tissue"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurorosettes.utilities.Tissue" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">abc.ABC</span></code></p>
 <p>Helper class that provides a standard way to create an ABC using
 inheritance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>use_2d</strong> (<em>bool</em>) – </p>
+</dd>
+</dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="neurorosettes.utilities.Tissue.get_coordinates">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_coordinates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.ndarray</span></span></span><a class="headerlink" href="#neurorosettes.utilities.Tissue.get_coordinates" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_coordinates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/neurorosettes/utilities.html#Tissue.get_coordinates"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurorosettes.utilities.Tissue.get_coordinates" title="Permalink to this definition"></a></dt>
 <dd><p>Returns the initial cell coordinates according to the tissue geometry</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="neurorosettes.utilities.RectangularTissue">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neurorosettes.utilities.</span></span><span class="sig-name descname"><span class="pre">RectangularTissue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spacing</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">16.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_2d</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neurorosettes.utilities.RectangularTissue" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neurorosettes.utilities.</span></span><span class="sig-name descname"><span class="pre">RectangularTissue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spacing</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">16.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_2d</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/neurorosettes/utilities.html#RectangularTissue"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurorosettes.utilities.RectangularTissue" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#neurorosettes.utilities.Tissue" title="neurorosettes.utilities.Tissue"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Tissue</span></code></a></p>
 <p>Helper class that provides a standard way to create an ABC using
 inheritance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>size</strong> (<em>float</em>) – </p></li>
+<li><p><strong>spacing</strong> (<em>float</em>) – </p></li>
+<li><p><strong>use_2d</strong> (<em>bool</em>) – </p></li>
+</ul>
+</dd>
+</dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="neurorosettes.utilities.RectangularTissue.get_coordinates">
-<span class="sig-name descname"><span class="pre">get_coordinates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.ndarray</span></span></span><a class="headerlink" href="#neurorosettes.utilities.RectangularTissue.get_coordinates" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">get_coordinates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/neurorosettes/utilities.html#RectangularTissue.get_coordinates"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurorosettes.utilities.RectangularTissue.get_coordinates" title="Permalink to this definition"></a></dt>
 <dd><p>Returns the initial cell coordinates according to the tissue geometry</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="neurorosettes.utilities.HexagonalTissue">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neurorosettes.utilities.</span></span><span class="sig-name descname"><span class="pre">HexagonalTissue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spacing</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">20.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_2d</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neurorosettes.utilities.HexagonalTissue" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neurorosettes.utilities.</span></span><span class="sig-name descname"><span class="pre">HexagonalTissue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spacing</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_2d</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/neurorosettes/utilities.html#HexagonalTissue"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurorosettes.utilities.HexagonalTissue" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#neurorosettes.utilities.Tissue" title="neurorosettes.utilities.Tissue"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Tissue</span></code></a></p>
 <p>Helper class that provides a standard way to create an ABC using
 inheritance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>size</strong> (<em>float</em>) – </p></li>
+<li><p><strong>spacing</strong> (<em>float</em>) – </p></li>
+<li><p><strong>use_2d</strong> (<em>bool</em>) – </p></li>
+</ul>
+</dd>
+</dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="neurorosettes.utilities.HexagonalTissue.get_coordinates">
-<span class="sig-name descname"><span class="pre">get_coordinates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.ndarray</span></span></span><a class="headerlink" href="#neurorosettes.utilities.HexagonalTissue.get_coordinates" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">get_coordinates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/neurorosettes/utilities.html#HexagonalTissue.get_coordinates"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurorosettes.utilities.HexagonalTissue.get_coordinates" title="Permalink to this definition"></a></dt>
 <dd><p>Returns the initial cell coordinates according to the tissue geometry</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="neurorosettes.utilities.get_random_position">
-<span class="sig-prename descclassname"><span class="pre">neurorosettes.utilities.</span></span><span class="sig-name descname"><span class="pre">get_random_position</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scaling_factor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.ndarray</span></span></span><a class="headerlink" href="#neurorosettes.utilities.get_random_position" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">neurorosettes.utilities.</span></span><span class="sig-name descname"><span class="pre">get_random_position</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scaling_factor</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/neurorosettes/utilities.html#get_random_position"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurorosettes.utilities.get_random_position" title="Permalink to this definition"></a></dt>
 <dd><p>Returns the coordinates for a random position between -scaling_factor and scaling factor.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>scaling_factor</strong> (<em>float</em>) – </p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>numpy.ndarray</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="neurorosettes.utilities.get_random_unit_vector">
-<span class="sig-prename descclassname"><span class="pre">neurorosettes.utilities.</span></span><span class="sig-name descname"><span class="pre">get_random_unit_vector</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">two_dimensions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.ndarray</span></span></span><a class="headerlink" href="#neurorosettes.utilities.get_random_unit_vector" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">neurorosettes.utilities.</span></span><span class="sig-name descname"><span class="pre">get_random_unit_vector</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">two_dimensions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/neurorosettes/utilities.html#get_random_unit_vector"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurorosettes.utilities.get_random_unit_vector" title="Permalink to this definition"></a></dt>
 <dd><p>Returns a vector for a random point in a unit sphere.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="neurorosettes.utilities.get_simulation_timer">
-<span class="sig-prename descclassname"><span class="pre">neurorosettes.utilities.</span></span><span class="sig-name descname"><span class="pre">get_simulation_timer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">total_time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timestep</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">vedo.ProgressBar</span></span></span><a class="headerlink" href="#neurorosettes.utilities.get_simulation_timer" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">neurorosettes.utilities.</span></span><span class="sig-name descname"><span class="pre">get_simulation_timer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">total_time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timestep</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/neurorosettes/utilities.html#get_simulation_timer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurorosettes.utilities.get_simulation_timer" title="Permalink to this definition"></a></dt>
 <dd><p>Returns a progress bar with the simulation time</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>total_time</strong> (<em>float</em>) – </p></li>
+<li><p><strong>timestep</strong> (<em>float</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>vedo.ProgressBar</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="neurorosettes.utilities.Animator">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neurorosettes.utilities.</span></span><span class="sig-name descname"><span class="pre">Animator</span></span><a class="headerlink" href="#neurorosettes.utilities.Animator" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neurorosettes.utilities.</span></span><span class="sig-name descname"><span class="pre">Animator</span></span><a class="reference internal" href="../../../_modules/neurorosettes/utilities.html#Animator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurorosettes.utilities.Animator" title="Permalink to this definition"></a></dt>
 <dd><dl class="py method">
 <dt class="sig sig-object py" id="neurorosettes.utilities.Animator.show">
-<span class="sig-name descname"><span class="pre">show</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interactive</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neurorosettes.utilities.Animator.show" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">show</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interactive</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/neurorosettes/utilities.html#Animator.show"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurorosettes.utilities.Animator.show" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>interactive</strong> (<em>bool</em>) – </p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="neurorosettes.utilities.Animator.update_clock">
-<span class="sig-name descname"><span class="pre">update_clock</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_point</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#neurorosettes.utilities.Animator.update_clock" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">update_clock</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_point</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/neurorosettes/utilities.html#Animator.update_clock"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurorosettes.utilities.Animator.update_clock" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>time_point</strong> (<em>float</em>) – </p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="neurorosettes.utilities.Animator.add_grid">
-<span class="sig-name descname"><span class="pre">add_grid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_grid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_grid</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neurorosettes.utilities.Animator.add_grid" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">add_grid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_grid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_grid</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/neurorosettes/utilities.html#Animator.add_grid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurorosettes.utilities.Animator.add_grid" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="neurorosettes.utilities.Animator.set_camera">
-<span class="sig-name descname"><span class="pre">set_camera</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">height</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neurorosettes.utilities.Animator.set_camera" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">set_camera</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">height</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/neurorosettes/utilities.html#Animator.set_camera"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurorosettes.utilities.Animator.set_camera" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>height</strong> (<em>float</em>) – </p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="neurorosettes.utilities.Animator.draw_spring">
-<span class="sig-name descname"><span class="pre">draw_spring</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">base_point</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">top_point</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neurorosettes.utilities.Animator.draw_spring" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">draw_spring</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">base_point</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">top_point</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/neurorosettes/utilities.html#Animator.draw_spring"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurorosettes.utilities.Animator.draw_spring" title="Permalink to this definition"></a></dt>
 <dd><p>Plots a spring and a sphere to represent a neurite in vedo.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>base_point</strong> (<em>numpy.ndarray</em>) – </p></li>
+<li><p><strong>top_point</strong> (<em>numpy.ndarray</em>) – </p></li>
+<li><p><strong>radius</strong> (<em>float</em>) – </p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="neurorosettes.utilities.Animator.draw_sphere">
-<span class="sig-name descname"><span class="pre">draw_sphere</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">center</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">vedo.Sphere</span></span></span><a class="headerlink" href="#neurorosettes.utilities.Animator.draw_sphere" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">draw_sphere</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">center</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/neurorosettes/utilities.html#Animator.draw_sphere"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neurorosettes.utilities.Animator.draw_sphere" title="Permalink to this definition"></a></dt>
 <dd><p>Plots a sphere to represent a soma cell in vedo.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>center</strong> (<em>numpy.ndarray</em>) – </p></li>
+<li><p><strong>radius</strong> (<em>float</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>vedo.Sphere</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
@@ -248,7 +350,7 @@ inheritance.</p>
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2022, yes.</p>
+    <p>&#169; Copyright 2022, Inês G. Gonçalves.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

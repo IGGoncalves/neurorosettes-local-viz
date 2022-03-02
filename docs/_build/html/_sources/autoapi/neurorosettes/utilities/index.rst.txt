@@ -30,81 +30,81 @@ Functions
 
 
 
-.. py:class:: Tissue(use_2d: bool = True)
+.. py:class:: Tissue(use_2d = True)
 
    Bases: :py:obj:`abc.ABC`
 
    Helper class that provides a standard way to create an ABC using
    inheritance.
 
-   .. py:method:: get_coordinates(self) -> numpy.ndarray
+   .. py:method:: get_coordinates(self)
       :abstractmethod:
 
       Returns the initial cell coordinates according to the tissue geometry
 
 
 
-.. py:class:: RectangularTissue(size: float, spacing: float = 16.0, use_2d: bool = True)
+.. py:class:: RectangularTissue(size, spacing = 16.0, use_2d = True)
 
    Bases: :py:obj:`Tissue`
 
    Helper class that provides a standard way to create an ABC using
    inheritance.
 
-   .. py:method:: get_coordinates(self) -> numpy.ndarray
+   .. py:method:: get_coordinates(self)
 
       Returns the initial cell coordinates according to the tissue geometry
 
 
 
-.. py:class:: HexagonalTissue(size: float, spacing: float = 20.0, use_2d: bool = True)
+.. py:class:: HexagonalTissue(size, spacing = 20.0, use_2d = True)
 
    Bases: :py:obj:`Tissue`
 
    Helper class that provides a standard way to create an ABC using
    inheritance.
 
-   .. py:method:: get_coordinates(self) -> numpy.ndarray
+   .. py:method:: get_coordinates(self)
 
       Returns the initial cell coordinates according to the tissue geometry
 
 
 
-.. py:function:: get_random_position(scaling_factor: float) -> numpy.ndarray
+.. py:function:: get_random_position(scaling_factor)
 
    Returns the coordinates for a random position between -scaling_factor and scaling factor.
 
 
-.. py:function:: get_random_unit_vector(two_dimensions=False) -> numpy.ndarray
+.. py:function:: get_random_unit_vector(two_dimensions=False)
 
    Returns a vector for a random point in a unit sphere.
 
 
-.. py:function:: get_simulation_timer(total_time: float, timestep: float) -> vedo.ProgressBar
+.. py:function:: get_simulation_timer(total_time, timestep)
 
    Returns a progress bar with the simulation time
 
 
 .. py:class:: Animator
 
-   .. py:method:: show(self, interactive: bool = False)
+   .. py:method:: show(self, interactive = False)
 
 
-   .. py:method:: update_clock(self, time_point: float) -> None
+   .. py:method:: update_clock(self, time_point)
 
 
    .. py:method:: add_grid(self, x_grid, y_grid)
 
 
-   .. py:method:: set_camera(self, height: float)
+   .. py:method:: set_camera(self, height)
 
 
-   .. py:method:: draw_spring(self, base_point: numpy.ndarray, top_point: numpy.ndarray, radius: float)
+   .. py:method:: draw_spring(self, base_point, top_point, radius)
 
       Plots a spring and a sphere to represent a neurite in vedo.
 
 
-   .. py:method:: draw_sphere(self, center: numpy.ndarray, radius: float, **kwargs) -> vedo.Sphere
+   .. py:method:: draw_sphere(self, center, radius, **kwargs)
 
       Plots a sphere to represent a soma cell in vedo.
 

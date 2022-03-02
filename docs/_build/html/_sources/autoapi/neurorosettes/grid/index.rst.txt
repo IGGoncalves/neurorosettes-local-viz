@@ -52,38 +52,38 @@ Classes
 
       
 
-   .. py:method:: __post_init__(self) -> None
+   .. py:method:: __post_init__(self)
 
 
-   .. py:method:: representation_grid_values(self) -> numpy.ndarray
+   .. py:method:: representation_grid_values(self)
       :property:
 
 
-   .. py:method:: interpolate_idx(self, position: numpy.ndarray) -> Tuple[int, int, int]
+   .. py:method:: interpolate_idx(self, position)
 
 
-   .. py:method:: register_cell(self, cell: neurorosettes.subcellular.CellBody) -> None
+   .. py:method:: register_cell(self, cell)
 
 
-   .. py:method:: register_neurite(self, neurite: neurorosettes.subcellular.Neurite) -> None
+   .. py:method:: register_neurite(self, neurite)
 
 
-   .. py:method:: remove_cell(self, cell: neurorosettes.subcellular.CellBody) -> None
+   .. py:method:: remove_cell(self, cell)
 
 
-   .. py:method:: remove_neurite(self, neurite: neurorosettes.subcellular.Neurite) -> None
+   .. py:method:: remove_neurite(self, neurite)
 
 
-   .. py:method:: get_objects_in_voxel(self, idxx: int, idxy: int, idxz: int) -> List[Union[neurorosettes.subcellular.CellBody, neurorosettes.subcellular.Neurite]]
+   .. py:method:: get_objects_in_voxel(self, idxx, idxy, idxz)
 
 
-   .. py:method:: get_close_objects(self, position: numpy.ndarray) -> List[Union[neurorosettes.subcellular.CellBody, neurorosettes.subcellular.Neurite]]
+   .. py:method:: get_close_objects(self, position)
 
 
-   .. py:method:: get_close_cells(self, position: numpy.ndarray) -> List[neurorosettes.subcellular.CellBody]
+   .. py:method:: get_close_cells(self, position)
 
 
-   .. py:method:: get_cells_in_radius(self, position: numpy.ndarray, radius: float) -> List[neurorosettes.subcellular.CellBody]
+   .. py:method:: get_cells_in_radius(self, position, radius)
 
 
 
@@ -94,30 +94,30 @@ Classes
    Helper class that provides a standard way to create an ABC using
    inheritance.
 
-   .. py:method:: check_max_density(self, cell: neurorosettes.subcellular.CellBody, grid: UniformGrid) -> bool
+   .. py:method:: check_max_density(self, cell, grid)
       :abstractmethod:
 
 
 
-.. py:class:: OneLevelDensityCheck(max_neighbors: int = 15)
+.. py:class:: OneLevelDensityCheck(max_neighbors = 15)
 
    Bases: :py:obj:`CellDensityCheck`
 
    Helper class that provides a standard way to create an ABC using
    inheritance.
 
-   .. py:method:: check_max_density(self, cell: neurorosettes.subcellular.CellBody, grid: UniformGrid) -> bool
+   .. py:method:: check_max_density(self, cell, grid)
 
 
 
-.. py:class:: TwoLevelsDensityCheck(max_outer_neighbors: int = 15, max_inner_neighbors: int = 6, radius: float = 18.0)
+.. py:class:: TwoLevelsDensityCheck(max_outer_neighbors = 15, max_inner_neighbors = 6, radius = 18.0)
 
    Bases: :py:obj:`CellDensityCheck`
 
    Helper class that provides a standard way to create an ABC using
    inheritance.
 
-   .. py:method:: check_max_density(self, cell: neurorosettes.subcellular.CellBody, grid: UniformGrid) -> bool
+   .. py:method:: check_max_density(self, cell, grid)
 
 
 

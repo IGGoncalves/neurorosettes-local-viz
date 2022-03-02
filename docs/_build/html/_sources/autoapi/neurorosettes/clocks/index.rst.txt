@@ -44,25 +44,25 @@ Classes
 
       
 
-   .. py:method:: set_proliferation_rate(self, proliferation_rate: float)
+   .. py:method:: set_proliferation_rate(self, proliferation_rate)
 
 
-   .. py:method:: advance_cycle_clock(self, timestep: float) -> None
+   .. py:method:: advance_cycle_clock(self, timestep)
 
       Updates the cell cycle status based on the proliferation rate (may happen or not)
 
 
-   .. py:method:: flag_for_proliferation(self) -> None
+   .. py:method:: flag_for_proliferation(self)
 
       Updates the cell cycle to proliferation (will always happen)
 
 
-   .. py:method:: remove_proliferation_flag(self) -> None
+   .. py:method:: remove_proliferation_flag(self)
 
       Updates the cell cycle to arrest (will always happen)
 
 
-   .. py:method:: block_proliferation(self) -> None
+   .. py:method:: block_proliferation(self)
 
       Activates the cycle block to avoid proliferation
 
@@ -87,20 +87,20 @@ Classes
 
       
 
-   .. py:method:: set_death_rate(self, death_rate: float) -> None
+   .. py:method:: set_death_rate(self, death_rate)
 
 
-   .. py:method:: advance_death_clock(self, timestep: float) -> None
+   .. py:method:: advance_death_clock(self, timestep)
 
       Updates the cell status based on the death rate (may happen or not)
 
 
-   .. py:method:: flag_for_death(self) -> None
+   .. py:method:: flag_for_death(self)
 
       Updates the cell status to death (will always happen)
 
 
-   .. py:method:: block_death(self) -> None
+   .. py:method:: block_death(self)
 
 
 
@@ -126,10 +126,10 @@ Classes
 
       
 
-   .. py:method:: set_differentiation_rate(self, differentiation_rate: float)
+   .. py:method:: set_differentiation_rate(self, differentiation_rate)
 
 
-   .. py:method:: advance_differentiation_clock(self, timestep: float) -> None
+   .. py:method:: advance_differentiation_clock(self, timestep)
 
       Updates the cell status based on the death rate (may happen or not)
 
@@ -139,7 +139,7 @@ Classes
       Updates the differentiation grade and resets the signal to allow differentiation
 
 
-   .. py:method:: block_differentiation(self) -> None
+   .. py:method:: block_differentiation(self)
 
 
 
@@ -160,22 +160,22 @@ Classes
 
       
 
-   .. py:method:: set_proliferation_clock(self, proliferation_rate: float)
+   .. py:method:: set_proliferation_clock(self, proliferation_rate)
 
 
-   .. py:method:: set_death_clock(self, death_rate: float)
+   .. py:method:: set_death_clock(self, death_rate)
 
 
-   .. py:method:: set_differentiation_clock(self, differentiation_rate: float)
+   .. py:method:: set_differentiation_clock(self, differentiation_rate)
 
 
-   .. py:method:: set_clocks(self, proliferation_rate: float, death_rate: float, differentiation_rate: float) -> None
+   .. py:method:: set_clocks(self, proliferation_rate, death_rate, differentiation_rate)
 
 
-   .. py:method:: get_clock_rates(self) -> Tuple[float, float, float]
+   .. py:method:: get_clock_rates(self)
 
 
-   .. py:method:: advance_clocks(self, timestep: float)
+   .. py:method:: advance_clocks(self, timestep)
 
 
    .. py:method:: block_all_clocks(self)
