@@ -65,11 +65,6 @@ def get_random_unit_vector(two_dimensions=False) -> np.ndarray:
     return vector / np.linalg.norm(vector)
 
 
-def get_simulation_timer(total_time: float, timestep: float) -> ProgressBar:
-    """Returns a progress bar with the simulation time"""
-    return ProgressBar(0, total_time / timestep, c="r")
-
-
 class Animator:
     def __init__(self):
         self.plotter = Plotter(interactive=False, axes=0)

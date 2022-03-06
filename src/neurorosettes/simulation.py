@@ -1,9 +1,11 @@
 """This module deals with the neuron structure and functions"""
 from typing import List, Optional, Union
-import time
+from dataclasses import  dataclass
 
 import numpy as np
+from vedo import ProgressBar
 
+from neurorosettes.config import ConfigParser
 from neurorosettes.physics import ContactFactory, PotentialsFactory
 from neurorosettes.subcellular import CellBody, Neurite, ObjectFactory
 from neurorosettes.neurons import Neuron
@@ -11,26 +13,35 @@ from neurorosettes.utilities import Animator, get_random_unit_vector
 from neurorosettes.grid import UniformGrid, CellDensityCheck
 
 
+@dataclass
+class Timer:
+    total_time: float
+    step: float
+    current_time: float = 0.0
+
+    def get_progress_bar(self) -> ProgressBar:
+        """Returns a progress bar with the simulation time"""
+        return ProgressBar(0, self.total_time / self.step, c="r")
+
+
 class Container:
     """Represents the environment where neurons exist"""
 
     def __init__(self,
-                 grid_range: List[float],
-                 simulation_2d: bool = True,
-                 contact_factory: ContactFactory = PotentialsFactory(),
-                 object_factory: ObjectFactory = ObjectFactory(),
-                 drag_coefficient: float = 5.0,
+                 grid: UniformGrid,
+                 simulation_2d: bool,
+                 object_factory: ObjectFactory,
+                 contact_factory: ContactFactory,
                  density_check: Optional[CellDensityCheck] = None) -> None:
 
+        self.grid = grid
         self.simulation_2d = simulation_2d
         self.sphere_int = contact_factory.get_sphere_sphere_interactions()
         self.sphere_cylinder_int = contact_factory.get_sphere_cylinder_interactions()
         self.cylinder_int = contact_factory.get_cylinder_cylinder_interactions()
         self.factory = object_factory
-        self.drag_coefficient = drag_coefficient
         self.neurons = []
         self.animator = Animator()
-        self.grid = UniformGrid(*grid_range)
         self.density_check = density_check
 
         if self.simulation_2d:
@@ -243,7 +254,8 @@ class Container:
     def get_displacement_from_force(self, force: np.ndarray, time_step: float) -> np.ndarray:
         """Returns a velocity from the passed force"""
         # Compute cell velocity
-        velocity = force / self.drag_coefficient
+        # TODO: Add drag coeff
+        velocity = force / 1.0
         return velocity * time_step
 
     def move_cell(self, neuron: Neuron, new_coordinates: Union[np.ndarray, List[float]]) -> None:
@@ -358,3 +370,30 @@ class Container:
     def solve_mechanics(self, time_step) -> None:
         self.compute_displacements(time_step)
         self.update_cell_positions()
+
+
+class Simulation:
+    def __init__(self, timer: Timer, container: Container):
+        self.timer = timer
+        self.container = container
+
+    @classmethod
+    def from_file(cls, config_path):
+        parser = ConfigParser(config_path)
+        timer = Timer(**parser.get_time_data())
+        grid = UniformGrid(**parser.get_domain_data())
+        status_2d = parser.get_2d_status()
+        objects = ObjectFactory(**parser.get_objects_data())
+        interactions_data = parser.get_interactions_data()
+        interactions_type = interactions_data.pop("type")
+        if interactions_type == "potentials":
+            interactions = PotentialsFactory(**interactions_data)
+        else:
+            interactions = PotentialsFactory(**interactions_data)
+
+        container = Container(grid=grid,
+                              simulation_2d=status_2d,
+                              object_factory=objects,
+                              contact_factory=interactions)
+
+        return Simulation(timer, container)

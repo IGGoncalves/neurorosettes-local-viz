@@ -1,17 +1,7 @@
 """Script to test the spring components of neurites."""
 import time
 
-from neurorosettes.simulation import Container
-from neurorosettes.utilities import get_simulation_timer
-
-# Time constants
-STEP: float = 0.1
-TOTAL_TIME: float = 20.0
-
-# Domain constants
-GRID_MIN: float = -60.0
-GRID_MAX: float = 60.0
-GRID_STEP: float = 20.0
+from neurorosettes.simulation import Simulation, Container
 
 
 def create_tissue(container: Container) -> None:
@@ -43,18 +33,18 @@ def update_tissue(container: Container) -> None:
     time.sleep(2)
 
 
-def run_simulation(time_step: float, total_time: float, container: Container) -> None:
+def run_simulation(simulation: Simulation) -> None:
     """Runs the entire simulation by solving the mechanics at each time point."""
-    sim_time = get_simulation_timer(total_time, time_step)
+    sim_time = simulation.timer.get_progress_bar()
 
     for t in sim_time.range():
         # Solve interactions and draw the new object positions
-        container.solve_mechanics(time_step)
-        container.update_drawings()
+        simulation.container.solve_mechanics(simulation.timer.step)
+        simulation.container.update_drawings()
 
         # Update the simulation time on the simulation window
         if t % 10 == 0:
-            container.animator.update_clock(t)
+            simulation.container.animator.update_clock(t)
 
         # Print time to the console as a progressbar
         sim_time.print()
@@ -62,12 +52,12 @@ def run_simulation(time_step: float, total_time: float, container: Container) ->
 
 if __name__ == "__main__":
     # Initialize simulation objects
-    sim_world = Container(grid_range=[GRID_MIN, GRID_MAX, GRID_STEP])
+    sim_world = Simulation.from_file("config.yml")
     # Create initial configuration
-    create_tissue(sim_world)
+    create_tissue(sim_world.container)
     # Move things around to test the springs
-    update_tissue(sim_world)
+    update_tissue(sim_world.container)
     # Run the simulation to check if springs work
-    run_simulation(STEP, TOTAL_TIME, sim_world)
+    run_simulation(sim_world)
     # Plot the results (mark interactive as False to automatically  close the window)
-    sim_world.animator.show(interactive=True)
+    sim_world.container.animator.show(interactive=True)

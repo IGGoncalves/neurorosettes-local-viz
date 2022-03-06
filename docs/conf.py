@@ -17,9 +17,11 @@ author = u"Inês G. Gonçalves"
 # ones.
 extensions = [
     "myst_nb",
+    "sphinx.ext.autodoc",
     "autoapi.extension",
     "sphinx.ext.napoleon",
     "sphinx.ext.viewcode",
+    "sphinx_autodoc_typehints",
 ]
 autoapi_dirs = ["../src"]
 autodoc_typehints = "description"
@@ -34,4 +36,12 @@ exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = "sphinx_rtd_theme"
+html_theme = "pydata_sphinx_theme"
+
+html_sidebars = {
+    "index": [
+        "search-field",
+        "sidebar-nav-bs",
+    ],  # This ensures we test for custom sidebars
+    "demo/no-sidebar": [],  # Test what page looks like with no sidebar items
+}

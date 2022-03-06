@@ -119,9 +119,9 @@ class Neurite:
     def get_cell_neighbor_force(self, neighbor: CellBody,
                                 interaction: physics.ContactForces) -> Tuple[np.ndarray, float]:
         """Returns the interaction force between two cells"""
-        point = physics.get_sphere_cylinder_intersection(sphere_center=neighbor.position,
-                                                         cylinder_base=self.proximal_point,
-                                                         cylinder_top=self.distal_point)
+        point = physics.get_sphere_cylinder_intersection(center=neighbor.position,
+                                                         base=self.proximal_point,
+                                                         top=self.distal_point)
 
         distance_to_point = np.linalg.norm(np.subtract(point, self.proximal_point))
         fraction_to_mother = distance_to_point / self.current_length
@@ -140,10 +140,10 @@ class Neurite:
     def get_neurite_neighbor_force(self, neighbor: "Neurite", interaction: physics.ContactForces):
         """Returns the interaction force between two cells"""
 
-        point1, point2 = physics.get_cylinder_intersection(cylinder_base_1=self.distal_point,
-                                                           cylinder_top_1=self.proximal_point,
-                                                           cylinder_base_2=neighbor.distal_point,
-                                                           cylinder_top_2=neighbor.proximal_point)
+        point1, point2 = physics.get_cylinder_intersection(base_1=self.distal_point,
+                                                           top_1=self.proximal_point,
+                                                           base_2=neighbor.distal_point,
+                                                           top_2=neighbor.proximal_point)
 
         distance_to_point = np.linalg.norm(np.subtract(point1, self.proximal_point))
         fraction_to_mother = distance_to_point / self.current_length
@@ -161,13 +161,12 @@ class Neurite:
 
 @dataclass
 class ObjectFactory:
-    cell_radius: float = 8.0
-    cell_interaction_factor: float = 1.25
-    neurite_radius: float = 0.5
-    neurite_interaction_factor: float = 1.5
-    neurite_spring_constant: float = 10.0
-    neurite_default_length: float = 10.0
-    neurite_max_length: float = 15.0
+    cell_radius: float
+    cell_interaction_factor: float
+    neurite_radius: float
+    neurite_interaction_factor: float
+    neurite_spring_constant: float
+    neurite_default_length: float
 
     def get_cell_body(self, center_position: np.ndarray) -> CellBody:
         cell_mechanics = physics.PhysicalProperties(self.cell_radius,
@@ -182,7 +181,6 @@ class ObjectFactory:
         cylinder_mechanics = physics.CylinderProperties(self.neurite_radius,
                                                         self.neurite_interaction_factor,
                                                         self.neurite_spring_constant,
-                                                        self.neurite_default_length,
-                                                        self.neurite_max_length)
+                                                        self.neurite_default_length)
 
         return Neurite(proximal_position, axis, cylinder_mechanics)

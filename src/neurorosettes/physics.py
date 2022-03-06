@@ -73,10 +73,11 @@ def get_sphere_overlap(radius1: float, radius2: float, distance: float) -> float
     return overlap
 
 
-def get_sphere_cylinder_intersection(sphere_center: np.ndarray, cylinder_base: np.ndarray,
-                                     cylinder_top: np.ndarray) -> np.ndarray:
+def get_sphere_cylinder_intersection(center: np.ndarray, base: np.ndarray, top: np.ndarray) -> np.ndarray:
     """
-    Returns the closest point on the cylinder axis to the sphere. The intersection is given by
+    Returns the closest point on the cylinder axis to the sphere.
+
+    The intersection is given by
     the dot product. Taking the dot product between the cylinder axis and the axis that connects
     the cylinder base to the sphere, the dot product gives us the projection of the cylinder-sphere
     axis on the cylinder axis. For dot products between 0 and 1, the closest point is on the
@@ -85,11 +86,11 @@ def get_sphere_cylinder_intersection(sphere_center: np.ndarray, cylinder_base: n
 
     Parameters
     ----------
-    sphere_center: np.ndarray
+    center: np.ndarray
         The coordinates for the center of the sphere object.
-    cylinder_base: np.ndarray
+    base: np.ndarray
         The coordinates for the base of the cylinder object.
-    cylinder_top: np.ndarray
+    top: np.ndarray
         The coordinates for the extremity of the cylinder object.
 
     Returns
@@ -97,40 +98,42 @@ def get_sphere_cylinder_intersection(sphere_center: np.ndarray, cylinder_base: n
     np.ndarray
         The coordinates of the closest point to the sphere on the cylinder axis
     """
-    base_to_sphere_axis = np.subtract(sphere_center, cylinder_base)
-    cylinder_axis = np.subtract(cylinder_top, cylinder_base)
+    base_to_sphere_axis = np.subtract(center, base)
+    cylinder_axis = np.subtract(top, base)
 
     dot_product = np.dot(base_to_sphere_axis, cylinder_axis)
     projection_fraction = dot_product / np.linalg.norm(cylinder_axis) ** 2
 
     if projection_fraction <= 0:
-        return cylinder_base
+        return base
 
     if projection_fraction >= 1:
-        return cylinder_top
+        return top
 
-    return cylinder_base + cylinder_axis * projection_fraction
+    return base + cylinder_axis * projection_fraction
 
 
-def get_cylinder_intersection(cylinder_base_1: np.ndarray,
-                              cylinder_top_1: np.ndarray,
-                              cylinder_base_2: np.ndarray,
-                              cylinder_top_2: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
+def get_cylinder_intersection(base_1: np.ndarray,
+                              top_1: np.ndarray,
+                              base_2: np.ndarray,
+                              top_2: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
     """
-    Returns the closest point between two cylinders. The cross product is used to evaluate
+    Returns the closest point between two cylinders.
+
+    The cross product is used to evaluate
     if the cylinder axes are parallel. If they are, the closest points between the two objects
     are considered to be their middle points. If not, the projection of each axis on the other
     axis is computed to find the closest point on each axis.
 
     Parameters
     ----------
-    cylinder_base_1: np.ndarray
+    base_1: np.ndarray
         The coordinates for the base of the first cylinder object.
-    cylinder_top_1: np.ndarray
+    top_1: np.ndarray
         The coordinates for the extremity of the first cylinder object.
-    cylinder_base_2: np.ndarray
+    base_2: np.ndarray
         The coordinates for the base of the second cylinder object.
-    cylinder_top_2: np.ndarray
+    top_2: np.ndarray
         The coordinates for the extremity of the second cylinder object.
 
     Returns
@@ -140,11 +143,11 @@ def get_cylinder_intersection(cylinder_base_1: np.ndarray,
     np.ndarray
         The closest point on the axis of the second cylinder.
     """
-    cylinder_axis_2 = np.subtract(cylinder_top_2, cylinder_base_2)
-    cylinder_axis_1 = np.subtract(cylinder_top_1, cylinder_base_1)
+    cylinder_axis_2 = np.subtract(top_2, base_2)
+    cylinder_axis_1 = np.subtract(top_1, base_1)
 
-    unit_vector_2, norm2 = get_distance_components(cylinder_top_2, cylinder_base_2)
-    unit_vector_1, norm1 = get_distance_components(cylinder_top_1, cylinder_base_1)
+    unit_vector_2, norm2 = get_distance_components(top_2, base_2)
+    unit_vector_1, norm1 = get_distance_components(top_1, base_1)
 
     cross = np.cross(unit_vector_1, unit_vector_2)
 
@@ -152,72 +155,113 @@ def get_cylinder_intersection(cylinder_base_1: np.ndarray,
 
     # If cylinder axes are parallel, set the closest points as the middle points
     if not denominator:
-        d0 = np.dot(unit_vector_1, (cylinder_base_2 - cylinder_base_1))
-        d1 = np.dot(unit_vector_1, (cylinder_top_2 - cylinder_base_1))
+        d0 = np.dot(unit_vector_1, (base_2 - base_1))
+        d1 = np.dot(unit_vector_1, (top_2 - base_1))
 
         if d0 <= 0 >= d1:
             if np.absolute(d0) < np.absolute(d1):
-                return cylinder_base_1, cylinder_base_2
-            return cylinder_base_1, cylinder_top_2
+                return base_1, base_2
+            return base_1, top_2
 
         elif d0 >= norm1 <= d1:
             if np.absolute(d0) < np.absolute(d1):
-                return cylinder_top_1, cylinder_base_2
-            return cylinder_top_1, cylinder_top_2
+                return top_1, base_2
+            return top_1, top_2
 
-        p1 = cylinder_base_1 + 0.5 * cylinder_axis_1
-        p2 = cylinder_base_2 + 0.5 * cylinder_axis_2
+        p1 = base_1 + 0.5 * cylinder_axis_1
+        p2 = base_2 + 0.5 * cylinder_axis_2
 
         return p1, p2
 
-    t = (cylinder_base_2 - cylinder_base_1)
+    t = (base_2 - base_1)
     detA = np.linalg.det([t, unit_vector_2, cross])
     detB = np.linalg.det([t, unit_vector_1, cross])
 
     t0 = detA / denominator
     t1 = detB / denominator
 
-    pA = cylinder_base_1 + (unit_vector_1 * t0)  # Projected closest point on segment A
-    pB = cylinder_base_1 + (unit_vector_2 * t1)  # Projected closest point on segment B
+    pA = base_1 + (unit_vector_1 * t0)  # Projected closest point on segment A
+    pB = base_1 + (unit_vector_2 * t1)  # Projected closest point on segment B
 
     # Clamp projections
     if t0 < 0:
-        pA = cylinder_base_1
+        pA = base_1
     elif t0 > norm1:
-        pA = cylinder_top_2
+        pA = top_2
 
     if t1 < 0:
-        pB = cylinder_base_2
+        pB = base_2
     elif t1 > norm2:
-        pB = cylinder_top_2
+        pB = top_2
 
     # Clamp projection A
     if t0 < 0 or t0 > norm1:
-        dot = np.dot(unit_vector_2, (pA - cylinder_base_2))
+        dot = np.dot(unit_vector_2, (pA - base_2))
         if dot < 0:
             dot = 0
         elif dot > norm2:
             dot = norm2
-        pB = cylinder_base_2 + (unit_vector_2 * dot)
+        pB = base_2 + (unit_vector_2 * dot)
 
     # Clamp projection B
     if t1 < 0 or t1 > norm2:
-        dot = np.dot(unit_vector_1, (pB - cylinder_base_1))
+        dot = np.dot(unit_vector_1, (pB - base_1))
         if dot < 0:
             dot = 0
         elif dot > norm1:
             dot = norm1
-        pA = cylinder_base_1 + (unit_vector_1 * dot)
+        pA = base_1 + (unit_vector_1 * dot)
 
     return pA, pB
 
 
-@dataclass
 class PhysicalProperties:
-    """Class with the mechanical properties of a physical object."""
+    """
+    Class with the mechanical properties of a physical object.
 
-    radius: float
-    interaction_factor: float
+    Parameters
+    ----------
+    radius
+        The radius of the physical object.
+    interaction_factor
+        The factor used to calculate the radius of interaction.
+    """
+
+    def __init__(self, radius: float, interaction_factor: float) -> None:
+        self.radius = radius
+        self.interaction_factor = interaction_factor
+
+    @property
+    def radius(self):
+        """
+        Returns the radius of the object.
+        Raises an error if a negative or non-numerical value is set.
+        """
+        return self._radius
+
+    @radius.setter
+    def radius(self, radius: float):
+        if not isinstance(radius, (int, float)):
+            raise TypeError("Object radius should be a numerical value.")
+        if radius < 0.0:
+            raise ValueError("Object radius should be positive.")
+        self._radius = radius
+
+    @property
+    def interaction_factor(self):
+        """
+        Returns the interaction factor of the object.
+        Raises an error if a negative or non-numerical value is set.
+        """
+        return self._interaction_factor
+
+    @interaction_factor.setter
+    def interaction_factor(self, interaction_factor: float):
+        if not isinstance(interaction_factor, (int, float)):
+            raise TypeError("Interaction factor should be a numerical value.")
+        if interaction_factor < 0.0:
+            raise ValueError("Interaction factor should be positive.")
+        self._interaction_factor = interaction_factor
 
     @property
     def interaction_radius(self) -> float:
@@ -225,13 +269,39 @@ class PhysicalProperties:
         return self.interaction_factor * self.radius
 
 
-@dataclass
-class CylinderProperties(PhysicalProperties):
-    """Class with the mechanical properties of a cylinder with a spring axis."""
+class SphereProperties(PhysicalProperties):
+    """
+    Class with the mechanical properties of a sphere.
 
-    spring_constant: float
-    default_length: float
-    max_length: float
+    Parameters
+    ----------
+    radius
+        The radius of the physical object.
+    interaction_factor
+        The factor used to calculate the radius of interaction.
+    """
+
+    def __init__(self, radius: float, interaction_factor: float):
+        super().__init__(radius, interaction_factor)
+
+
+class CylinderProperties(PhysicalProperties):
+    """
+    Class with the mechanical properties of a cylinder with a spring axis.
+
+    Parameters
+    ----------
+    radius
+        The radius of the physical object.
+    interaction_factor
+        The factor used to calculate the radius of interaction.
+    """
+
+    def __init__(self, radius: float, interaction_factor: float,
+                 spring_constant: float, default_length: float) -> None:
+        super().__init__(radius, interaction_factor)
+        self.spring_constant = spring_constant
+        self.default_length = default_length
 
     def get_spring_tension(self, cylinder_length: float) -> float:
         """Returns the tension in the spring for a given spring length."""
@@ -372,17 +442,17 @@ class ContactFactory(ABC):
 
 @dataclass
 class PotentialsFactory(ContactFactory):
-    sphere_sphere_adhesion: float = 4.0
-    sphere_sphere_repulsion: float = 50.0
-    sphere_sphere_smoothness: int = 1
+    sphere_sphere_adhesion: float
+    sphere_sphere_repulsion: float
+    sphere_sphere_smoothness: int
 
-    sphere_cylinder_adhesion: float = 5.0
-    sphere_cylinder_repulsion: float = 10.0
-    sphere_cylinder_smoothness: int = 1
+    sphere_cylinder_adhesion: float
+    sphere_cylinder_repulsion: float
+    sphere_cylinder_smoothness: int
 
-    cylinder_cylinder_adhesion: float = 10.0
-    cylinder_cylinder_repulsion: float = 10.0
-    cylinder_cylinder_smoothness: int = 1
+    cylinder_cylinder_adhesion: float
+    cylinder_cylinder_repulsion: float
+    cylinder_cylinder_smoothness: int
 
     def get_sphere_sphere_interactions(self) -> PotentialsContact:
         return PotentialsContact(self.sphere_sphere_adhesion,
