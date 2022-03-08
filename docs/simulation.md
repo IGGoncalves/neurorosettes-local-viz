@@ -27,10 +27,16 @@ if __name__ == "__main__":
 ```
 
 ### Loading data from the configuration file
+
 All the data required to create a new simulation is stored in YAML configuration files.
 
-## Tissue initialization stamdard functions
+### Creating the tissue structure
 
-![tissue_rect](img/tissue_rect.png)
+Some [initialization functions](tissue_initialization.md) are provided with the
+package, to create structured grid tissues.
 
 ### Running the simulation
+Simulations can be run by calling the `.run()` method for the `Simulation` instance.
+This function will run the simulation for the total time specified in the `config.yml`
+file. At each time point, the biological clocks are advanced, and then neurons are checked
+for cell, death and proliferation. 

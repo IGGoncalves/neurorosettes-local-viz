@@ -6,4 +6,5 @@
 simulation.md
 cycle.md
 mechanics.md
+additional_utilities.md
 ```
