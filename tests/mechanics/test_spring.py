@@ -30,24 +30,7 @@ def update_tissue(container: Container) -> None:
     container.move_cell(container.neurons[1], [2.0, -10.0, 0.0])
     # Plot the current state of the simulation
     container.update_drawings()
-    time.sleep(2)
-
-
-def run_simulation(simulation: Simulation) -> None:
-    """Runs the entire simulation by solving the mechanics at each time point."""
-    sim_time = simulation.timer.get_progress_bar()
-
-    for t in sim_time.range():
-        # Solve interactions and draw the new object positions
-        simulation.container.solve_mechanics(simulation.timer.step)
-        simulation.container.update_drawings()
-
-        # Update the simulation time on the simulation window
-        if t % 10 == 0:
-            simulation.container.animator.update_clock(t)
-
-        # Print time to the console as a progressbar
-        sim_time.print()
+    time.sleep(1)
 
 
 if __name__ == "__main__":
@@ -58,6 +41,6 @@ if __name__ == "__main__":
     # Move things around to test the springs
     update_tissue(sim_world.container)
     # Run the simulation to check if springs work
-    run_simulation(sim_world)
+    sim_world.run()
     # Plot the results (mark interactive as False to automatically  close the window)
     sim_world.container.animator.show(interactive=True)

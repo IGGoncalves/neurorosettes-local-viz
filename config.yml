@@ -14,7 +14,7 @@ objects:
   cell_interaction_factor: 1.25
   neurite_radius: 0.5
   neurite_interaction_factor: 1.25
-  neurite_spring_constant: 10.0
+  neurite_spring_constant: 5.0
   neurite_default_length: 10.0
 
 interactions:

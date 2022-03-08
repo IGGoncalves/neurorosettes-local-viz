@@ -377,6 +377,23 @@ class Simulation:
         self.timer = timer
         self.container = container
 
+    def run(self) -> None:
+        """Runs the entire simulation by solving the mechanics at each time point."""
+        sim_time = self.timer.get_progress_bar()
+
+        for t in sim_time.range():
+            # Solve interactions and draw the new object positions
+            self.container.solve_mechanics(self.timer.step)
+            self.container.update_drawings()
+
+            # Update the simulation time on the simulation window
+            if t % 10 == 0:
+                self.container.animator.update_clock(t)
+
+            # Print time to the console as a progressbar
+            self.timer.current_time += self.timer.step
+            sim_time.print()
+
     @classmethod
     def from_file(cls, config_path):
         parser = ConfigParser(config_path)
