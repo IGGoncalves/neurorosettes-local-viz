@@ -1,9 +1,13 @@
-# Physical objects and interactions
+# Physics and interactions
+
+## Object types
 
 We consider two types of physical objects to create biological entities: spheres and cylinders. 
 The objects in a simulation  can interact with each other, using sphere-sphere contact functions.
+
 - Cell bodies are defined by spheres (shown in red in the figur below) that have a **center point**,
 a **radius** and an **interaction radius**;
+
 - Fibrous materials such as neurites are defined by a cylinder that has two extremity points: the **proximal
 point** (closest to the sphere) and the **distal point** (farther from the sphere). Each cylinder is also characterized
 by a **radius** and an **interaction radius** (as shown by the distal points represented as blue spheres in
@@ -24,7 +28,7 @@ together, and a repulsion component, that pushes the spheres away.
 The force that results from the combination of these components is applied to the center of the spheres, 
 and will be taken  into account later to compute the position of the sphere in the next time point of the simulation.
 
-![sphere-intersection](img/sphere_intersection.png)
+![sphere-intersection](img/sphere_sphere.svg)
 
 ### Sphere-cylinder interactions
 
@@ -37,7 +41,7 @@ extremities (as shown by the two black arrows on the cylinder extremity points).
 closest point is one of the extremities, the force will only be applied to that extremity (represented by the single
 black arrow on the closest point of the cylinder axis).
 
-![cylinder-sphere-intersections](img/cylinder_sphere_intersection.png)
+![cylinder-sphere-intersections](img/sphere_spring.svg)
 
 ### Cylinder-cylinder interactions
 
@@ -48,7 +52,7 @@ configurations in space (shown in 2D) and the corresponding closest points. When
 we transmit the forces to the distal and/or proximal points as previously defined
 in the sphere-cylinder interactions section.
 
-![cylinder-intersections](img/cylinder_intersection.png)
+![cylinder-intersections](img/spring_spring.svg)
 
 ## Contact forces
 

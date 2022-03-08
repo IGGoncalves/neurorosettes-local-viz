@@ -3,13 +3,13 @@ from typing import List, Optional, Union
 from dataclasses import  dataclass
 
 import numpy as np
-from vedo import ProgressBar
+from vedo import Plotter, Sphere, Spring, ProgressBar, Grid, Text2D
 
 from neurorosettes.config import ConfigParser
 from neurorosettes.physics import ContactFactory, PotentialsFactory
 from neurorosettes.subcellular import CellBody, Neurite, ObjectFactory
 from neurorosettes.neurons import Neuron
-from neurorosettes.utilities import Animator, get_random_unit_vector
+from neurorosettes.utilities import get_random_unit_vector
 from neurorosettes.grid import UniformGrid, CellDensityCheck
 
 
@@ -22,6 +22,43 @@ class Timer:
     def get_progress_bar(self) -> ProgressBar:
         """Returns a progress bar with the simulation time"""
         return ProgressBar(0, self.total_time / self.step, c="r")
+
+
+class Animator:
+    def __init__(self):
+        self.plotter = Plotter(interactive=False, axes=0, backend="ipyvtk")
+        self.clock = Text2D("Simulation step: 0", pos="top right", c="black", font="Courier")
+        self.plotter += self.clock
+
+    def show(self, interactive: bool = False):
+        self.plotter.show(interactive=interactive, resetcam=False)
+
+    def update_clock(self, time_point: float) -> None:
+        self.clock.text(f"Simulation step: {time_point}")
+
+    def add_grid(self, x_grid, y_grid):
+        self.plotter += Grid(sx=x_grid, sy=y_grid, c='lightgrey')
+
+    def set_camera(self, height: float):
+        self.plotter.camera.SetPosition([0., 0., height])
+        self.plotter.camera.SetFocalPoint([0., 0., 0.])
+        self.plotter.camera.SetViewUp([0., 1., 0.])
+
+    def draw_spring(self, base_point: np.ndarray, top_point: np.ndarray, radius: float):
+        """Plots a spring and a sphere to represent a neurite in vedo."""
+        cylinder = Spring(startPoint=base_point, endPoint=top_point, r=radius)
+        top_sphere = Sphere(pos=top_point, r=radius, c='b3')
+        self.plotter += cylinder
+        self.plotter += top_sphere
+
+        return cylinder, top_sphere
+
+    def draw_sphere(self, center: np.ndarray, radius: float, **kwargs) -> Sphere:
+        """Plots a sphere to represent a soma cell in vedo."""
+        sphere = Sphere(pos=center, r=radius, alpha=1.0, **kwargs)
+        self.plotter += sphere
+
+        return sphere
 
 
 class Container:
@@ -40,9 +77,9 @@ class Container:
         self.sphere_cylinder_int = contact_factory.get_sphere_cylinder_interactions()
         self.cylinder_int = contact_factory.get_cylinder_cylinder_interactions()
         self.factory = object_factory
-        self.neurons = []
-        self.animator = Animator()
         self.density_check = density_check
+        self.animator = Animator()
+        self.neurons = []
 
         if self.simulation_2d:
             self.animator.add_grid(self.grid.representation_grid_values,

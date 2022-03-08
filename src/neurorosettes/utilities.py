@@ -67,7 +67,7 @@ def get_random_unit_vector(two_dimensions=False) -> np.ndarray:
 
 class Animator:
     def __init__(self):
-        self.plotter = Plotter(interactive=False, axes=0)
+        self.plotter = Plotter(interactive=False, axes=0, backend="ipyvtk")
         self.clock = Text2D("Simulation step: 0", pos="top right", c="black", font="Courier")
         self.plotter += self.clock
 

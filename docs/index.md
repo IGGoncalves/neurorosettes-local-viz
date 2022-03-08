@@ -5,8 +5,6 @@
 :maxdepth: 1
 :hidden:
 
-simulation.md
-cycle.md
-mechanics.md
+user_guide.md
 autoapi/index
 ```
