@@ -492,6 +492,34 @@ python-versions = "*"
 scripts = ["click (>=6.0)", "twisted (>=16.4.0)"]
 
 [[package]]
+name = "ipycanvas"
+version = "0.11.0"
+description = "Interactive widgets library exposing the browser's Canvas API"
+category = "dev"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+ipywidgets = ">=7.6.0"
+numpy = "*"
+pillow = ">=6.0"
+
+[[package]]
+name = "ipyevents"
+version = "2.0.1"
+description = "A custom widget for returning mouse and keyboard events to Python"
+category = "dev"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+ipywidgets = ">=7.6.0"
+
+[package.extras]
+docs = ["sphinx", "nbsphinx", "jupyterlab (>=3)"]
+test = ["pytest", "pytest-cov", "nbval"]
+
+[[package]]
 name = "ipykernel"
 version = "6.9.1"
 description = "IPython Kernel for Jupyter"
@@ -551,6 +579,19 @@ description = "Vestigial utilities from IPython"
 category = "dev"
 optional = false
 python-versions = "*"
+
+[[package]]
+name = "ipyvtklink"
+version = "0.2.2"
+description = "ipywidget for vtkRenderWindow"
+category = "dev"
+optional = false
+python-versions = ">=3.5.*"
+
+[package.dependencies]
+ipycanvas = ">=0.5.0"
+ipyevents = ">=0.8.0"
+ipywidgets = "*"
 
 [[package]]
 name = "ipywidgets"
@@ -1487,21 +1528,6 @@ testing = ["covdefaults (>=2)", "coverage (>=6)", "diff-cover (>=6.4)", "nptypin
 type_comments = ["typed-ast (>=1.4.0)"]
 
 [[package]]
-name = "sphinx-rtd-theme"
-version = "1.0.0"
-description = "Read the Docs theme for Sphinx"
-category = "dev"
-optional = false
-python-versions = ">=2.7,!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*"
-
-[package.dependencies]
-docutils = "<0.18"
-sphinx = ">=1.6"
-
-[package.extras]
-dev = ["transifex-client", "sphinxcontrib-httpdomain", "bump2version"]
-
-[[package]]
 name = "sphinx-togglebutton"
 version = "0.3.0"
 description = "Toggle page content and collapse admonitions in Sphinx."
@@ -1895,7 +1921,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7"
-content-hash = "46f129d1620dc4b4bfa7265ab1f0d35152a712e9326c586cf5c7e762ee2948e9"
+content-hash = "3c545faada1010846158e06f41700e23c3f39b51792ca2c6cbcd245a41d7faaf"
 
 [metadata.files]
 aiohttp = [
@@ -2345,6 +2371,14 @@ incremental = [
     {file = "incremental-21.3.0-py2.py3-none-any.whl", hash = "sha256:92014aebc6a20b78a8084cdd5645eeaa7f74b8933f70fa3ada2cfbd1e3b54321"},
     {file = "incremental-21.3.0.tar.gz", hash = "sha256:02f5de5aff48f6b9f665d99d48bfc7ec03b6e3943210de7cfc88856d755d6f57"},
 ]
+ipycanvas = [
+    {file = "ipycanvas-0.11.0-py2.py3-none-any.whl", hash = "sha256:08ea61a391d5b9fe6c97a25e01910bdeea6842a4a5abda4aa0f806da3656a160"},
+    {file = "ipycanvas-0.11.0.tar.gz", hash = "sha256:29769b47e275badce31defb7748545dd2ea760a7acba75892e0bfa1c5bc5b175"},
+]
+ipyevents = [
+    {file = "ipyevents-2.0.1-py2.py3-none-any.whl", hash = "sha256:9f255fdab40e7598b1143ace90153c5f4e52be15dc6f1b94f575a043a5970c17"},
+    {file = "ipyevents-2.0.1.tar.gz", hash = "sha256:23eb2afab13d9056397f120a88051dd3beb067b698d08b33adffc9e077f019cb"},
+]
 ipykernel = [
     {file = "ipykernel-6.9.1-py3-none-any.whl", hash = "sha256:4fae9df6e192837552b2406a6052d707046dd2e153860be73c68484bacba18ed"},
     {file = "ipykernel-6.9.1.tar.gz", hash = "sha256:f95070a2dfd3147f8ab19f18ee46733310813758593745e07ec18fb08b409f1d"},
@@ -2356,6 +2390,10 @@ ipython = [
 ipython-genutils = [
     {file = "ipython_genutils-0.2.0-py2.py3-none-any.whl", hash = "sha256:72dd37233799e619666c9f639a9da83c34013a73e8bbc79a7a6348d93c61fab8"},
     {file = "ipython_genutils-0.2.0.tar.gz", hash = "sha256:eb2e116e75ecef9d4d228fdc66af54269afa26ab4463042e33785b887c628ba8"},
+]
+ipyvtklink = [
+    {file = "ipyvtklink-0.2.2-py3-none-any.whl", hash = "sha256:311c8d434dc51c45edf14a5bab832f5f80495489da2f4788814d3b54cd45a0dc"},
+    {file = "ipyvtklink-0.2.2.tar.gz", hash = "sha256:9e0a9b7ef8302a5d1149108e8117031b1c9b27095e7eb0c4c2172e5fd8c2f33a"},
 ]
 ipywidgets = [
     {file = "ipywidgets-7.6.5-py2.py3-none-any.whl", hash = "sha256:d258f582f915c62ea91023299603be095de19afb5ee271698f88327b9fe9bf43"},
@@ -3031,10 +3069,6 @@ sphinx-autoapi = [
 sphinx-autodoc-typehints = [
     {file = "sphinx_autodoc_typehints-1.17.0-py3-none-any.whl", hash = "sha256:081daf53077b4ae1c28347d6d858e13e63aefe3b4aacef79fd717dd60687b470"},
     {file = "sphinx_autodoc_typehints-1.17.0.tar.gz", hash = "sha256:51c7b3f5cb9ccd15d0b52088c62df3094f1abd9612930340365c26def8629a14"},
-]
-sphinx-rtd-theme = [
-    {file = "sphinx_rtd_theme-1.0.0-py2.py3-none-any.whl", hash = "sha256:4d35a56f4508cfee4c4fb604373ede6feae2a306731d533f409ef5c3496fdbd8"},
-    {file = "sphinx_rtd_theme-1.0.0.tar.gz", hash = "sha256:eec6d497e4c2195fa0e8b2016b337532b8a699a68bcb22a512870e16925c6a5c"},
 ]
 sphinx-togglebutton = [
     {file = "sphinx-togglebutton-0.3.0.tar.gz", hash = "sha256:005594ceb82c3da382d7b3a20aa0ceabc79648fc14f85bbef1424d1409112831"},
