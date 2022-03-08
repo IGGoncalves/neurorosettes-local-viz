@@ -29,6 +29,8 @@ if __name__ == "__main__":
 ### Loading data from the configuration file
 All the data required to create a new simulation is stored in YAML configuration files.
 
-### Tissue initialization
+## Tissue initialization stamdard functions
+
+![tissue_rect](img/tissue_rect.png)
 
 ### Running the simulation
