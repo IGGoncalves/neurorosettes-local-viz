@@ -12,6 +12,7 @@ class UniformGrid:
     min: float
     max: float
     step: float
+    use_2d: bool = True
     grid_values: np.ndarray = field(init=False)
     idx_values: np.ndarray = field(init=False)
     grid: np.ndarray = field(init=False)
@@ -20,13 +21,15 @@ class UniformGrid:
         self.grid_values = np.arange(self.min, self.max, self.step)
         self.idx_values = np.arange(self.grid_values.shape[0])
 
-        self.grid = np.empty(shape=[self.grid_values.shape[0],
+        z_shape = 1 if self.use_2d else self.grid_values.shape[0]
+
+        self.grid = np.empty(shape=[z_shape,
                                     self.grid_values.shape[0],
                                     self.grid_values.shape[0]], dtype=object)
 
-        self.grid[...] = [[[[] for _ in range(self.grid.shape[0])]
+        self.grid[...] = [[[[] for _ in range(self.grid.shape[2])]
                            for _ in range(self.grid.shape[1])]
-                          for _ in range(self.grid.shape[2])]
+                          for _ in range(self.grid.shape[0])]
 
     @property
     def representation_grid_values(self) -> np.ndarray:
@@ -35,6 +38,10 @@ class UniformGrid:
     def interpolate_idx(self, position: np.ndarray) -> Tuple[int, int, int]:
         idxx = np.floor(np.interp(position[0], self.grid_values, self.idx_values)).astype(int)
         idxy = np.floor(np.interp(position[1], self.grid_values, self.idx_values)).astype(int)
+
+        if self.use_2d:
+            return idxx, idxy, 0
+            
         idxz = np.floor(np.interp(position[2], self.grid_values, self.idx_values)).astype(int)
 
         return idxx, idxy, idxz
@@ -55,7 +62,7 @@ class UniformGrid:
         idxx, idxy, idxz = self.interpolate_idx(neurite.distal_point)
         self.grid[idxz][idxy][idxx].remove(neurite)
 
-    def get_objects_in_voxel(self, idxx: int, idxy: int, idxz: int) -> List[Union[CellBody, Neurite]]:
+    def get_objects_in_voxel(self, idxx: int, idxy: int, idxz: int  = 0) -> List[Union[CellBody, Neurite]]:
         return self.grid[idxz][idxy][idxx]
 
     def get_close_objects(self, position: np.ndarray) -> List[Union[CellBody, Neurite]]:
