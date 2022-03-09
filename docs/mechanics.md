@@ -113,37 +113,6 @@ repulsion = contact.compute_repulsion(distance=10.0, radius1=8.0, radius2=8.0)
 magnitude = repulsion - adhesion
 ```
 
-## Default parameter values
-
-| Type     | Name               | Default value | Unit   |
-|----------|--------------------|---------------|--------|
-| Sphere   | Radius             | 8.0           | $\mu$m |
-|          | Interaction factor | 1.25          | ---    |
-| Cylinder | Radius             | 0.5           | $\mu$m |
-|          | Initial length     | 10.0          | $\mu$m |
-|          | Interaction factor | 1.25          | ---    |
-|          | Spring constant    | 10.0          | ---    |
-
-==VALUES NEED TO BE CONFIRMED==
-
-| Group             | Type           | Name                  | Default value | Unit |
-|-------------------|----------------|-----------------------|---------------|------|
-| Sphere-sphere     | Simple contact | Adhesion coefficient  | 8.0           | ---  |
-|                   |                | Repulsion coefficient | 1.25          | ---  |
-|                   | Potentials     | Adhesion coefficient  | 4.0           | ---  |
-|                   |                | Repulsion coefficient | 10.0          | ---  |
-|                   |                | Smoothness factor     | 1.0           | ---  |
-| Sphere-cylinder   | Simple contact | Adhesion coefficient  | 8.0           | ---  |
-|                   |                | Repulsion coefficient | 1.25          | ---  |
-|                   | Potentials     | Adhesion coefficient  | 0.0           | ---  |
-|                   |                | Repulsion coefficient | 10.0          | ---  |
-|                   |                | Smoothness factor     | 1.0           | ---  |
-| Cylinder-cylinder | Simple contact | Adhesion coefficient  | 8.0           | ---  |
-|                   |                | Repulsion coefficient | 1.25          | ---  |
-|                   | Potentials     | Adhesion coefficient  | 10.0          | ---  |
-|                   |                | Repulsion coefficient | 10.0          | ---  |
-|                   |                | Smoothness factor     | 1.0           | ---  |
-
 ## General use
 
 Regardless of the type of contact forces used, the cell and neurite objects already include

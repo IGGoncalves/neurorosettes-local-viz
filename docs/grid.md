@@ -18,4 +18,6 @@ from neurorosettes.grid import UniformGrid
 
 grid = UniformGrid(min=-60.0, max=60.0, step=20.0)
 ```
+This code creates a grid as shown below.
 
+![grid](img/grid.png)
