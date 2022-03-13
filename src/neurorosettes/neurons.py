@@ -1,19 +1,20 @@
 """This module deals with the neuron structure and functions"""
+from dataclasses import dataclass
 import numpy as np
 
 from neurorosettes.subcellular import CellBody, Neurite, ObjectFactory
-from neurorosettes.clocks import CellClocks
+from neurorosettes.clocks import CellClocks, ClocksFactory
 
 
 class Neuron:
     """Represents a neuron that has a cell and neurites"""
 
-    def __init__(self, position: np.ndarray, factory: ObjectFactory,
-                 outgrowth_axis: np.ndarray = np.array([1.0, 0.0, 0.0]),
+    def __init__(self, position: np.ndarray, outgrowth_axis: np.ndarray,
+                 factory: ObjectFactory, clocks: CellClocks,
                  differentiation_grade: int = 0) -> None:
         self.cell = factory.get_cell_body(position)
         self.outgrowth_axis = outgrowth_axis
-        self.clocks = CellClocks()
+        self.clocks = clocks
         self.max_number_of_neurites = 4
         self.neurites = []
 
@@ -44,10 +45,6 @@ class Neuron:
         self.outgrowth_axis[1] = coordinates[1]
         self.outgrowth_axis[2] = coordinates[2]
 
-    def set_clocks_from_mother(self, mother_neuron: "Neuron"):
-        clocks = mother_neuron.clocks.get_clock_rates()
-        self.clocks.set_clocks(clocks[0], clocks[1], clocks[2])
-
     def get_neurite_position_on_cell_surface(self) -> np.ndarray:
         """Returns the coordinates on the cell surface where the first neurite should be placed"""
         connector = self.neurites[0].distal_point - self.cell.position
@@ -76,3 +73,14 @@ class Neuron:
         proximal_point = self.neurites[-1].distal_point
         neurite = factory.get_neurite(proximal_point, self.outgrowth_axis)
         self.neurites.append(neurite)
+
+
+@dataclass
+class NeuronFactory:
+    objects_factory: ObjectFactory
+    clocks_factory: ClocksFactory
+
+    def create_neuron(self, coordinates, outgrowth_axis):
+        clocks = self.clocks_factory.get_clocks()
+        return Neuron(coordinates, outgrowth_axis, 
+                      self.objects_factory, clocks)

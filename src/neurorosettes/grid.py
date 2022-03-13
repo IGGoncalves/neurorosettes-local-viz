@@ -75,6 +75,13 @@ class UniformGrid:
         y_neighbors = [idxy + value for value in [-1, 0, 1]
                        if 0 < idxy + value < len(self.idx_values)]
 
+        if self.use_2d:
+            for y in y_neighbors:
+                for x in x_neighbors:
+                    neighbors.extend(self.get_objects_in_voxel(x, y, 0))
+
+            return neighbors
+
         z_neighbors = [idxz + value for value in [-1, 0, 1]
                        if 0 < idxz + value < len(self.idx_values)]
 

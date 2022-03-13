@@ -3,12 +3,13 @@ from typing import List, Optional, Union
 from dataclasses import  dataclass
 
 import numpy as np
+from neurorosettes.clocks import CellClocks, ClocksFactory
 from vedo import Plotter, Sphere, Spring, ProgressBar, Grid, Text2D
 
 from neurorosettes.config import ConfigParser
-from neurorosettes.physics import ContactFactory, PotentialsFactory
+from neurorosettes.physics import ContactFactory, PotentialsFactory, get_cylinder_intersection
 from neurorosettes.subcellular import CellBody, Neurite, ObjectFactory
-from neurorosettes.neurons import Neuron
+from neurorosettes.neurons import Neuron, NeuronFactory
 from neurorosettes.utilities import get_random_unit_vector
 from neurorosettes.grid import UniformGrid, CellDensityCheck
 
@@ -67,7 +68,7 @@ class Container:
     def __init__(self,
                  grid: UniformGrid,
                  simulation_2d: bool,
-                 object_factory: ObjectFactory,
+                 neuron_factory: NeuronFactory,
                  contact_factory: ContactFactory,
                  density_check: Optional[CellDensityCheck] = None) -> None:
 
@@ -76,7 +77,8 @@ class Container:
         self.sphere_int = contact_factory.get_sphere_sphere_interactions()
         self.sphere_cylinder_int = contact_factory.get_sphere_cylinder_interactions()
         self.cylinder_int = contact_factory.get_cylinder_cylinder_interactions()
-        self.factory = object_factory
+        self.neuron_factory = neuron_factory
+        self.object_factory = self.neuron_factory.objects_factory
         self.density_check = density_check
         self.animator = Animator()
         self.neurons = []
@@ -111,7 +113,9 @@ class Container:
     def create_new_neuron(self, coordinates: Union[np.ndarray, List[float]],
                           outgrowth_axis: Optional[Union[List[float], np.ndarray]] = None,
                           differentiation_grade: int = 0, color="red") -> Neuron:
+                          
         """Creates a new neuron and registers it to the container"""
+
         if isinstance(coordinates, list):
             coordinates = np.array(coordinates)
 
@@ -121,7 +125,7 @@ class Container:
             else:
                 outgrowth_axis = get_random_unit_vector(two_dimensions=self.simulation_2d)
 
-        new_neuron = Neuron(coordinates, self.factory, outgrowth_axis, differentiation_grade)
+        new_neuron = self.neuron_factory.create_neuron(coordinates, outgrowth_axis)
         self.register_neuron(new_neuron, color=color)
 
         return new_neuron
@@ -133,119 +137,17 @@ class Container:
                 continue
             # Decide whether to create a new neurite or extend an existing one
             if neuron.neurites:
-                neuron.create_secondary_neurite(self.factory)
+                neuron.create_secondary_neurite(self.object_factory)
                 neurite = neuron.neurites[-1]
                 neurite.create_neurite_representation(self.animator)
-                neighbors = self.grid.get_close_objects(neurite.distal_point)
-                neighbor_ok = [False for _ in neighbors]
-
-                number_of_tries = 0
-
-                while not all(neighbor_ok) and number_of_tries < 5:
-                    neighbor_ok = [False for _ in neighbors]
-                    for j, neighbor in enumerate(neighbors):
-                        # Check if the new neurite overlaps with another neurite
-                        if isinstance(neighbor, Neurite):
-                            if neighbor is neuron.neurites[-2]:
-                                dot = np.dot(neurite.spring_axis/neurite.current_length,
-                                             neighbor.spring_axis / neighbor.current_length)
-                                if dot > 0.2:
-                                    neighbor_ok[j] = True
-
-                            else:
-                                point, overlap = self.cylinder_int.compute_intersection(neurite.proximal_point,
-                                                                                        neurite.distal_point,
-                                                                                        neighbor.proximal_point,
-                                                                                        neighbor.distal_point)
-
-                                # If there is no overlap, mark interaction as OK
-                                if np.linalg.norm(overlap) > 0.0000001:
-                                    neighbor_ok[j] = True
-                                else:
-                                    new_point = point - neurite.spring_axis * 0.05
-                                    new_length = np.linalg.norm(neurite.proximal_point - new_point)
-
-                                    if new_length > 5.0:
-                                        neurite.move_distal_point(new_point)
-                                        neighbor_ok[j] = True
-
-                        # Check if the new neurite overlaps with a cell
-                        else:
-                            distance = np.linalg.norm(neurite.distal_point - neighbor.position)
-                            if distance >= 8:
-                                neighbor_ok[j] = True
-                            else:
-                                unit_vector = neurite.spring_axis / np.linalg.norm(neurite.spring_axis)
-                                point = neighbor.position - unit_vector * 8.5
-                                if np.linalg.norm(neurite.proximal_point - point) > 5.0:
-                                    neurite.move_distal_point(point)
-                                    neighbor_ok[j] = True
-
-                        if not neighbor_ok[j]:
-                            new_vector = get_random_unit_vector(two_dimensions=self.simulation_2d)
-                            new_vector *= neurite.mechanics.default_length
-                            neurite.move_distal_point(neurite.proximal_point + new_vector)
-                            break
-
-                    number_of_tries += 1
 
             else:
-                neuron.create_first_neurite()
+                neuron.create_first_neurite(self.object_factory)
                 neurite = neuron.neurites[0]
                 neurite.create_neurite_representation(self.animator)
-                neighbors = self.grid.get_close_objects(neurite.distal_point)
-                neighbor_ok = [False for _ in neighbors]
 
-                while not all(neighbor_ok):
-                    for j, neighbor in enumerate(neighbors):
-                        # Check if the new neurite overlaps with another neurite
-                        if isinstance(neighbor, Neurite):
-                            point, overlap = self.cylinder_int.compute_intersection(neurite.proximal_point,
-                                                                                    neurite.distal_point,
-                                                                                    neighbor.proximal_point,
-                                                                                    neighbor.distal_point)
-
-                            # If there is no overlap, mark interaction as OK
-                            if np.linalg.norm(overlap) > 0.0000001:
-                                neighbor_ok[j] = True
-
-                            else:
-                                new_point = point - neurite.spring_axis * 0.05
-                                new_length = np.linalg.norm(neurite.proximal_point - new_point)
-
-                                if new_length > 5.0:
-                                    neurite.move_distal_point(new_point)
-                                    neighbor_ok[j] = True
-
-                        # Check if the new neurite overlaps with a cell
-                        else:
-                            distance = np.linalg.norm(neurite.distal_point - neighbor.position)
-                            if distance >= 8:
-                                neighbor_ok[j] = True
-
-                            else:
-                                unit_vector = neurite.spring_axis / np.linalg.norm(neurite.spring_axis)
-                                point = neighbor.position - unit_vector * 8.5
-                                if np.linalg.norm(neurite.proximal_point - point) > 5.0:
-                                    neurite.move_distal_point(point)
-                                    neuron.place_neurite_on_cell_surface(neurite)
-                                    neighbor_ok[j] = True
-
-                        if not neighbor_ok[j]:
-                            new_vector = get_random_unit_vector(two_dimensions=self.simulation_2d)
-                            new_vector *= neurite.mechanics.default_length + neuron.cell.mechanics.radius
-                            neurite.move_distal_point(neuron.cell.position + new_vector)
-                            break
-
-            if all(neighbor_ok):
-                self.grid.register_neurite(neurite)
-                neuron.clocks.differentiation_clock.differentiation_signal = False
-            else:
-                self.animator.plotter -= neurite.cylinder[0]
-                self.animator.plotter -= neurite.cylinder[1]
-                neuron.neurites.remove(neurite)
-
-                neuron.clocks.differentiation_clock.differentiation_block = True
+            self.grid.register_neurite(neurite)
+            neuron.clocks.differentiation_clock.differentiation_signal = False
 
     def kill(self) -> None:
         """Checks for neurons that are flagged for death and removes them from the container"""
@@ -273,8 +175,7 @@ class Container:
                     # Create a new neuron next to the old one
                     position = get_random_unit_vector(two_dimensions=self.simulation_2d) * neuron.cell_radius * 2.05
                     position += neuron.cell.position
-                    new_neuron = self.create_new_neuron(position)
-                    new_neuron.set_clocks_from_mother(neuron)
+                    self.create_new_neuron(position)
                     # Update the cell cycle state of the old neuron to arrest
                     neuron.clocks.cycle_clock.remove_proliferation_flag()
                     self.update_drawings()
@@ -283,7 +184,6 @@ class Container:
                 position = get_random_unit_vector(two_dimensions=self.simulation_2d) * neuron.cell_radius * 2.05
                 position += neuron.cell.position
                 new_neuron = self.create_new_neuron(position)
-                new_neuron.set_clocks_from_mother(neuron)
                 # Update the cell cycle state of the old neuron to arrest
                 neuron.clocks.cycle_clock.remove_proliferation_flag()
                 self.update_drawings()
@@ -419,6 +319,10 @@ class Simulation:
         sim_time = self.timer.get_progress_bar()
 
         for t in sim_time.range():
+            self.container.advance_cycles(self.timer.step)
+            self.container.kill()
+            self.container.differentiate()
+            self.container.divide()
             # Solve interactions and draw the new object positions
             self.container.solve_mechanics(self.timer.step)
             self.container.update_drawings()
@@ -438,6 +342,7 @@ class Simulation:
         grid = UniformGrid(**parser.get_domain_data())
         status_2d = parser.get_2d_status()
         objects = ObjectFactory(**parser.get_objects_data())
+        clocks = ClocksFactory(**parser.get_clocks_data())
         interactions_data = parser.get_interactions_data()
         interactions_type = interactions_data.pop("type")
         if interactions_type == "potentials":
@@ -447,7 +352,7 @@ class Simulation:
 
         container = Container(grid=grid,
                               simulation_2d=status_2d,
-                              object_factory=objects,
+                              neuron_factory=NeuronFactory(objects, clocks),
                               contact_factory=interactions)
 
         return Simulation(timer, container)

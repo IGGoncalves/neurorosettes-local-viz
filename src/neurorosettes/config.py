@@ -42,6 +42,22 @@ class ObjectValidator(BaseModel):
             raise ValueError("Physical object data should be positive.")
         return v
 
+class ClocksValidator(BaseModel):
+    proliferation_rate: float
+    death_rate: float
+    differentiation_rate: float
+
+    @validator("*")
+    def not_negative(cls, v):
+        if v < 0.0:
+            raise ValueError("Physical object data should be positive.")
+        return v
+
+
+class ClocksValidator(BaseModel):
+    proliferation_rate: float
+    death_rate: float
+    differentiation_rate: float
 
 class InteractionsValidator(BaseModel):
     type: str
@@ -77,7 +93,10 @@ class ConfigParser:
         return self.cfg["use_2d"]
 
     def get_objects_data(self):
-        return dict(ObjectValidator(**self.cfg["objects"]))
+        return dict(ObjectValidator(**self.cfg["neurons"]["objects"]))
+
+    def get_clocks_data(self):
+        return dict(ClocksValidator(**self.cfg["neurons"]["clocks"]))
 
     def get_interactions_data(self):
         return dict(InteractionsValidator(**self.cfg["interactions"]))

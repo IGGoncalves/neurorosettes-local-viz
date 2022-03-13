@@ -1,4 +1,5 @@
 """This module deals with the proliferation, differentiation and death cycles"""
+from dataclasses import dataclass
 from typing import Optional, Tuple
 
 import numpy as np
@@ -6,18 +7,11 @@ import numpy as np
 
 class Cycle:
     """Represents the cell cycle (arrest/proliferation)"""
-    proliferation_rate: Optional[float]
-    division_signal: bool
-    cycle_block: bool
 
-    def __init__(self) -> None:
-        self.proliferation_rate = None
-        self.division_signal = False
-        self.cycle_block = True
-
-    def set_proliferation_rate(self, proliferation_rate: float):
+    def __init__(self, proliferation_rate: Optional[float] = None) -> None:
         self.proliferation_rate = proliferation_rate
-        self.cycle_block = False
+        self.division_signal = False
+        self.cycle_block = False if proliferation_rate else True
 
     def advance_cycle_clock(self, timestep: float) -> None:
         """Updates the cell cycle status based on the proliferation rate (may happen or not)"""
@@ -42,14 +36,11 @@ class Cycle:
 
 class Death:
     """Represents the cell death status (alive/dead)"""
-    death_rate: Optional[float]
-    death_signal: bool
-    death_block: bool
 
-    def __init__(self) -> None:
-        self.death_rate = None
+    def __init__(self, death_rate: Optional[float] = None) -> None:
+        self.death_rate = death_rate
         self.death_signal = False
-        self.death_block = True
+        self.death_block = False if death_rate else True
 
     def set_death_rate(self, death_rate: float) -> None:
         self.death_rate = death_rate
@@ -71,16 +62,12 @@ class Death:
 
 
 class Differentiation:
-    differentiation_rate: Optional[float]
-    differentiation_signal: bool
-    differentiation_grade: int
-    differentiation_block: bool
 
-    def __init__(self) -> None:
-        self.differentiation_rate = None
+    def __init__(self, differentiation_rate: Optional[float] = None) -> None:
+        self.differentiation_rate = differentiation_rate
         self.differentiation_signal = False
         self.differentiation_grade = 0
-        self.differentiation_block = True
+        self.differentiation_block = False if differentiation_rate else True
 
     def set_differentiation_rate(self, differentiation_rate: float):
         self.differentiation_rate = differentiation_rate
@@ -105,14 +92,11 @@ class Differentiation:
 
 
 class CellClocks:
-    cycle_clock: Cycle
-    death_clock: Death
-    differentiation_clock: Differentiation
 
-    def __init__(self) -> None:
-        self.cycle_clock = Cycle()
-        self.death_clock = Death()
-        self.differentiation_clock = Differentiation()
+    def __init__(self, proliferation_rate, death_rate, differentiation_rate) -> None:
+        self.cycle_clock = Cycle(proliferation_rate)
+        self.death_clock = Death(death_rate)
+        self.differentiation_clock = Differentiation(differentiation_rate)
 
     def set_proliferation_clock(self, proliferation_rate: float):
         self.cycle_clock.set_proliferation_rate(proliferation_rate)
@@ -144,3 +128,15 @@ class CellClocks:
         self.cycle_clock.block_proliferation()
         self.death_clock.block_death()
         self.differentiation_clock.block_differentiation()
+
+
+@dataclass
+class ClocksFactory:
+    proliferation_rate: float
+    death_rate: float
+    differentiation_rate: float
+
+    def get_clocks(self) -> CellClocks:
+        return CellClocks(self.proliferation_rate, 
+                          self.death_rate, 
+                          self.differentiation_rate)

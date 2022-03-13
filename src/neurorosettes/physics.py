@@ -26,7 +26,10 @@ def get_distance_components(point1: np.ndarray, point2: np.ndarray) -> Tuple[np.
     """
     distance_vector = point1 - point2
     norm = np.linalg.norm(distance_vector)
-    unit_vector = distance_vector / np.linalg.norm(distance_vector)
+    if norm < 0.0000001:
+        norm = 0.0000001
+        
+    unit_vector = distance_vector / norm
 
     return unit_vector, norm
 
