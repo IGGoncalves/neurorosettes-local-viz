@@ -21,12 +21,12 @@ neurons:
   clocks:
     proliferation_rate: 0.0006
     death_rate: 0.00002
-    differentiation_rate: 0.0009
+    differentiation_rate: 0.0007
 
 interactions:
   type: "potentials"
-  sphere_sphere_adhesion: 4.0
-  sphere_sphere_repulsion: 5.0
+  sphere_sphere_adhesion: 10.0
+  sphere_sphere_repulsion: 30.0
   sphere_sphere_smoothness: 1
   sphere_cylinder_adhesion: 5.0
   sphere_cylinder_repulsion: 10.0

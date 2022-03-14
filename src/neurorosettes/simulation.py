@@ -73,6 +73,7 @@ class Container:
                  simulation_2d: bool,
                  neuron_factory: NeuronFactory,
                  contact_factory: ContactFactory,
+                 drag_coefficient: float = 10.0,
                  density_check: Optional[CellDensityCheck] = None) -> None:
 
         self.grid = grid
@@ -82,6 +83,7 @@ class Container:
         self.cylinder_int = contact_factory.get_cylinder_cylinder_interactions()
         self.neuron_factory = neuron_factory
         self.object_factory = self.neuron_factory.objects_factory
+        self.drag_coefficient = drag_coefficient
         self.density_check = density_check
         self.animator = Animator()
         self.neurons = []
@@ -197,8 +199,7 @@ class Container:
     def get_displacement_from_force(self, force: np.ndarray, time_step: float) -> np.ndarray:
         """Returns a velocity from the passed force"""
         # Compute cell velocity
-        # TODO: Add drag coeff
-        velocity = force / 1.0
+        velocity = force / self.drag_coefficient
         return velocity * time_step
 
     def move_cell(self, neuron: Neuron, new_coordinates: Union[np.ndarray, List[float]]) -> None:

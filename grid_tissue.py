@@ -1,14 +1,18 @@
 """Script to test the spring components of neurites."""
 from neurorosettes.simulation import Simulation, Container
-from neurorosettes.utilities import RectangularTissue
+from neurorosettes.utilities import HexagonalTissue
 from neurorosettes.grid import OneLevelDensityCheck
 
 
-TISSUE = RectangularTissue(size=160, spacing=20).get_coordinates()
+TISSUE = HexagonalTissue(size=160, spacing=18).get_coordinates()
 DENSITY_CHECK = OneLevelDensityCheck(max_neighbors=19)
+DRAG_COEFFICIENT = 10.0
 
 def set_density_check(container: Container) -> None:
     container.set_density_check(DENSITY_CHECK)
+
+def set_drag_coefficient(container: Container) -> None:
+    container.drag_coefficient = DRAG_COEFFICIENT
 
 def create_tissue(container: Container) -> None:
     """Creates and registers new neurons in the simulation world."""
@@ -25,6 +29,7 @@ if __name__ == "__main__":
     # Initialize simulation objects
     sim_world = Simulation.from_file("config.yml")
     set_density_check(sim_world.container)
+    set_drag_coefficient(sim_world.container)
     # Create initial configuration
     create_tissue(sim_world.container)
     # Run the simulation to check if springs work
