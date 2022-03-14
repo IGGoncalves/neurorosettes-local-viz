@@ -3,11 +3,11 @@ from typing import List, Optional, Union
 from dataclasses import  dataclass
 
 import numpy as np
-from neurorosettes.clocks import CellClocks, ClocksFactory
-from vedo import Plotter, Sphere, Spring, ProgressBar, Grid, Text2D
+from neurorosettes.clocks import ClocksFactory
+from vedo import Plotter, Sphere, Spring, ProgressBar, Grid, Text2D, screenshot
 
 from neurorosettes.config import ConfigParser
-from neurorosettes.physics import ContactFactory, PotentialsFactory, get_cylinder_intersection
+from neurorosettes.physics import ContactFactory, PotentialsFactory
 from neurorosettes.subcellular import CellBody, Neurite, ObjectFactory
 from neurorosettes.neurons import Neuron, NeuronFactory
 from neurorosettes.utilities import get_random_unit_vector
@@ -61,6 +61,9 @@ class Animator:
 
         return sphere
 
+    def save_screenshot(self, file_name: str) -> None:
+        screenshot(file_name)
+
 
 class Container:
     """Represents the environment where neurons exist"""
@@ -86,6 +89,9 @@ class Container:
         if self.simulation_2d:
             self.animator.add_grid(self.grid.representation_grid_values,
                                    self.grid.representation_grid_values)
+
+    def set_density_check(self, density_check: CellDensityCheck) -> None:
+        self.density_check = density_check
 
     def register_neuron(self, neuron: Neuron, color="red") -> None:
         """Registers a neuron and its representation into the container"""
@@ -338,11 +344,14 @@ class Simulation:
     @classmethod
     def from_file(cls, config_path):
         parser = ConfigParser(config_path)
+
         timer = Timer(**parser.get_time_data())
         grid = UniformGrid(**parser.get_domain_data())
         status_2d = parser.get_2d_status()
+
         objects = ObjectFactory(**parser.get_objects_data())
         clocks = ClocksFactory(**parser.get_clocks_data())
+
         interactions_data = parser.get_interactions_data()
         interactions_type = interactions_data.pop("type")
         if interactions_type == "potentials":
