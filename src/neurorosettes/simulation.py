@@ -198,7 +198,6 @@ class Container:
 
     def get_displacement_from_force(self, force: np.ndarray, time_step: float) -> np.ndarray:
         """Returns a velocity from the passed force"""
-        # Compute cell velocity
         velocity = force / self.drag_coefficient
         return velocity * time_step
 
@@ -349,7 +348,9 @@ class Simulation:
         timer = Timer(**parser.get_time_data())
         grid = UniformGrid(**parser.get_domain_data())
         status_2d = parser.get_2d_status()
+        drag = parser.get_drag_coefficient()
 
+        number_of_neurites = parser.get_max_number_of_neurites()
         objects = ObjectFactory(**parser.get_objects_data())
         clocks = ClocksFactory(**parser.get_clocks_data())
 
@@ -362,7 +363,8 @@ class Simulation:
 
         container = Container(grid=grid,
                               simulation_2d=status_2d,
-                              neuron_factory=NeuronFactory(objects, clocks),
-                              contact_factory=interactions)
+                              neuron_factory=NeuronFactory(number_of_neurites, objects, clocks),
+                              contact_factory=interactions,
+                              drag_coefficient=drag)
 
         return Simulation(timer, container)

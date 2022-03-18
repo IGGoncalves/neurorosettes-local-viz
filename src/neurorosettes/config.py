@@ -87,10 +87,16 @@ class ConfigParser:
         return dict(TimerValidator(**self.cfg["time"]))
 
     def get_domain_data(self):
-        return dict(DomainValidator(**self.cfg["domain"]))
+        return dict(DomainValidator(**self.cfg["domain"]["boundaries"]))
 
     def get_2d_status(self):
-        return self.cfg["use_2d"]
+        return self.cfg["domain"]["use_2d"]
+
+    def get_drag_coefficient(self):
+        return self.cfg["domain"]["drag_coefficient"]
+
+    def get_max_number_of_neurites(self):
+        return self.cfg["neurons"]["max_number_of_neurites"]
 
     def get_objects_data(self):
         return dict(ObjectValidator(**self.cfg["neurons"]["objects"]))

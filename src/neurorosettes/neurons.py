@@ -11,11 +11,12 @@ class Neuron:
 
     def __init__(self, position: np.ndarray, outgrowth_axis: np.ndarray,
                  factory: ObjectFactory, clocks: CellClocks,
+                 max_number_of_neurites: int = 4, 
                  differentiation_grade: int = 0) -> None:
         self.cell = factory.get_cell_body(position)
         self.outgrowth_axis = outgrowth_axis
         self.clocks = clocks
-        self.max_number_of_neurites = 4
+        self.max_number_of_neurites = max_number_of_neurites
         self.neurites = []
 
         if differentiation_grade != 0:
@@ -77,10 +78,12 @@ class Neuron:
 
 @dataclass
 class NeuronFactory:
+    max_number_of_neurites: int
     objects_factory: ObjectFactory
     clocks_factory: ClocksFactory
 
     def create_neuron(self, coordinates, outgrowth_axis):
         clocks = self.clocks_factory.get_clocks()
         return Neuron(coordinates, outgrowth_axis, 
-                      self.objects_factory, clocks)
+                      self.objects_factory, clocks,
+                      self.max_number_of_neurites)
