@@ -343,6 +343,7 @@ class Simulation:
 
     @classmethod
     def from_file(cls, config_path):
+        """Initializes a Simulation object from a YAML config file."""
         parser = ConfigParser(config_path)
 
         timer = Timer(**parser.get_time_data())
