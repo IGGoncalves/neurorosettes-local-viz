@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
 import numpy as np
-from vedo import Plotter, Sphere, Spring, ProgressBar, Grid, Text2D
+from vedo import Plotter, Sphere, Spring, screenshot, Grid, Text2D
 
 
 class Tissue(ABC):
@@ -52,7 +52,7 @@ def get_random_position(scaling_factor: float) -> np.ndarray:
 
     return np.array([(np.random.random() - 0.5) * scaling_factor,
                      (np.random.random() - 0.5) * scaling_factor,
-                     (np.random.random() - 0.5) * scaling_factor])
+                     0.0])
 
 
 def get_random_unit_vector(two_dimensions=False) -> np.ndarray:
@@ -100,3 +100,6 @@ class Animator:
         self.plotter += sphere
 
         return sphere
+
+    def save_screenshot(self, file_name: str) -> None:
+        screenshot(file_name)

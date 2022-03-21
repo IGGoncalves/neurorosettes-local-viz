@@ -30,15 +30,15 @@ class Neuron:
 
     @property
     def ready_for_division(self):
-        return self.clocks.cycle_clock.division_signal
+        return self.clocks.cycle_clock.signal
 
     @property
     def ready_for_differentiation(self):
-        return self.clocks.differentiation_clock.differentiation_signal
+        return self.clocks.differentiation_clock.signal
 
     @property
     def ready_to_die(self):
-        return self.clocks.death_clock.death_signal
+        return self.clocks.death_clock.signal
 
     def set_outgrowth_axis(self, coordinates: np.ndarray) -> None:
         """Sets the axis that neurites will follow when new neurites are created"""
@@ -78,11 +78,18 @@ class Neuron:
 
 @dataclass
 class NeuronFactory:
+    """
+    Helper class to create instances of neurons based on defined properties.
+    """
     max_number_of_neurites: int
+    """The maximum number of neurites that a neuron can have."""
     objects_factory: ObjectFactory
+    """The ObjectFactory used to create new object instances."""
     clocks_factory: ClocksFactory
+    """The ClocksFactory used to create new clock instances."""
 
-    def create_neuron(self, coordinates, outgrowth_axis):
+    def create_neuron(self, coordinates: np.ndarray, outgrowth_axis: np.ndarray) -> Neuron:
+        """Returns a Neuron object placed in the given coordinates."""
         clocks = self.clocks_factory.get_clocks()
         return Neuron(coordinates, outgrowth_axis, 
                       self.objects_factory, clocks,

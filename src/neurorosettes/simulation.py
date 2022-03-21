@@ -3,14 +3,14 @@ from typing import List, Optional, Union
 from dataclasses import  dataclass
 
 import numpy as np
-from neurorosettes.clocks import ClocksFactory
-from vedo import Plotter, Sphere, Spring, ProgressBar, Grid, Text2D, screenshot
+from vedo import ProgressBar
 
 from neurorosettes.config import ConfigParser
+from neurorosettes.clocks import ClocksFactory
 from neurorosettes.physics import ContactFactory, PotentialsFactory
 from neurorosettes.subcellular import CellBody, Neurite, ObjectFactory
 from neurorosettes.neurons import Neuron, NeuronFactory
-from neurorosettes.utilities import get_random_unit_vector
+from neurorosettes.utilities import Animator, get_random_unit_vector
 from neurorosettes.grid import UniformGrid, CellDensityCheck
 
 
@@ -23,46 +23,6 @@ class Timer:
     def get_progress_bar(self) -> ProgressBar:
         """Returns a progress bar with the simulation time"""
         return ProgressBar(0, self.total_time / self.step, c="r")
-
-
-class Animator:
-    def __init__(self):
-        self.plotter = Plotter(interactive=False, axes=0, backend="ipyvtk")
-        self.clock = Text2D("Simulation step: 0", pos="top right", c="black", font="Courier")
-        self.plotter += self.clock
-
-    def show(self, interactive: bool = False):
-        self.plotter.show(interactive=interactive, resetcam=False)
-
-    def update_clock(self, time_point: float) -> None:
-        self.clock.text(f"Simulation step: {time_point}")
-
-    def add_grid(self, x_grid, y_grid):
-        self.plotter += Grid(sx=x_grid, sy=y_grid, c='lightgrey')
-
-    def set_camera(self, height: float):
-        self.plotter.camera.SetPosition([0., 0., height])
-        self.plotter.camera.SetFocalPoint([0., 0., 0.])
-        self.plotter.camera.SetViewUp([0., 1., 0.])
-
-    def draw_spring(self, base_point: np.ndarray, top_point: np.ndarray, radius: float):
-        """Plots a spring and a sphere to represent a neurite in vedo."""
-        cylinder = Spring(startPoint=base_point, endPoint=top_point, r=radius)
-        top_sphere = Sphere(pos=top_point, r=radius, c='b3')
-        self.plotter += cylinder
-        self.plotter += top_sphere
-
-        return cylinder, top_sphere
-
-    def draw_sphere(self, center: np.ndarray, radius: float, **kwargs) -> Sphere:
-        """Plots a sphere to represent a soma cell in vedo."""
-        sphere = Sphere(pos=center, r=radius, alpha=1.0, **kwargs)
-        self.plotter += sphere
-
-        return sphere
-
-    def save_screenshot(self, file_name: str) -> None:
-        screenshot(file_name)
 
 
 class Container:
@@ -177,15 +137,15 @@ class Container:
 
             if self.density_check:
                 if self.density_check.check_max_density(neuron.cell, self.grid):
-                    neuron.clocks.cycle_clock.remove_proliferation_flag()
-                    neuron.clocks.cycle_clock.block_proliferation()
+                    neuron.clocks.cycle_clock.remove_flag()
+                    neuron.clocks.cycle_clock.block()
                 else:
                     # Create a new neuron next to the old one
                     position = get_random_unit_vector(two_dimensions=self.simulation_2d) * neuron.cell_radius * 2.05
                     position += neuron.cell.position
                     self.create_new_neuron(position)
                     # Update the cell cycle state of the old neuron to arrest
-                    neuron.clocks.cycle_clock.remove_proliferation_flag()
+                    neuron.clocks.cycle_clock.remove_flag()
                     self.update_drawings()
             else:
                 # Create a new neuron next to the old one
@@ -193,7 +153,7 @@ class Container:
                 position += neuron.cell.position
                 new_neuron = self.create_new_neuron(position)
                 # Update the cell cycle state of the old neuron to arrest
-                neuron.clocks.cycle_clock.remove_proliferation_flag()
+                neuron.clocks.cycle_clock.remove_flag()
                 self.update_drawings()
 
     def get_displacement_from_force(self, force: np.ndarray, time_step: float) -> np.ndarray:
