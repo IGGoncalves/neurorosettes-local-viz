@@ -28,7 +28,7 @@ together, and a repulsion component, that pushes the spheres away.
 The force that results from the combination of these components is applied to the center of the spheres, 
 and will be taken  into account later to compute the position of the sphere in the next time point of the simulation.
 
-![sphere-intersection](img/sphere_sphere.svg)
+![sphere-intersection](img/sphere_sphere.png)
 
 ### Sphere-cylinder interactions
 
@@ -41,7 +41,7 @@ extremities (as shown by the two black arrows on the cylinder extremity points).
 closest point is one of the extremities, the force will only be applied to that extremity (represented by the single
 black arrow on the closest point of the cylinder axis).
 
-![cylinder-sphere-intersections](img/sphere_spring.svg)
+![cylinder-sphere-intersections](img/sphere_spring.png)
 
 ### Cylinder-cylinder interactions
 
@@ -52,7 +52,7 @@ configurations in space (shown in 2D) and the corresponding closest points. When
 we transmit the forces to the distal and/or proximal points as previously defined
 in the sphere-cylinder interactions section.
 
-![cylinder-intersections](img/spring_spring.svg)
+![cylinder-intersections](img/spring_spring.png)
 
 ## Contact forces
 
