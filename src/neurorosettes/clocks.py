@@ -51,7 +51,7 @@ class Clock:
         """Updates the cell cycle to arrest (will always happen)"""
         self.signal = False
 
-    def block(self) -> None:
+    def trigger_block(self) -> None:
         """Activates the cycle block to avoid proliferation"""
         self.signal = False
         self.block = True

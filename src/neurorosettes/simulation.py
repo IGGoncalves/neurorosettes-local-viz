@@ -138,7 +138,7 @@ class Container:
             if self.density_check:
                 if self.density_check.check_max_density(neuron.cell, self.grid):
                     neuron.clocks.cycle_clock.remove_flag()
-                    neuron.clocks.cycle_clock.block()
+                    neuron.clocks.cycle_clock.trigger_block()
                 else:
                     # Create a new neuron next to the old one
                     position = get_random_unit_vector(two_dimensions=self.simulation_2d) * neuron.cell_radius * 2.05
