@@ -4,11 +4,17 @@ from neurorosettes.utilities import HexagonalTissue, RectangularTissue
 from neurorosettes.grid import OneLevelDensityCheck
 
 # Cell-cell interactions
-cell_cell_adhesion = [5.0, 50.0, 100.0]
-cell_cell_repulsion = [15.0, 50.0, 100.0]
+cell_cell_adhesion = 5.0
+cell_cell_repulsion = [15.0, 25.0, 50.0]
+# Cell-neurite interactions
+cell_neurite_adhesion = 5.0
+cell_neurite_repulsion = [15.0, 25.0, 50.0]
+# Neurite-neurite interactions
+neurite_neurite_adhesion = 5.0
+neurite_neurite_repulsion = [15.0, 25.0, 50.0]
 
 # Initial cell positions
-TISSUE = HexagonalTissue(size=160, spacing=16).get_coordinates()
+TISSUE = HexagonalTissue(size=160, spacing=20).get_coordinates()
 # Contact inhibition function
 DENSITY_CHECK = OneLevelDensityCheck(max_neighbors=19)
 
@@ -32,15 +38,17 @@ def simulation(sim_world: Simulation) -> None:
     sim_world.container.animator.show()
     # Run the simulation to check if springs work
     sim_world.run()
-    # Plot the results (mark interactive as False to automatically  close the window)
-    sim_world.container.animator.show(interactive=False)
-    sim_world.container.animator.plotter.screenshot("THIS A TEST")
-    sim_world.container.animator.plotter.close()
 
 
 if __name__ == "__main__":
-    sim_world = Simulation.from_file("config.yml")
-    sim_world.container.sphere_int.adhesion_coefficient = cell_cell_adhesion[0]
-    sim_world.container.sphere_int.repulsion_coefficient = cell_cell_repulsion[0]
-    print(sim_world.container.sphere_int.adhesion_coefficient)
-    simulation(sim_world)
+    for ccr in cell_cell_repulsion:
+        for i in range(3):
+            sim_world = Simulation.from_file("config.yml")
+            sim_world.container.sphere_int.adhesion_coefficient = cell_cell_adhesion
+            sim_world.container.sphere_int.repulsion_coefficient = ccr
+            simulation(sim_world)
+            # Plot the results (mark interactive as False to automatically  close the window)
+            sim_world.container.animator.show(interactive=False)
+            sim_world.container.animator.save_screenshot(f"{cell_cell_adhesion}_{ccr}_{i}.png")
+            sim_world.container.animator.plotter.close()
+    
