@@ -37,7 +37,14 @@ class Clock:
         self.rate = rate
 
     def advance_clock(self, timestep: float) -> None:
-        """Updates the cell cycle status based on the proliferation rate (may happen or not)"""
+        """
+        Updates the cell cycle status based on the proliferation rate (may happen or not).
+
+        Parameters
+        ----------
+        timestep
+            The simulation time step (time passed between status updates).
+        """
         if self.block:
             return
         probability = timestep * self.rate

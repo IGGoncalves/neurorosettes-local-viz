@@ -2,12 +2,31 @@
 from dataclasses import dataclass
 import numpy as np
 
-from neurorosettes.subcellular import CellBody, Neurite, ObjectFactory
+from neurorosettes.subcellular import Neurite, ObjectFactory
 from neurorosettes.clocks import CellClocks, ClocksFactory
 
 
 class Neuron:
-    """Represents a neuron that has a cell and neurites"""
+    """
+    Class to represent a neuron as a combination of a cell body and neurites.
+
+    Parameters
+    ----------
+    position
+        The center position of the neuron's cell body.
+    outgrowth_axis
+        The direction of growth of the neuron's neurites.
+    factory
+        The factory object to be used to create new neuron components.
+    clocks
+        The rates of the neuron's biological processes.
+    max_number_of_neurites
+        The total number of neurites a neuron can have before
+        proliferation is blocked.
+    differentiation_grade
+        The starting differentiation stage of the neurite, represented
+        by the initial number of neurites.
+    """
 
     def __init__(self, position: np.ndarray, outgrowth_axis: np.ndarray,
                  factory: ObjectFactory, clocks: CellClocks,
@@ -26,22 +45,33 @@ class Neuron:
 
     @property
     def cell_radius(self):
+        """The radius of the neuron's cell body."""
         return self.cell.mechanics.radius
 
     @property
     def ready_for_division(self):
+        """If the neuron is ready to proliferate."""
         return self.clocks.cycle_clock.signal
 
     @property
     def ready_for_differentiation(self):
+        """If the neuron is ready to differentiate."""
         return self.clocks.differentiation_clock.signal
 
     @property
     def ready_to_die(self):
+        """If the neuron is ready to die."""
         return self.clocks.death_clock.signal
 
     def set_outgrowth_axis(self, coordinates: np.ndarray) -> None:
-        """Sets the axis that neurites will follow when new neurites are created"""
+        """
+        Sets the axis that neurites will follow when new neurites are created.
+        
+        Prameters
+        ----------
+        outgrowth_axis
+            The direction of growth of the neuron's neurites.
+        """
         self.outgrowth_axis[0] = coordinates[0]
         self.outgrowth_axis[1] = coordinates[1]
         self.outgrowth_axis[2] = coordinates[2]
@@ -55,19 +85,40 @@ class Neuron:
         return new_point
 
     def place_neurite_on_cell_surface(self, neurite: Neurite) -> None:
-        """Places the neurite base on the cell surface according to the cell-distal vector"""
+        """
+        Places the neurite base on the cell surface according to the cell-distal vector.
+
+        Parameters
+        ----------
+        neurite
+            The neurite to be placed on the cell body's surface.
+        """
         neurite_attachment_coordinates = self.get_neurite_position_on_cell_surface()
         neurite.move_proximal_point(neurite_attachment_coordinates)
 
     def create_first_neurite(self, factory: ObjectFactory) -> None:
-        """Creates a neurite attached to the soma cell"""
+        """
+        Creates a neurite attached to the soma cell
+        
+        Parameters
+        ----------
+        factory
+            The factory object to be used to create new neuron components.
+        """
         proximal_point = self.cell.position + self.outgrowth_axis * self.cell.mechanics.radius
         neurite = factory.get_neurite(proximal_point, self.outgrowth_axis)
         self.neurites.append(neurite)
         self.clocks.cycle_clock.cycle_block = True
 
     def create_secondary_neurite(self, factory: ObjectFactory) -> None:
-        """Creates a neurite attached to the most recent neurite"""
+        """
+        Creates a neurite attached to the most recent neurite.
+             
+        Parameters
+        ----------
+        factory
+            The factory object to be used to create new neuron components.
+        """
         if len(self.neurites) >= self.max_number_of_neurites:
             return
 

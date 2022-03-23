@@ -1,10 +1,8 @@
 """This module deals with the two components of the neurons: soma cells and neurites"""
-import time
-from typing import Optional, Tuple
+from typing import Tuple
 from dataclasses import dataclass
 
 import numpy as np
-from vedo import Sphere, Spring
 
 from neurorosettes import physics
 from neurorosettes.utilities import Animator

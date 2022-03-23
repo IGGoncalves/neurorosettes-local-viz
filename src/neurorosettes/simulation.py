@@ -1,4 +1,5 @@
 """This module deals with the neuron structure and functions"""
+from pathlib import Path
 from typing import List, Optional, Union
 from dataclasses import  dataclass
 
@@ -16,9 +17,13 @@ from neurorosettes.grid import UniformGrid, CellDensityCheck
 
 @dataclass
 class Timer:
+    """Class to store the simulation time data."""
     total_time: float
+    """The total time of a simulation (in minutes)."""
     step: float
+    """The time between simulation points (in minutes)."""
     current_time: float = 0.0
+    """The current time point of the simulation."""
 
     def get_progress_bar(self) -> ProgressBar:
         """Returns a progress bar with the simulation time"""
@@ -26,7 +31,26 @@ class Timer:
 
 
 class Container:
-    """Represents the environment where neurons exist"""
+    """
+    Class that represents the environment where neurons exist.
+    
+    Parameters
+    ----------
+    grid
+        The grid where simulation objects will be stored,
+        to improve neighbor interactions.
+    simulation_2d
+        If the simulation is 2D or 3D.
+    neuron_factory
+        The factory object to be used to create new neurons.
+    contact_factory
+        The factory object to be used to create interactions.
+    drag_coefficient
+        The drag coefficient of the extracellular space.
+    density_check
+        Optional contact inhibition function to inhibit proliferation
+        when the cell density is too high.
+    """
 
     def __init__(self,
                  grid: UniformGrid,
@@ -53,10 +77,28 @@ class Container:
                                    self.grid.representation_grid_values)
 
     def set_density_check(self, density_check: CellDensityCheck) -> None:
+        """
+        Sets the contact inhibition function to be used before proliferation.
+
+        Parameters
+        ----------
+        density_check
+            The contact inhibition function to be used.
+        """
         self.density_check = density_check
 
     def register_neuron(self, neuron: Neuron, color="red") -> None:
-        """Registers a neuron and its representation into the container"""
+        """
+        Registers a neuron and its representation into the container.
+
+        Parameters
+        ----------
+        neuron
+            The new neuron to be registered.
+        color
+            The color of the sphere that will represent the new neuron
+            in the renderings of the simulation.
+        """
         neuron.cell.set_sphere_representation(self.animator, color=color)
         self.grid.register_cell(neuron.cell)
         for neurite in neuron.neurites:
@@ -75,15 +117,37 @@ class Container:
         self.animator.plotter.show()
 
     def advance_cycles(self, time_step: float) -> None:
+        """
+        Updates the biological clocks of every object in the simulation.
+
+        Parameters
+        ----------
+        time_step
+            The time between simulation time points.
+        """
         for neuron in self.neurons:
             neuron.clocks.advance_clocks(time_step)
 
     def create_new_neuron(self, coordinates: Union[np.ndarray, List[float]],
                           outgrowth_axis: Optional[Union[List[float], np.ndarray]] = None,
-                          differentiation_grade: int = 0, color="red") -> Neuron:
+                          color="red") -> Neuron:
                           
-        """Creates a new neuron and registers it to the container"""
+        """
+        Creates a new neuron and registers it to the container's grid.
 
+        The new neuron is created as an undifferentiated cell body centred at
+        the passed coordinates. An outgrowth axis vector can be passed to model
+        neurite outgrowth along this direction.
+        
+        Parameters
+        ----------
+        coordinates
+            The center position of the neuron's cell body.
+        outgrowth_axis
+            The direction of growth of the neuron's neurites.
+        color
+            The color of the new neurite in the simulation renders.
+        """
         if isinstance(coordinates, list):
             coordinates = np.array(coordinates)
 
@@ -100,7 +164,7 @@ class Container:
 
     def differentiate(self) -> None:
         """Checks for neurons that are flagged for differentiation and deals with differentiation"""
-        for i, neuron in enumerate(self.neurons):
+        for neuron in self.neurons:
             if not neuron.ready_for_differentiation or len(neuron.neurites) >= neuron.max_number_of_neurites:
                 continue
             # Decide whether to create a new neurite or extend an existing one
@@ -157,12 +221,30 @@ class Container:
                 self.update_drawings()
 
     def get_displacement_from_force(self, force: np.ndarray, time_step: float) -> np.ndarray:
-        """Returns a velocity from the passed force"""
+        """
+        Returns the displacemnt value that a force originates, based on the equation of motion.
+        
+        Parameters
+        ----------
+        force
+            The force value to be converted to a displacement
+        time_step
+            The time passed between simulation time points.
+        """
         velocity = force / self.drag_coefficient
         return velocity * time_step
 
     def move_cell(self, neuron: Neuron, new_coordinates: Union[np.ndarray, List[float]]) -> None:
-        """Moves the cell to a new position and updates the proximal point of the first neurite"""
+        """
+        Moves the cell to a new position and updates the proximal point of the first neurite.
+
+        Parameters
+        ----------
+        neuron
+            The neuron object to be moved.
+        new_coordinates
+            The new coordinates to be assigned to the cell body's centre.
+        """
         if isinstance(new_coordinates, list):
             new_coordinates = np.array(new_coordinates)
 
@@ -174,12 +256,29 @@ class Container:
             neuron.place_neurite_on_cell_surface(neuron.neurites[0])
 
     def move_neurite(self, neurite: Neurite, new_coordinates: np.ndarray) -> None:
+        """
+        Deals with moving a neurite's distal point and updating it on the grid.
+
+        Parameters
+        ----------
+        neurite
+            The neurite object to be moved.
+        new_coordinates
+            The new coordinates to be assigned to the neurite's distal point.
+        """
         self.grid.remove_neurite(neurite)
         neurite.move_distal_point(new_coordinates)
         self.grid.register_neurite(neurite)
 
     def compute_displacements(self, time_step) -> None:
-        """Updates the cell positions and representations based on object interactions"""
+        """
+        Computes the displacement for each object based on the resulting force.
+        
+        Parameters
+        ----------
+        time_step
+            The time passed between simulation time points.
+        """
         for i, neuron in enumerate(self.neurons):
             reversed_order = range(len(neuron.neurites) - 1, -1, -1)
 
@@ -257,6 +356,7 @@ class Container:
             neuron.cell.displacement = displacement
 
     def update_cell_positions(self) -> None:
+        """Updates the positions of all the simulation objects based on their velocity."""
         for neuron in self.neurons:
             neuron.cell.force_from_neighbors = np.zeros(3)
             neuron.cell.force_from_daughter = np.zeros(3)
@@ -271,11 +371,34 @@ class Container:
             self.move_cell(neuron, neuron.cell.position + neuron.cell.displacement)
 
     def solve_mechanics(self, time_step) -> None:
+        """
+        Solves the mechanical interactions and updates the neurons' positions.
+
+        Goes through each object and computes the resulting force acting on
+        it, then gets the object's velocity based on the equation of motion.
+        When all of the objects are checked, the positions are updated based
+        on the calculated velocity.
+
+        Parameters
+        ----------
+        time_step
+            The time passed between simulation time points.
+        """
         self.compute_displacements(time_step)
         self.update_cell_positions()
 
 
 class Simulation:
+    """
+    Class to create and run a simulation.
+
+    Parameters
+    ----------
+    timer
+        The structure to store the time data of the simulation.
+    container
+        The structure to store the spatial data of the simulation.
+    """
     def __init__(self, timer: Timer, container: Container):
         self.timer = timer
         self.container = container
@@ -302,8 +425,18 @@ class Simulation:
             sim_time.print()
 
     @classmethod
-    def from_file(cls, config_path):
-        """Initializes a Simulation object from a YAML config file."""
+    def from_file(cls, config_path: Union[Path, str]) -> "Simulation":
+        """
+        Initializes a Simulation object from a YAML config file.
+
+        Parameters
+        ----------
+        config_path
+            The path to the YAML file config file.
+        """
+        if not isinstance(config_path, Path):
+            config_path = Path(config_path)
+
         parser = ConfigParser(config_path)
 
         timer = Timer(**parser.get_time_data())
