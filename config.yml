@@ -1,6 +1,6 @@
 # Simulation time [minutes]
 time:
-  total_time: 1000.0
+  total_time: 1440.0
   step: 0.1
 
 # Domain options
@@ -24,7 +24,7 @@ neurons:
     cell_radius: 8.0
     cell_interaction_factor: 1.25
     neurite_radius: 0.5
-    neurite_interaction_factor: 5.0
+    neurite_interaction_factor: 2.0
     neurite_spring_constant: 5.0
     neurite_default_length: 10.0
 

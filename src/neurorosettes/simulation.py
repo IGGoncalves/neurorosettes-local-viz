@@ -461,4 +461,4 @@ class Simulation:
                               contact_factory=interactions,
                               drag_coefficient=drag)
 
-        return Simulation(timer, container)
+        return cls(timer, container)
