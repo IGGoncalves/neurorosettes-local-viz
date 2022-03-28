@@ -1,11 +1,13 @@
-"""Script to test the spring components of neurites."""
+"""Script to perform a parameter study on the cell mechanics parameters that regulate the tissue architecture."""
 from typing import Dict
 from pathlib import Path
 import json
 from itertools import count
 
+import click
+
 from neurorosettes.simulation import Simulation, Container
-from neurorosettes.utilities import HexagonalTissue, RectangularTissue
+from neurorosettes.utilities import HexagonalTissue
 from neurorosettes.grid import OneLevelDensityCheck
 
 # Cell-cell interactions
@@ -40,6 +42,7 @@ def create_tissue(container: Container) -> None:
 
 
 def simulation(sim_world: Simulation) -> None:
+    """Adds any additional functions to the container and runs the simulation."""
     # Add additional functions to the simulation (i.g., contact inhibition)
     set_density_check(sim_world.container)
     # Create initial configuration
@@ -54,6 +57,7 @@ def simulation(sim_world: Simulation) -> None:
 def create_params_dict(
     cca: float, ccr: float, cna: float, cnr: float, nna: float, nnr: float
 ) -> Dict[str, float]:
+    """Returns a dictionary with the name of the varied parameters and corresponding values."""
     return {
         "cell-cell adhesion": cca,
         "cell-cell repulsion": ccr,
@@ -64,11 +68,18 @@ def create_params_dict(
     }
 
 
-if __name__ == "__main__":
-    sim_counter = count(start=24)
+@click.command()
+@click.option("--config_path", default="config/config.yml", help="Configuration file path.")
+def main(config_path):
+    # Simple counter to make sure that output files are stored in unique folders
+    sim_counter = count(start=0)
+
+    # Loop through the interaction combinations
     for nnr in neurite_neurite_repulsion:
         for cnr in cell_neurite_repulsion:
             for ccr in cell_cell_repulsion:
+                # Store the current iteration's parameters in a JSON file
+                # First create a dict with this information
                 parameters = create_params_dict(
                     cell_cell_adhesion,
                     ccr,
@@ -78,6 +89,7 @@ if __name__ == "__main__":
                     nnr,
                 )
 
+                # Then store the data in a JSON file
                 folder_name = next(sim_counter)
                 filepath = Path(f"output/{folder_name}/params.json")
                 filepath.parent.mkdir(parents=True, exist_ok=True)
@@ -86,15 +98,25 @@ if __name__ == "__main__":
                     json.dump(parameters, outfile)
 
                 for i in range(NUMBER_OF_REPLICATES):
-                    sim_world = Simulation.from_file("config.yml")
+                    # Load the data from the configuration file to create a simulation instance
+                    sim_world = Simulation.from_file(config_path)
+
+                    # Update the interaction coefficients based on the current iteration
                     sim_world.container.sphere_int.adhesion_coefficient = cell_cell_adhesion
                     sim_world.container.sphere_int.repulsion_coefficient = ccr
                     sim_world.container.sphere_cylinder_int.adhesion_coefficient = cell_neurite_adhesion
                     sim_world.container.sphere_cylinder_int.repulsion_coefficient = cnr
                     sim_world.container.cylinder_int.adhesion_coefficient = neurite_neurite_adhesion
                     sim_world.container.cylinder_int.repulsion_coefficient = nnr
+
+                    # Run the simulation
                     simulation(sim_world)
-                    # Plot the results (mark interactive as False to automatically  close the window)
+
+                    # Plot and save the results (mark interactive as False to automatically  close the window)
                     sim_world.container.animator.show(interactive=False)
                     sim_world.container.animator.save_screenshot(f"output/{folder_name}/replicate{i}.png")
                     sim_world.container.animator.plotter.close()
+
+
+if __name__ == "__main__":
+    main()

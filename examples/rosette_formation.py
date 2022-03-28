@@ -1,4 +1,6 @@
-"""Script to test the spring components of neurites."""
+"""Script to simulate the formation of Homer-Wright rosettes."""
+import click
+
 from neurorosettes.simulation import Simulation, Container
 from neurorosettes.utilities import HexagonalTissue, RectangularTissue
 from neurorosettes.grid import OneLevelDensityCheck
@@ -16,10 +18,11 @@ def create_tissue(container: Container) -> None:
     for cell in TISSUE:
         container.create_new_neuron(coordinates=cell)
 
-
-if __name__ == "__main__":
+@click.command()
+@click.option("--config_path", default="config/config.yml", help="Configuration file path.")
+def main(config_path):
     # Initialize simulation objects
-    sim_world = Simulation.from_file("config.yml")
+    sim_world = Simulation.from_file(config_path)
     set_density_check(sim_world.container)
     # Create initial configuration
     create_tissue(sim_world.container)
@@ -30,3 +33,7 @@ if __name__ == "__main__":
     sim_world.run()
     # Plot the results (mark interactive as False to automatically  close the window)
     sim_world.container.animator.show(interactive=True)
+
+
+if __name__ == "__main__":
+    main()
