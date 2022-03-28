@@ -1,10 +1,9 @@
 # neurorosettes
-> An agent-based framework to model the formation of spatial structures in early development
+> An agent-based framework to model the formation of rosette patterns in tissues of the nervous system
 
-`neurorosettes` is a Python package that implements agent-based modelling to study the formation of spatial structures 
-during neuronal development. It is built on top of the `vedo` package (version 2022.0.1), which provides an interface
-to plot 3D objects using VTK. Thus, this framework prioritizes the visualization of the simulations in real time,
-without requiring additional processing.
+`neurorosettes` is a Python package that implements agent-based modelling to study the formation of rosette patterns in tissues
+during neuronal development. It is built on top of the `vedo` package (version 2022.1.0), which provides an interface
+to plot 3D objects using VTK, to prioritize the visualization of the simulations in real time, without requiring additional processing.
 
 ## Installation
 

@@ -16,8 +16,8 @@ def create_tissue(container: Container) -> None:
         neurite.create_neurite_representation(container.animator)
         container.grid.register_neurite(neurite)
 
-    neuron = container.create_new_neuron(coordinates=[19.0, 16.5, 0.0],
-                                outgrowth_axis=[-1, 0, 0.0])
+    neuron = container.create_new_neuron(coordinates=[3, 30.0, 0.0],
+                                outgrowth_axis=[0, -1, 0.0])
 
     neuron.create_first_neurite(container.object_factory)
     for neurite in neuron.neurites:
@@ -35,7 +35,8 @@ def create_tissue(container: Container) -> None:
 def main(config_path):
     # Initialize simulation objects
     sim_world = Simulation.from_file(config_path)
-    sim_world.timer.total_time = 25.0
+    sim_world.timer.total_time = 50.0
+    #sim_world.container.object_factory.neurite_interaction_factor = 5.0
     # Create initial configuration
     create_tissue(sim_world.container)
     # Run the simulation to check if springs work

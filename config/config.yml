@@ -43,14 +43,14 @@ interactions:
   # or potentials functions ["potentials"]
   type: "potentials"
   sphere_sphere_adhesion: 5.0
-  sphere_sphere_repulsion: 30.0
+  sphere_sphere_repulsion: 25.0
   # Smoothness factor should be commented for simple adhesion/repulsion
   sphere_sphere_smoothness: 1
   sphere_cylinder_adhesion: 5.0
-  sphere_cylinder_repulsion: 30.0
+  sphere_cylinder_repulsion: 25.0
   # Smoothness factor should be commented for simple adhesion/repulsion
   sphere_cylinder_smoothness: 1
-  cylinder_cylinder_adhesion: 10.0
-  cylinder_cylinder_repulsion: 30.0
+  cylinder_cylinder_adhesion: 5.0
+  cylinder_cylinder_repulsion: 15.0
     # Smoothness factor should be commented for simple adhesion/repulsion
   cylinder_cylinder_smoothness: 1

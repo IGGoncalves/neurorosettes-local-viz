@@ -6,7 +6,7 @@ authors = ["Inês G Gonçalves, Jose Manuel García-Aznar"]
 
 [tool.poetry.scripts]
 rosette_formation = "examples.rosette_formation:main"
-sweep = "examples.sweep:main"
+sweep_mechanics = "examples.sweep_mechanics:main"
 neurite_neurite = "examples.mechanics.test_neurite_neurite:main"
 neurite_cell = "examples.mechanics.test_sphere_neurite:main"
 cell_cell = "examples.mechanics.test_sphere_sphere:main"

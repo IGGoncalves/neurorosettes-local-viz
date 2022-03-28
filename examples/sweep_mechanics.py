@@ -15,10 +15,10 @@ cell_cell_adhesion = 5.0
 cell_cell_repulsion = [15.0, 25.0, 50.0]
 # Cell-neurite interactions
 cell_neurite_adhesion = 5.0
-cell_neurite_repulsion = [50.0]
+cell_neurite_repulsion = [15.0, 25.0, 50.0]
 # Neurite-neurite interactions
 neurite_neurite_adhesion = 5.0
-neurite_neurite_repulsion = [50.0]
+neurite_neurite_repulsion = [15.0, 25.0, 50.0]
 
 # Replicates for each condition
 NUMBER_OF_REPLICATES = 3
