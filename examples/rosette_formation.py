@@ -6,7 +6,7 @@ from neurorosettes.utilities import HexagonalTissue, RectangularTissue
 from neurorosettes.grid import OneLevelDensityCheck
 
 
-TISSUE = HexagonalTissue(size=160, spacing=16).get_coordinates()
+TISSUE = HexagonalTissue(size=160, spacing=20).get_coordinates()
 DENSITY_CHECK = OneLevelDensityCheck(max_neighbors=19)
 
 def set_density_check(container: Container) -> None:
@@ -27,7 +27,7 @@ def main(config_path):
     # Create initial configuration
     create_tissue(sim_world.container)
     # Plot the current state of the simulation
-    sim_world.container.animator.set_camera(height=600.0)
+    sim_world.container.animator.set_camera(height=400.0)
     sim_world.container.animator.show()
     # Run the simulation to check if springs work
     sim_world.run()

@@ -47,7 +47,7 @@ interactions:
   # Smoothness factor should be commented for simple adhesion/repulsion
   sphere_sphere_smoothness: 1
   sphere_cylinder_adhesion: 5.0
-  sphere_cylinder_repulsion: 25.0
+  sphere_cylinder_repulsion: 50.0
   # Smoothness factor should be commented for simple adhesion/repulsion
   sphere_cylinder_smoothness: 1
   cylinder_cylinder_adhesion: 5.0

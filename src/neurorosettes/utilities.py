@@ -113,7 +113,7 @@ class Animator:
     def __init__(self):
         self.plotter = Plotter(interactive=False, axes=0, backend="ipyvtk")
         self.clock = Text2D("Simulation step: 0", pos="top right", c="black", font="Courier")
-        self.plotter += self.clock
+        #self.plotter += self.clock
 
     def show(self, interactive: bool = False):
         """
@@ -148,7 +148,7 @@ class Animator:
         y_grid
             The y coordinates of the cell of the grid.
         """
-        self.plotter += Grid(sx=x_grid, sy=y_grid, c='lightgrey')
+        #self.plotter += Grid(sx=x_grid, sy=y_grid, c='lightgrey')
 
     def set_camera(self, height: float):
         """
@@ -159,8 +159,8 @@ class Animator:
         height
             The height to place the camera at.
         """
-        self.plotter.camera.SetPosition([0., 0., height])
-        self.plotter.camera.SetFocalPoint([0., 0., 0.])
+        self.plotter.camera.SetPosition([0., -10., height])
+        self.plotter.camera.SetFocalPoint([0., -10., 0.])
         self.plotter.camera.SetViewUp([0., 1., 0.])
 
     def draw_spring(self, base_point: np.ndarray, top_point: np.ndarray, radius: float):
@@ -179,8 +179,8 @@ class Animator:
         radius
             The radius of the cylinder object.
         """
-        cylinder = Spring(startPoint=base_point, endPoint=top_point, r=radius)
-        top_sphere = Sphere(pos=top_point, r=radius, c='b3')
+        cylinder = Spring(startPoint=base_point, endPoint=top_point, r=radius, c="lightpink")
+        top_sphere = Sphere(pos=top_point, r=radius, c='pink')
         self.plotter += cylinder
         self.plotter += top_sphere
 

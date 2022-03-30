@@ -87,7 +87,7 @@ class Container:
         """
         self.density_check = density_check
 
-    def register_neuron(self, neuron: Neuron, color="red") -> None:
+    def register_neuron(self, neuron: Neuron, color="gray") -> None:
         """
         Registers a neuron and its representation into the container.
 
@@ -130,7 +130,7 @@ class Container:
 
     def create_new_neuron(self, coordinates: Union[np.ndarray, List[float]],
                           outgrowth_axis: Optional[Union[List[float], np.ndarray]] = None,
-                          color="red") -> Neuron:
+                          color="darkblue") -> Neuron:
                           
         """
         Creates a new neuron and registers it to the container's grid.
