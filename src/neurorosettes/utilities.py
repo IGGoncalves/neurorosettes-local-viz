@@ -211,4 +211,4 @@ class Animator:
         file_name
             The name of the PNG file to be created.
         """
-        self.plotter.screenshot(f"{file_name}.png")
+        self.plotter.screenshot(f"{file_name}")

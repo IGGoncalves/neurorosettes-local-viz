@@ -88,7 +88,7 @@ def main():
 
                 # Plot and save the results (mark interactive as False to automatically  close the window)
                 sim_world.container.animator.show(interactive=False)
-                sim_world.container.animator.save_screenshot(f"output/{folder_name}/replicate{i}.png")
+                sim_world.container.animator.save_screenshot(f"output/{folder_name}/replicate{i}.svg")
                 sim_world.container.animator.plotter.close()
 
 
