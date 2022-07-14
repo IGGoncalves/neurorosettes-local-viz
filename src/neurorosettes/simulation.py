@@ -8,7 +8,7 @@ from vedo import ProgressBar
 
 from neurorosettes.config import ConfigParser
 from neurorosettes.clocks import ClocksFactory
-from neurorosettes.physics import ContactFactory, PotentialsFactory
+from neurorosettes.physics import ContactFactory, PotentialsFactory, SimpleFactory
 from neurorosettes.subcellular import CellBody, Neurite, ObjectFactory
 from neurorosettes.neurons import Neuron, NeuronFactory
 from neurorosettes.utilities import Animator, get_random_unit_vector
@@ -453,7 +453,7 @@ class Simulation:
         if interactions_type == "potentials":
             interactions = PotentialsFactory(**interactions_data)
         else:
-            interactions = PotentialsFactory(**interactions_data)
+            interactions = SimpleFactory(**interactions_data)
 
         container = Container(grid=grid,
                               simulation_2d=status_2d,

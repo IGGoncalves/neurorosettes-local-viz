@@ -444,6 +444,30 @@ class ContactFactory(ABC):
 
 
 @dataclass
+class SimpleFactory(ContactFactory):
+    sphere_sphere_adhesion: float
+    sphere_sphere_repulsion: float
+
+    sphere_cylinder_adhesion: float
+    sphere_cylinder_repulsion: float
+
+    cylinder_cylinder_adhesion: float
+    cylinder_cylinder_repulsion: float
+
+    def get_sphere_sphere_interactions(self) -> ContactForces:
+        return SimpleContact(self.sphere_sphere_adhesion,
+                                 self.sphere_sphere_repulsion)
+
+    def get_sphere_cylinder_interactions(self) -> ContactForces:
+        return SimpleContact(self.sphere_cylinder_adhesion,
+                                 self.sphere_cylinder_repulsion)
+
+    def get_cylinder_cylinder_interactions(self) -> ContactForces:
+        return SimpleContact(self.cylinder_cylinder_adhesion,
+                                 self.cylinder_cylinder_repulsion)
+
+
+@dataclass
 class PotentialsFactory(ContactFactory):
     sphere_sphere_adhesion: float
     sphere_sphere_repulsion: float

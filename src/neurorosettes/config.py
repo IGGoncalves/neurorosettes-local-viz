@@ -66,13 +66,13 @@ class InteractionsValidator(BaseModel):
     type: str
     sphere_sphere_adhesion: float
     sphere_sphere_repulsion: float
-    sphere_sphere_smoothness: Optional[int]
     sphere_cylinder_adhesion: float
     sphere_cylinder_repulsion: float
-    sphere_cylinder_smoothness: Optional[int]
     cylinder_cylinder_adhesion: float
     cylinder_cylinder_repulsion: float
-    cylinder_cylinder_smoothness: Optional[int]
+    sphere_sphere_smoothness: Optional[int] = None
+    sphere_cylinder_smoothness: Optional[int] = None
+    cylinder_cylinder_smoothness: Optional[int] = None
 
     @validator("sphere_sphere_adhesion")
     def not_negative(cls, v):
@@ -125,4 +125,5 @@ class ConfigParser:
 
     def get_interactions_data(self):
         """Returns the data to create object physical interactions."""
-        return dict(InteractionsValidator(**self.cfg["interactions"]))
+        interactions = dict(InteractionsValidator(**self.cfg["interactions"]))
+        return {k: v for k, v in interactions.items() if v is not None}
