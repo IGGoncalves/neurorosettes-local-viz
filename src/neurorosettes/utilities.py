@@ -179,8 +179,8 @@ class Animator:
         radius
             The radius of the cylinder object.
         """
-        cylinder = Spring(startPoint=base_point, endPoint=top_point, r=radius, c="lightpink")
-        top_sphere = Sphere(pos=top_point, r=radius, c='pink')
+        cylinder = Spring(startPoint=base_point, endPoint=top_point, r=radius, c="grey")
+        top_sphere = Sphere(pos=top_point, r=radius, c="black")
         self.plotter += cylinder
         self.plotter += top_sphere
 

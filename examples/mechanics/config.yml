@@ -24,7 +24,7 @@ neurons:
     cell_radius: 8.0
     cell_interaction_factor: 1.25
     neurite_radius: 0.5
-    neurite_interaction_factor: 10.0
+    neurite_interaction_factor: 5.0
     neurite_spring_constant: 5.0
     neurite_default_length: 10.0
 
@@ -42,12 +42,12 @@ interactions:
   # Interactions may be based on simple adhesion/repulsion functions ["simple"]
   # or potentials functions ["potentials"]
   type: "simple"
-  sphere_sphere_adhesion: 0.0
-  sphere_sphere_repulsion: 0.0
+  sphere_sphere_adhesion: 1.0
+  sphere_sphere_repulsion: 1.2
   # Smoothness factor should be commented for simple adhesion/repulsion
-  sphere_cylinder_adhesion: 0.0
-  sphere_cylinder_repulsion: 0.0
+  sphere_cylinder_adhesion: 1.0
+  sphere_cylinder_repulsion: 1.5
   # Smoothness factor should be commented for simple adhesion/repulsion
-  cylinder_cylinder_adhesion: 20.0
-  cylinder_cylinder_repulsion: 5.0
-    # Smoothness factor should be commented for simple adhesion/repulsion
+  cylinder_cylinder_adhesion: 2.0
+  cylinder_cylinder_repulsion: 0.6
+  # Smoothness factor should be commented for simple adhesion/repulsion
