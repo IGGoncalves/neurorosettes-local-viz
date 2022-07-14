@@ -160,7 +160,7 @@ def get_cylinder_intersection(
     denominator = np.linalg.norm(cross) ** 2
 
     # If cylinder axes are parallel, set the closest points as the middle points
-    if not denominator:
+    if denominator < 0.000001:
         d0 = np.dot(unit_vector_1, (base_2 - base_1))
         d1 = np.dot(unit_vector_1, (top_2 - base_1))
 
@@ -186,14 +186,16 @@ def get_cylinder_intersection(
     t0 = detA / denominator
     t1 = detB / denominator
 
-    pA = base_1 + (unit_vector_1 * t0)  # Projected closest point on segment A
-    pB = base_1 + (unit_vector_2 * t1)  # Projected closest point on segment B
+    # Closest point on segment 1
+    pA = base_1 + (unit_vector_1 * t0)
+    # Closest point on segment B 2
+    pB = base_2 + (unit_vector_2 * t1)
 
     # Clamp projections
     if t0 < 0:
         pA = base_1
     elif t0 > norm1:
-        pA = top_2
+        pA = top_1
 
     if t1 < 0:
         pB = base_2
@@ -201,7 +203,7 @@ def get_cylinder_intersection(
         pB = top_2
 
     # Clamp projection A
-    if t0 < 0 or t0 > norm1:
+    if (t0 < 0) or (t0 > norm1):
         dot = np.dot(unit_vector_2, (pA - base_2))
         if dot < 0:
             dot = 0
@@ -210,7 +212,7 @@ def get_cylinder_intersection(
         pB = base_2 + (unit_vector_2 * dot)
 
     # Clamp projection B
-    if t1 < 0 or t1 > norm2:
+    if (t1 < 0) or (t1 > norm2):
         dot = np.dot(unit_vector_1, (pB - base_1))
         if dot < 0:
             dot = 0

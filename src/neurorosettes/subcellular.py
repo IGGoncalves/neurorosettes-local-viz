@@ -199,7 +199,7 @@ class Neurite:
         np.ndarray
             The components of the interaction force between the two objects.
         float
-            The fraction of the force to be transmited to the mother object.
+            The fraction of the force to be applied to the distal point.
         """
         # Get the point on the cylinder axis closest to the sphere
         point = physics.get_sphere_cylinder_intersection(
@@ -208,7 +208,7 @@ class Neurite:
 
         # Calculate the distance between the two closest points
         distance_to_point = np.linalg.norm(np.subtract(point, self.proximal_point))
-        fraction_to_mother = distance_to_point / self.current_length
+        fraction = distance_to_point / self.current_length
         distance_vector, norm = physics.get_distance_components(
             neighbor.position, point
         )
@@ -226,7 +226,7 @@ class Neurite:
             neighbor.mechanics.interaction_radius,
         )
 
-        return magnitude * distance_vector, fraction_to_mother
+        return magnitude * distance_vector, fraction
 
     def get_neurite_neighbor_force(
         self, neighbor: "Neurite", interaction: physics.ContactForces
@@ -246,7 +246,7 @@ class Neurite:
         np.ndarray
             The components of the interaction force between the two objects.
         float
-            The fraction of the force to be transmited to the mother object.
+            The fraction of the force to be applied to the distal point.
         """
         # Get the closes point on the cylinder axes to the other cylinder
         point1, point2 = physics.get_cylinder_intersection(
@@ -256,9 +256,12 @@ class Neurite:
             top_2=neighbor.distal_point,
         )
 
+        #print("Internal check", point1, point2)
+
         # Calculate the distance between the two closest points
-        distance_to_point = np.linalg.norm(np.subtract(point1, self.proximal_point))
-        fraction_to_mother = distance_to_point / self.current_length
+        distance_to_point = np.linalg.norm(np.subtract(self.proximal_point, point1))
+        fraction = distance_to_point / self.current_length
+        #print(point1, self.proximal_point, self.distal_point, fraction)
         distance_vector, norm = physics.get_distance_components(point2, point1)
 
         # Calculate cell-cell adhesion forces
@@ -274,7 +277,7 @@ class Neurite:
             radius2=neighbor.mechanics.interaction_radius,
         )
 
-        return magnitude * distance_vector, fraction_to_mother
+        return magnitude * distance_vector, fraction
 
 
 @dataclass

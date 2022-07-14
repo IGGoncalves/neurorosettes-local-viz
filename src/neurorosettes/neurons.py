@@ -4,6 +4,7 @@ import numpy as np
 
 from neurorosettes.subcellular import Neurite, ObjectFactory
 from neurorosettes.clocks import CellClocks, ClocksFactory
+from neurorosettes.physics import normalize_vector
 
 
 class Neuron:
@@ -77,6 +78,9 @@ class Neuron:
         outgrowth_axis
             The direction of growth of the neuron's neurites.
         """
+        if np.linalg.norm(coordinates) > 1.0:
+            coordinates = normalize_vector(coordinates)
+            
         self.outgrowth_axis[0] = coordinates[0]
         self.outgrowth_axis[1] = coordinates[1]
         self.outgrowth_axis[2] = coordinates[2]

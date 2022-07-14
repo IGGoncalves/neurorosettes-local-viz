@@ -30,7 +30,7 @@ def update_tissue(container: Container) -> None:
     time.sleep(1)
 
 @click.command()
-@click.option("--config_path", default="config/config.yml", help="Configuration file path.")
+@click.option("--config_path", default="config.yml", help="Configuration file path.")
 def main(config_path):
     # Initialize simulation objects
     sim_world = Simulation.from_file(config_path)

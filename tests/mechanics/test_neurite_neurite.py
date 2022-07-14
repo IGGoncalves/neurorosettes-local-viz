@@ -12,7 +12,6 @@ def create_tissue(container: Container) -> None:
     )
 
     neuron.create_first_neurite(container.object_factory)
-    neuron.create_secondary_neurite(container.object_factory)
     for neurite in neuron.neurites:
         neurite.create_neurite_representation(container.animator)
         container.grid.register_neurite(neurite)
