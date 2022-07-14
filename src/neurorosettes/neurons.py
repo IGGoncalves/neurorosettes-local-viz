@@ -28,10 +28,15 @@ class Neuron:
         by the initial number of neurites.
     """
 
-    def __init__(self, position: np.ndarray, outgrowth_axis: np.ndarray,
-                 factory: ObjectFactory, clocks: CellClocks,
-                 max_number_of_neurites: int = 4, 
-                 differentiation_grade: int = 0) -> None:
+    def __init__(
+        self,
+        position: np.ndarray,
+        outgrowth_axis: np.ndarray,
+        factory: ObjectFactory,
+        clocks: CellClocks,
+        max_number_of_neurites: int = 4,
+        differentiation_grade: int = 0,
+    ) -> None:
         self.cell = factory.get_cell_body(position)
         self.outgrowth_axis = outgrowth_axis
         self.clocks = clocks
@@ -66,7 +71,7 @@ class Neuron:
     def set_outgrowth_axis(self, coordinates: np.ndarray) -> None:
         """
         Sets the axis that neurites will follow when new neurites are created.
-        
+
         Prameters
         ----------
         outgrowth_axis
@@ -99,13 +104,15 @@ class Neuron:
     def create_first_neurite(self, factory: ObjectFactory) -> None:
         """
         Creates a neurite attached to the soma cell
-        
+
         Parameters
         ----------
         factory
             The factory object to be used to create new neuron components.
         """
-        proximal_point = self.cell.position + self.outgrowth_axis * self.cell.mechanics.radius
+        proximal_point = (
+            self.cell.position + self.outgrowth_axis * self.cell.mechanics.radius
+        )
         neurite = factory.get_neurite(proximal_point, self.outgrowth_axis)
         self.neurites.append(neurite)
         self.clocks.cycle_clock.cycle_block = True
@@ -113,7 +120,7 @@ class Neuron:
     def create_secondary_neurite(self, factory: ObjectFactory) -> None:
         """
         Creates a neurite attached to the most recent neurite.
-             
+
         Parameters
         ----------
         factory
@@ -132,6 +139,7 @@ class NeuronFactory:
     """
     Helper class to create instances of neurons based on defined properties.
     """
+
     max_number_of_neurites: int
     """The maximum number of neurites that a neuron can have."""
     objects_factory: ObjectFactory
@@ -139,9 +147,15 @@ class NeuronFactory:
     clocks_factory: ClocksFactory
     """The ClocksFactory used to create new clock instances."""
 
-    def create_neuron(self, coordinates: np.ndarray, outgrowth_axis: np.ndarray) -> Neuron:
+    def create_neuron(
+        self, coordinates: np.ndarray, outgrowth_axis: np.ndarray
+    ) -> Neuron:
         """Returns a Neuron object placed in the given coordinates."""
         clocks = self.clocks_factory.get_clocks()
-        return Neuron(coordinates, outgrowth_axis, 
-                      self.objects_factory, clocks,
-                      self.max_number_of_neurites)
+        return Neuron(
+            coordinates,
+            outgrowth_axis,
+            self.objects_factory,
+            clocks,
+            self.max_number_of_neurites,
+        )

@@ -7,6 +7,7 @@ from pydantic import BaseModel, validator
 
 class TimerValidator(BaseModel):
     """Class to parse and validate data on simulation time."""
+
     total_time: float
     step: float
 
@@ -20,6 +21,7 @@ class TimerValidator(BaseModel):
 
 class DomainValidator(BaseModel):
     """Class to parse and validate data on simulation space."""
+
     min: float
     max: float
     step: float
@@ -34,6 +36,7 @@ class DomainValidator(BaseModel):
 
 class ObjectValidator(BaseModel):
     """Class to parse and validate data on physical objects."""
+
     cell_radius: float
     cell_interaction_factor: float
     neurite_radius: float
@@ -48,8 +51,10 @@ class ObjectValidator(BaseModel):
             raise ValueError("Physical object data should be positive.")
         return v
 
+
 class ClocksValidator(BaseModel):
     """Class to parse and validate data on biological clocks."""
+
     proliferation_rate: float
     death_rate: float
     differentiation_rate: float
@@ -61,8 +66,10 @@ class ClocksValidator(BaseModel):
             raise ValueError("Clocks data should be positive.")
         return v
 
+
 class InteractionsValidator(BaseModel):
     """Class to parse and validate data on object interactions."""
+
     type: str
     sphere_sphere_adhesion: float
     sphere_sphere_repulsion: float
@@ -91,6 +98,7 @@ class ConfigParser:
     config_path
         The path to the YAML file to be parsed.
     """
+
     def __init__(self, config_path: Path) -> None:
         with open(config_path) as file:
             self.cfg = yaml.safe_load(file)

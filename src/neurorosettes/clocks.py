@@ -28,7 +28,7 @@ class Clock:
     def set_rate(self, rate: float) -> None:
         """
         Sets the clock's event rate.
-        
+
         Parameters
         ----------
         rate
@@ -116,7 +116,9 @@ class CellClocks:
         """
         self.differentiation_clock.set_rate(differentiation_rate)
 
-    def set_clocks(self, proliferation_rate: float, death_rate: float, differentiation_rate: float) -> None:
+    def set_clocks(
+        self, proliferation_rate: float, death_rate: float, differentiation_rate: float
+    ) -> None:
         """
         Sets the rates for all biological events (proliferation, death and differentiation).
 
@@ -166,6 +168,7 @@ class ClocksFactory:
     """
     Helper class to create instances of cell internal clocks based on the same rates.
     """
+
     proliferation_rate: float
     """The rate of proliferation of the cells."""
     death_rate: float
@@ -175,6 +178,6 @@ class ClocksFactory:
 
     def get_clocks(self) -> CellClocks:
         """Returns an instance of a CellClocks object with the chosen biology rates."""
-        return CellClocks(self.proliferation_rate, 
-                          self.death_rate, 
-                          self.differentiation_rate)
+        return CellClocks(
+            self.proliferation_rate, self.death_rate, self.differentiation_rate
+        )

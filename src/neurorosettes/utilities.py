@@ -14,6 +14,7 @@ class Tissue(ABC):
         If the cells are placed in a single plane or if
         the tissue is a 3D tissue.
     """
+
     def __init__(self, use_2d: bool = True):
         self.use_2d = use_2d
 
@@ -37,6 +38,7 @@ class RectangularTissue(Tissue):
         If the cells are placed in a single plane or if
         the tissue is a 3D tissue.
     """
+
     def __init__(self, size: float, spacing: float = 16.0, use_2d: bool = True):
         super().__init__(use_2d)
         self.size = size
@@ -45,14 +47,22 @@ class RectangularTissue(Tissue):
     def get_coordinates(self) -> np.ndarray:
         """Returns the initial cell coordinates according to the tissue geometry"""
         if self.use_2d:
-            return np.array([[x, y, 0]
-                             for x in np.arange(-self.size / 2, self.size / 2, self.spacing)
-                             for y in np.arange(-self.size / 2, self.size / 2, self.spacing)])
+            return np.array(
+                [
+                    [x, y, 0]
+                    for x in np.arange(-self.size / 2, self.size / 2, self.spacing)
+                    for y in np.arange(-self.size / 2, self.size / 2, self.spacing)
+                ]
+            )
 
-        return np.array([[x, y, z]
-                         for x in np.arange(-self.size / 2, self.size / 2, self.spacing)
-                         for y in np.arange(-self.size / 2, self.size / 2, self.spacing)
-                         for z in np.arange(-self.size / 2, self.size / 2, self.spacing)])
+        return np.array(
+            [
+                [x, y, z]
+                for x in np.arange(-self.size / 2, self.size / 2, self.spacing)
+                for y in np.arange(-self.size / 2, self.size / 2, self.spacing)
+                for z in np.arange(-self.size / 2, self.size / 2, self.spacing)
+            ]
+        )
 
 
 class HexagonalTissue(Tissue):
@@ -69,6 +79,7 @@ class HexagonalTissue(Tissue):
         If the cells are placed in a single plane or if
         the tissue is a 3D tissue.
     """
+
     def __init__(self, size: float, spacing: float = 20.0, use_2d: bool = True):
         super().__init__(use_2d)
         self.size = size
@@ -77,15 +88,21 @@ class HexagonalTissue(Tissue):
     def get_coordinates(self) -> np.ndarray:
         """Returns the initial cell coordinates according to the tissue geometry"""
         if self.use_2d:
-            return np.array([[x + 12 * (i % 2), y, 0]
-                             for x in np.arange(-self.size / 2, self.size / 2, self.spacing)
-                             for i, y in enumerate(np.arange(-self.size / 2, self.size / 2, self.spacing))])
+            return np.array(
+                [
+                    [x + 12 * (i % 2), y, 0]
+                    for x in np.arange(-self.size / 2, self.size / 2, self.spacing)
+                    for i, y in enumerate(
+                        np.arange(-self.size / 2, self.size / 2, self.spacing)
+                    )
+                ]
+            )
 
 
 def get_random_position(scaling_factor: float) -> np.ndarray:
     """
     Returns the coordinates for a random position between -scaling_factor and scaling factor.
-    
+
     Parameters
     ----------
     scaling_factor
@@ -93,9 +110,13 @@ def get_random_position(scaling_factor: float) -> np.ndarray:
         sampled from.
     """
 
-    return np.array([(np.random.random() - 0.5) * scaling_factor,
-                     (np.random.random() - 0.5) * scaling_factor,
-                     0.0])
+    return np.array(
+        [
+            (np.random.random() - 0.5) * scaling_factor,
+            (np.random.random() - 0.5) * scaling_factor,
+            0.0,
+        ]
+    )
 
 
 def get_random_unit_vector(two_dimensions=False) -> np.ndarray:
@@ -110,15 +131,18 @@ def get_random_unit_vector(two_dimensions=False) -> np.ndarray:
 
 class Animator:
     """Class to render the simulaiton results through vedo."""
+
     def __init__(self):
         self.plotter = Plotter(interactive=False, axes=0, backend="ipyvtk")
-        self.clock = Text2D("Simulation step: 0", pos="top right", c="black", font="Courier")
-        #self.plotter += self.clock
+        self.clock = Text2D(
+            "Simulation step: 0", pos="top right", c="black", font="Courier"
+        )
+        # self.plotter += self.clock
 
     def show(self, interactive: bool = False):
         """
         Shows the simulation results in a display window.
-        
+
         Parameters
         ----------
         interactive
@@ -148,7 +172,7 @@ class Animator:
         y_grid
             The y coordinates of the cell of the grid.
         """
-        #self.plotter += Grid(sx=x_grid, sy=y_grid, c='lightgrey')
+        # self.plotter += Grid(sx=x_grid, sy=y_grid, c='lightgrey')
 
     def set_camera(self, height: float):
         """
@@ -159,9 +183,9 @@ class Animator:
         height
             The height to place the camera at.
         """
-        self.plotter.camera.SetPosition([0., -10., height])
-        self.plotter.camera.SetFocalPoint([0., -10., 0.])
-        self.plotter.camera.SetViewUp([0., 1., 0.])
+        self.plotter.camera.SetPosition([0.0, -10.0, height])
+        self.plotter.camera.SetFocalPoint([0.0, -10.0, 0.0])
+        self.plotter.camera.SetViewUp([0.0, 1.0, 0.0])
 
     def draw_spring(self, base_point: np.ndarray, top_point: np.ndarray, radius: float):
         """
@@ -169,13 +193,13 @@ class Animator:
 
         The spring connects the two points passed as coordinates,
         and a sphere is placed centred on the top point.
-        
+
         Parameters
         ----------
         base_point
             The coordinates for the base of the spring.
         top_point
-            The coordinates for the top of the spring. 
+            The coordinates for the top of the spring.
         radius
             The radius of the cylinder object.
         """

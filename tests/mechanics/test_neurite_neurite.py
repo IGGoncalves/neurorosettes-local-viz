@@ -7,8 +7,9 @@ from neurorosettes.simulation import Simulation, Container
 
 def create_tissue(container: Container) -> None:
     """Creates and registers new neurons in the simulation world."""
-    neuron = container.create_new_neuron(coordinates=[0.0, -10.0, 0.0],
-                                         outgrowth_axis=[0.0, 1.0, 0.0])
+    neuron = container.create_new_neuron(
+        coordinates=[0.0, -10.0, 0.0], outgrowth_axis=[0.0, 1.0, 0.0]
+    )
 
     neuron.create_first_neurite(container.object_factory)
     neuron.create_secondary_neurite(container.object_factory)
@@ -16,8 +17,9 @@ def create_tissue(container: Container) -> None:
         neurite.create_neurite_representation(container.animator)
         container.grid.register_neurite(neurite)
 
-    neuron = container.create_new_neuron(coordinates=[21.0, 6.0, 0.0],
-                                         outgrowth_axis=[-1.0, 0.0, 0.0])
+    neuron = container.create_new_neuron(
+        coordinates=[21.0, 6.0, 0.0], outgrowth_axis=[-1.0, 0.0, 0.0]
+    )
 
     neuron.create_first_neurite(container.object_factory)
     for neurite in neuron.neurites:
@@ -36,7 +38,7 @@ def main(config_path):
     # Initialize simulation objects
     sim_world = Simulation.from_file("config.yml")
     sim_world.timer.total_time = 100.0
-    #sim_world.container.object_factory.neurite_interaction_factor = 5.0
+    # sim_world.container.object_factory.neurite_interaction_factor = 5.0
     # Create initial configuration
     create_tissue(sim_world.container)
     # Run the simulation to check if springs work

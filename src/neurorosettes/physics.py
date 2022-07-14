@@ -6,7 +6,9 @@ from typing import Tuple
 import numpy as np
 
 
-def get_distance_components(point1: np.ndarray, point2: np.ndarray) -> Tuple[np.ndarray, float]:
+def get_distance_components(
+    point1: np.ndarray, point2: np.ndarray
+) -> Tuple[np.ndarray, float]:
     """
     Returns the direction and magnitude components of a vector that connects two points.
 
@@ -28,7 +30,7 @@ def get_distance_components(point1: np.ndarray, point2: np.ndarray) -> Tuple[np.
     norm = np.linalg.norm(distance_vector)
     if norm < 0.0000001:
         norm = 0.0000001
-        
+
     unit_vector = distance_vector / norm
 
     return unit_vector, norm
@@ -76,7 +78,9 @@ def get_sphere_overlap(radius1: float, radius2: float, distance: float) -> float
     return overlap
 
 
-def get_sphere_cylinder_intersection(center: np.ndarray, base: np.ndarray, top: np.ndarray) -> np.ndarray:
+def get_sphere_cylinder_intersection(
+    center: np.ndarray, base: np.ndarray, top: np.ndarray
+) -> np.ndarray:
     """
     Returns the closest point on the cylinder axis to the sphere.
 
@@ -116,10 +120,9 @@ def get_sphere_cylinder_intersection(center: np.ndarray, base: np.ndarray, top: 
     return base + cylinder_axis * projection_fraction
 
 
-def get_cylinder_intersection(base_1: np.ndarray,
-                              top_1: np.ndarray,
-                              base_2: np.ndarray,
-                              top_2: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
+def get_cylinder_intersection(
+    base_1: np.ndarray, top_1: np.ndarray, base_2: np.ndarray, top_2: np.ndarray
+) -> Tuple[np.ndarray, np.ndarray]:
     """
     Returns the closest point between two cylinders.
 
@@ -176,7 +179,7 @@ def get_cylinder_intersection(base_1: np.ndarray,
 
         return p1, p2
 
-    t = (base_2 - base_1)
+    t = base_2 - base_1
     detA = np.linalg.det([t, unit_vector_2, cross])
     detB = np.linalg.det([t, unit_vector_1, cross])
 
@@ -300,26 +303,34 @@ class CylinderProperties(PhysicalProperties):
         The factor used to calculate the radius of interaction.
     """
 
-    def __init__(self, radius: float, interaction_factor: float,
-                 spring_constant: float, default_length: float) -> None:
+    def __init__(
+        self,
+        radius: float,
+        interaction_factor: float,
+        spring_constant: float,
+        default_length: float,
+    ) -> None:
         super().__init__(radius, interaction_factor)
         self.spring_constant = spring_constant
         self.default_length = default_length
 
     def get_spring_tension(self, cylinder_length: float) -> float:
         """Returns the tension in the spring for a given spring length."""
-        length_difference = (cylinder_length - self.default_length)
+        length_difference = cylinder_length - self.default_length
         return self.spring_constant * length_difference / self.default_length
 
 
 @dataclass
 class ContactForces(ABC):
     """Class to compute the contact forces between two objects, represented as spheres."""
+
     adhesion_coefficient: float
     repulsion_coefficient: float
 
     @abstractmethod
-    def compute_adhesion(self, distance: float, radius1: float, radius2: float) -> float:
+    def compute_adhesion(
+        self, distance: float, radius1: float, radius2: float
+    ) -> float:
         """
         Returns the magnitude of the adhesion force between two objects
 
@@ -340,7 +351,9 @@ class ContactForces(ABC):
         pass
 
     @abstractmethod
-    def compute_repulsion(self, distance: float, radius1: float, radius2: float) -> float:
+    def compute_repulsion(
+        self, distance: float, radius1: float, radius2: float
+    ) -> float:
         """
         Returns the magnitude of the repulsion force between two objects
 
@@ -370,7 +383,9 @@ class SimpleContact(ContactForces):
     Same approach as done in Cx3D.
     """
 
-    def compute_adhesion(self, distance: float, radius1: float, radius2: float) -> float:
+    def compute_adhesion(
+        self, distance: float, radius1: float, radius2: float
+    ) -> float:
         """Returns a force proportional to the adhesion coefficient, cell overlap and cell radii"""
         # Compute the cells' overlap, taking into account an interaction radius
         adhesion_overlap = get_sphere_overlap(radius1, radius2, distance)
@@ -383,7 +398,9 @@ class SimpleContact(ContactForces):
 
         return self.adhesion_coefficient * np.sqrt(equivalent_radius * adhesion_overlap)
 
-    def compute_repulsion(self, distance: float, radius1: float, radius2: float) -> float:
+    def compute_repulsion(
+        self, distance: float, radius1: float, radius2: float
+    ) -> float:
         """Returns a force proportional to the repulsion coefficient and cell overlap"""
         # Check if cells overlap (real radius)
         overlap = get_sphere_overlap(radius1, radius2, distance)
@@ -399,9 +416,12 @@ class PotentialsContact(ContactForces):
     between two objects.
     Same approach as done in PhysiCell.
     """
+
     smoothness_factor: int
 
-    def compute_adhesion(self, distance: float, radius1: float, radius2: float) -> float:
+    def compute_adhesion(
+        self, distance: float, radius1: float, radius2: float
+    ) -> float:
         """Returns a force based on adhesion potentials"""
         # Check if cells interact (interaction radius)
         adhesion_overlap = get_sphere_overlap(radius1, radius2, distance)
@@ -410,19 +430,21 @@ class PotentialsContact(ContactForces):
             return 0.0
 
         # Compute adhesion force
-        adhesion_component = (1 - distance / (radius1 + radius2))
+        adhesion_component = 1 - distance / (radius1 + radius2)
         adhesion_component = adhesion_component ** (self.smoothness_factor + 1)
 
         return self.adhesion_coefficient * adhesion_component
 
-    def compute_repulsion(self, distance: float, radius1: float, radius2: float) -> float:
+    def compute_repulsion(
+        self, distance: float, radius1: float, radius2: float
+    ) -> float:
         """Returns a force based on repulsion potentials"""
         # Check if cells overlap (real radius)
         overlap = get_sphere_overlap(radius1, radius2, distance)
         if overlap == 0.0:
             return 0.0
         # Compute repulsion force
-        repulsion_component = (1 - distance / (radius1 + radius2))
+        repulsion_component = 1 - distance / (radius1 + radius2)
         repulsion_component = repulsion_component ** (self.smoothness_factor + 1)
 
         return self.repulsion_coefficient * repulsion_component
@@ -455,16 +477,17 @@ class SimpleFactory(ContactFactory):
     cylinder_cylinder_repulsion: float
 
     def get_sphere_sphere_interactions(self) -> ContactForces:
-        return SimpleContact(self.sphere_sphere_adhesion,
-                                 self.sphere_sphere_repulsion)
+        return SimpleContact(self.sphere_sphere_adhesion, self.sphere_sphere_repulsion)
 
     def get_sphere_cylinder_interactions(self) -> ContactForces:
-        return SimpleContact(self.sphere_cylinder_adhesion,
-                                 self.sphere_cylinder_repulsion)
+        return SimpleContact(
+            self.sphere_cylinder_adhesion, self.sphere_cylinder_repulsion
+        )
 
     def get_cylinder_cylinder_interactions(self) -> ContactForces:
-        return SimpleContact(self.cylinder_cylinder_adhesion,
-                                 self.cylinder_cylinder_repulsion)
+        return SimpleContact(
+            self.cylinder_cylinder_adhesion, self.cylinder_cylinder_repulsion
+        )
 
 
 @dataclass
@@ -482,16 +505,22 @@ class PotentialsFactory(ContactFactory):
     cylinder_cylinder_smoothness: int
 
     def get_sphere_sphere_interactions(self) -> PotentialsContact:
-        return PotentialsContact(self.sphere_sphere_adhesion,
-                                 self.sphere_sphere_repulsion,
-                                 self.sphere_sphere_smoothness)
+        return PotentialsContact(
+            self.sphere_sphere_adhesion,
+            self.sphere_sphere_repulsion,
+            self.sphere_sphere_smoothness,
+        )
 
     def get_sphere_cylinder_interactions(self) -> PotentialsContact:
-        return PotentialsContact(self.sphere_cylinder_adhesion,
-                                 self.sphere_cylinder_repulsion,
-                                 self.sphere_cylinder_smoothness)
+        return PotentialsContact(
+            self.sphere_cylinder_adhesion,
+            self.sphere_cylinder_repulsion,
+            self.sphere_cylinder_smoothness,
+        )
 
     def get_cylinder_cylinder_interactions(self) -> PotentialsContact:
-        return PotentialsContact(self.cylinder_cylinder_adhesion,
-                                 self.cylinder_cylinder_repulsion,
-                                 self.cylinder_cylinder_smoothness)
+        return PotentialsContact(
+            self.cylinder_cylinder_adhesion,
+            self.cylinder_cylinder_repulsion,
+            self.cylinder_cylinder_smoothness,
+        )
