@@ -26,6 +26,7 @@ class CellBody:
     ) -> None:
         self.position = position
         self.mechanics = mechanics
+        self.force = np.zeros(3)
         self.force_from_daughter = np.zeros(3)
         self.force_from_neighbors = np.zeros(3)
         self.displacement = np.zeros(3)
@@ -123,6 +124,7 @@ class Neurite:
         self.distal_point = proximal_point + axis * cylinder_mechanics.default_length
         self.mechanics = cylinder_mechanics
         self.cylinder = None
+        self.force = np.zeros(3)
         self.force_from_daughter = np.zeros(3)
         self.displacement = np.zeros(3)
 
@@ -261,7 +263,6 @@ class Neurite:
         # Calculate the distance between the two closest points
         distance_to_point = np.linalg.norm(np.subtract(self.proximal_point, point1))
         fraction = distance_to_point / self.current_length
-        #print(point1, self.proximal_point, self.distal_point, fraction)
         distance_vector, norm = physics.get_distance_components(point2, point1)
 
         # Calculate cell-cell adhesion forces

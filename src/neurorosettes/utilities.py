@@ -183,8 +183,8 @@ class Animator:
         height
             The height to place the camera at.
         """
-        self.plotter.camera.SetPosition([0.0, -10.0, height])
-        self.plotter.camera.SetFocalPoint([0.0, -10.0, 0.0])
+        self.plotter.camera.SetPosition([0.0, 0.0, height])
+        self.plotter.camera.SetFocalPoint([0.0, 0.0, 0.0])
         self.plotter.camera.SetViewUp([0.0, 1.0, 0.0])
 
     def draw_spring(self, base_point: np.ndarray, top_point: np.ndarray, radius: float):

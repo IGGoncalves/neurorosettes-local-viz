@@ -1,6 +1,6 @@
 # Simulation time [minutes]
 time:
-  total_time: 150.0
+  total_time: 200.0
   step: 0.1
 
 # Domain options
@@ -24,15 +24,15 @@ neurons:
     cell_radius: 8.0
     cell_interaction_factor: 1.25
     neurite_radius: 0.5
-    neurite_interaction_factor: 12.0
-    neurite_spring_constant: 10.0
+    neurite_interaction_factor: 15.0
+    neurite_spring_constant: 5.0
     neurite_default_length: 10.0
 
   # Cycling and differentitation rates [1/min]
   clocks:
     proliferation_rate: 0.0
     death_rate: 0.0
-    differentiation_rate: 0.03
+    differentiation_rate: 0.02
 
   # Number of neurites allowed until differentiation is blocked 
   max_number_of_neurites: 2
@@ -48,6 +48,6 @@ interactions:
   sphere_cylinder_adhesion: 1.0
   sphere_cylinder_repulsion: 1.5
   # sphere_cylinder_smoothness: 1
-  cylinder_cylinder_adhesion: 1.5
+  cylinder_cylinder_adhesion: 1.0
   cylinder_cylinder_repulsion: 0.6
   # cylinder_cylinder_smoothness: 1

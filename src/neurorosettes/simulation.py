@@ -1,4 +1,5 @@
 """This module deals with the neuron structure and functions"""
+from operator import ne
 from pathlib import Path
 from typing import List, Optional, Union
 from dataclasses import  dataclass
@@ -283,13 +284,22 @@ class Container:
             reversed_order = range(len(neuron.neurites) - 1, -1, -1)
 
             for j, neurite in zip(reversed_order, reversed(neuron.neurites)):
-                force = np.zeros(3)
-
                 # Get force from spring
                 force_spring = neurite.get_spring_force()
-                force += force_spring
-                # Get force from daughter's spring
-                force += neurite.force_from_daughter
+                neurite.force += force_spring
+                # Transmit the opposite force to the mother neurite/cell
+                # (Going through the neurites in reverse, once we arrive at 0 it is the last)
+                if j > 0:
+                    # Transmit to the mother neurite
+                    neuron.neurites[j - 1].force_from_daughter -= force_spring
+                else:
+                    # Transmit to the cell
+                    neuron.cell.force_from_daughter -= force_spring
+
+                # Get force from daughter
+                # Will contain force from spring and object interactions (the mother fraction)
+                neurite.force += neurite.force_from_daughter
+                
                 # Get objects in the surrounding voxels
                 nearby_objects = self.grid.get_close_objects(neurite.distal_point)
                 nearby_cells = [nearby_object for nearby_object in nearby_objects
@@ -297,48 +307,44 @@ class Container:
                 nearby_neurites = [nearby_object for nearby_object in nearby_objects
                                    if isinstance(nearby_object, Neurite)]
 
-                # Get forces from neighbors
+                # Get forces from neighbor cells
                 for neighbor in nearby_cells:
                     if neighbor is neuron.cell:
                         continue
 
-                    # Cell force
+                    # Cell force and fraction to be transmitted to the distal point
                     cell_force, fraction = neurite.get_cell_neighbor_force(neighbor,
                                                                            self.sphere_cylinder_int)
 
+                    # Apply force to the distal point
+                    neurite.force += cell_force * fraction
+                    # Transmit force to the neighbor
                     neighbor.force_from_neighbors -= cell_force
-                    force += cell_force * fraction
 
                     # Transmit the force from cell to proximal part of the neurite
+                     # (Going through the neurites in reverse, once we arrive at 0 it is the last)
                     if j > 0:
-                        neuron.neurites[j - 1].force_from_daughter += cell_force * (1 - fraction)
+                        neuron.neurites[j - 1].force_from_daughter += (cell_force * (1 - fraction))
                     else:
-                        neuron.cell.force_from_daughter += cell_force * (1 - fraction)
+                        neuron.cell.force_from_daughter += (cell_force * (1 - fraction))
 
-                # Neurites force
+                # Get forces from neighbor neurites
                 for neighbor in nearby_neurites:
                     if neighbor in neuron.neurites:
                         continue
 
                     neurite_force, fraction = neurite.get_neurite_neighbor_force(neighbor,
                                                                                  self.cylinder_int)
-                    force += neurite_force * fraction
+                    neurite.force += neurite_force * fraction
 
                     # Transmit the force from cell to proximal part of the neurite
+                    # (Going through the neurites in reverse, once we arrive at 0 it is the last)
                     if j > 0:
-                        neuron.neurites[j - 1].force_from_daughter += neurite_force * (1 - fraction)
+                        neuron.neurites[j - 1].force_from_daughter += (neurite_force * (1 - fraction))
                     else:
-                        neuron.cell.force_from_daughter += neurite_force * (1 - fraction)
+                        neuron.cell.force_from_daughter += (neurite_force * (1 - fraction))
 
-                displacement = self.get_displacement_from_force(force, time_step)
-                self.neurons[i].neurites[j].displacement = displacement
-
-                if j > 0:
-                    neuron.neurites[j - 1].force_from_daughter -= force_spring
-                else:
-                    neuron.cell.force_from_daughter -= force_spring
-
-            force = np.zeros(3)
+            # Get cell bodies close to the cell
             nearby_objects = self.grid.get_close_objects(neuron.cell.position)
             nearby_cells = [nearby_object for nearby_object in nearby_objects
                             if isinstance(nearby_object, CellBody)]
@@ -346,22 +352,32 @@ class Container:
             for neighbor in nearby_cells:
                 if neuron.cell is neighbor:
                     continue
-                force += neuron.cell.get_neighbor_force(neighbor, self.sphere_int)
+                neuron.cell.force += neuron.cell.get_neighbor_force(neighbor, self.sphere_int)
 
-            force += neuron.cell.force_from_daughter
-            force += neuron.cell.force_from_neighbors
+
+        for i, neuron in enumerate(self.neurons):
+            for j, neurite in enumerate(neuron.neurites):
+                neurite.force += neurite.force_from_daughter
+                displacement = self.get_displacement_from_force(neurite.force, time_step)
+                self.neurons[i].neurites[j].displacement = displacement
+
+            # Add the forces that were already calculated from other neurites
+            neuron.cell.force += neuron.cell.force_from_daughter
+            neuron.cell.force += neuron.cell.force_from_neighbors
 
             # Convert force value to displacement to assign new position
-            displacement = self.get_displacement_from_force(force, time_step)
+            displacement = self.get_displacement_from_force(neuron.cell.force, time_step)
             neuron.cell.displacement = displacement
 
     def update_cell_positions(self) -> None:
         """Updates the positions of all the simulation objects based on their velocity."""
         for neuron in self.neurons:
+            neuron.cell.force = np.zeros(3)
             neuron.cell.force_from_neighbors = np.zeros(3)
             neuron.cell.force_from_daughter = np.zeros(3)
 
             for j, neurite in enumerate(neuron.neurites):
+                neurite.force = np.zeros(3)
                 neurite.force_from_daughter = np.zeros(3)
                 self.move_neurite(neurite, neurite.distal_point + neurite.displacement)
                 if j < len(neuron.neurites) - 1:
