@@ -19,7 +19,7 @@ def create_tissue(container: Container) -> None:
     container.create_new_neuron(coordinates=[4.0, 15.0, 0.0])
 
     # Plot the current state of the simulation
-    container.animator.set_camera(height=200.0)
+    container.animator.set_camera(height=100.0)
     container.animator.show()
     time.sleep(1)
 

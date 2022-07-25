@@ -8,7 +8,7 @@ import numpy as np
 def create_tissue(container: Container) -> None:
     """Creates and registers new neurons in the simulation world."""
     # Create a neuron with two neurites
-    radius = 35.0
+    radius = 30.0
     number_of_cells = 10
     t = np.linspace(0, 2*np.pi, number_of_cells, endpoint=False)
 

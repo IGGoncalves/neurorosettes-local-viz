@@ -91,8 +91,8 @@ class CellBody:
 
         magnitude -= interaction.compute_repulsion(
             norm,
-            self.mechanics.interaction_radius,
-            neighbor.mechanics.interaction_radius,
+            self.mechanics.radius,
+            neighbor.mechanics.radius,
         )
 
         return magnitude * distance_vector
@@ -224,8 +224,8 @@ class Neurite:
 
         magnitude -= interaction.compute_repulsion(
             norm,
-            self.mechanics.interaction_radius,
-            neighbor.mechanics.interaction_radius,
+            self.mechanics.radius,
+            neighbor.mechanics.radius,
         )
 
         return magnitude * distance_vector, fraction
@@ -274,8 +274,8 @@ class Neurite:
 
         magnitude -= interaction.compute_repulsion(
             distance=norm,
-            radius1=self.mechanics.interaction_radius,
-            radius2=neighbor.mechanics.interaction_radius,
+            radius1=self.mechanics.radius,
+            radius2=neighbor.mechanics.radius,
         )
 
         return magnitude * distance_vector, fraction

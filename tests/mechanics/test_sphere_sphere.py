@@ -6,11 +6,11 @@ from neurorosettes.simulation import Simulation, Container
 
 def create_tissue(container: Container) -> None:
     """Creates and registers new neurons in the simulation world."""
-    container.create_new_neuron(coordinates=[0.0, 10.0, 0.0])
-    container.create_new_neuron(coordinates=[-5.0, 10.0, 0.0])
+    container.create_new_neuron(coordinates=[2.0, 0.0, 0.0])
+    container.create_new_neuron(coordinates=[-2.0, 0.0, 0.0])
 
     # Plot the current state of the simulation
-    container.animator.set_camera(height=150.0)
+    container.animator.set_camera(height=70.0)
     container.animator.show()
     time.sleep(1)
 

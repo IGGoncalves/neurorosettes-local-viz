@@ -17,7 +17,7 @@ def create_tissue(container: Container) -> None:
         container.grid.register_neurite(neurite)
 
     neuron = container.create_new_neuron(
-        coordinates=[21.0, 6.0, 0.0], outgrowth_axis=[-1.0, 0.0, 0.0]
+        coordinates=[18.25, 6.0, 0.0], outgrowth_axis=[-1.0, 0.0, 0.0]
     )
 
     neuron.create_first_neurite(container.object_factory)
@@ -26,7 +26,7 @@ def create_tissue(container: Container) -> None:
         container.grid.register_neurite(neurite)
 
     # Plot the current state of the simulation
-    container.animator.set_camera(height=200.0)
+    container.animator.set_camera(height=100.0)
     container.animator.show()
     time.sleep(1)
 
