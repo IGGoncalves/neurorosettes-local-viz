@@ -258,7 +258,7 @@ class Neurite:
             top_2=neighbor.distal_point,
         )
 
-        #print("Internal check", point1, point2)
+        # print("Internal check", point1, point2)
 
         # Calculate the distance between the two closest points
         distance_to_point = np.linalg.norm(np.subtract(self.proximal_point, point1))
@@ -319,7 +319,12 @@ class ObjectFactory:
 
         return CellBody(center_position, cell_mechanics)
 
-    def get_neurite(self, proximal_position: np.ndarray, axis: np.ndarray) -> Neurite:
+    def get_neurite(
+        self,
+        proximal_position: np.ndarray,
+        axis: np.ndarray,
+        restriction_factor: float = 0.8,
+    ) -> Neurite:
         """
         Returns a Neurite object placed on the given position, pointing towards the axis.
 
@@ -329,6 +334,10 @@ class ObjectFactory:
             The coordinates of the neurite's proximal point.
         axis
             The axis of growth of the new neurite.
+        restriction_factor
+            The restriction factor used to compute the direction of a new neurite
+            (the neurite will follow the axis with a given degree of freedom, defined
+            by the restriction factor). Should be between 0 and 1.
 
         Returns
         -------
@@ -337,8 +346,20 @@ class ObjectFactory:
         if np.linalg.norm(axis) > 1.0:
             axis = physics.normalize_vector(axis)
 
+        if not (0 <= restriction_factor <= 1):
+            raise ValueError(
+                "The neurite axis restriction factor should be between 0 and 1."
+            )
+
         axis_angle = np.arctan2(axis[1], axis[0])
-        temp_angle = np.pi*((1 - 0.7)*np.random.uniform() + (-0.5 + 0.7/2)) + axis_angle
+        temp_angle = (
+            np.pi
+            * (
+                (1 - restriction_factor) * np.random.uniform()
+                + (-0.5 + restriction_factor / 2)
+            )
+            + axis_angle
+        )
         new_axis = np.asarray([np.cos(temp_angle), np.sin(temp_angle), 0])
 
         cylinder_mechanics = physics.CylinderProperties(

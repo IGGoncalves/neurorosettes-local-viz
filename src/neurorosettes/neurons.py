@@ -80,7 +80,7 @@ class Neuron:
         """
         if np.linalg.norm(coordinates) > 1.0:
             coordinates = normalize_vector(coordinates)
-            
+
         self.outgrowth_axis[0] = coordinates[0]
         self.outgrowth_axis[1] = coordinates[1]
         self.outgrowth_axis[2] = coordinates[2]
