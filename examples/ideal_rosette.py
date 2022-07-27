@@ -8,7 +8,7 @@ import numpy as np
 def create_tissue(container: Container) -> None:
     """Creates and registers new neurons in the simulation world."""
     # Create a neuron with two neurites
-    radius = 30.0
+    radius = 25.0
     number_of_cells = 10
     t = np.linspace(0, 2*np.pi, number_of_cells, endpoint=False)
 
@@ -25,7 +25,7 @@ def main():
     # Create initial configuration
     create_tissue(sim_world.container)
     # Plot the current state of the simulation
-    sim_world.container.animator.set_camera(height=200.0)
+    sim_world.container.animator.set_camera(height=150.0)
     sim_world.container.animator.show()
     # Run the simulation to check if springs work
     sim_world.run()

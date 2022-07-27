@@ -337,6 +337,10 @@ class ObjectFactory:
         if np.linalg.norm(axis) > 1.0:
             axis = physics.normalize_vector(axis)
 
+        axis_angle = np.arctan2(axis[1], axis[0])
+        temp_angle = np.pi*((1 - 0.7)*np.random.uniform() + (-0.5 + 0.7/2)) + axis_angle
+        new_axis = np.asarray([np.cos(temp_angle), np.sin(temp_angle), 0])
+
         cylinder_mechanics = physics.CylinderProperties(
             self.neurite_radius,
             self.neurite_interaction_factor,
@@ -344,4 +348,4 @@ class ObjectFactory:
             self.neurite_default_length,
         )
 
-        return Neurite(proximal_position, axis, cylinder_mechanics)
+        return Neurite(proximal_position, new_axis, cylinder_mechanics)

@@ -172,7 +172,7 @@ class Animator:
         y_grid
             The y coordinates of the cell of the grid.
         """
-        # self.plotter += Grid(sx=x_grid, sy=y_grid, c='lightgrey')
+        self.plotter += Grid(sx=x_grid, sy=y_grid, c='lightgrey')
 
     def set_camera(self, height: float):
         """

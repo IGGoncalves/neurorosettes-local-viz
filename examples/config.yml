@@ -22,9 +22,9 @@ neurons:
   # Physical objects properties
   objects:
     cell_radius: 8.0
-    cell_interaction_factor: 1.25
+    cell_interaction_factor: 1.5
     neurite_radius: 0.5
-    neurite_interaction_factor: 5.0
+    neurite_interaction_factor: 1.5
     neurite_spring_constant: 5.0
     neurite_default_length: 10.0
 
@@ -41,13 +41,13 @@ neurons:
 interactions:
   # Interactions may be based on simple adhesion/repulsion functions ["simple"]
   # or potentials functions ["potentials"]
-  type: "simple"
-  sphere_sphere_adhesion: 1.0
-  sphere_sphere_repulsion: 10.0
-  # sphere_sphere_smoothness: 1
-  sphere_cylinder_adhesion: 1.0
-  sphere_cylinder_repulsion: 10.0
-  # sphere_cylinder_smoothness: 1
-  cylinder_cylinder_adhesion: 1.0
-  cylinder_cylinder_repulsion: 0.8
-  # cylinder_cylinder_smoothness: 1
+  type: "potentials"
+  sphere_sphere_adhesion: 5.0
+  sphere_sphere_repulsion: 50.0
+  sphere_sphere_smoothness: 1
+  sphere_cylinder_adhesion: 5.0
+  sphere_cylinder_repulsion: 100.0
+  sphere_cylinder_smoothness: 1
+  cylinder_cylinder_adhesion: 5.0
+  cylinder_cylinder_repulsion: 25.0
+  cylinder_cylinder_smoothness: 1
