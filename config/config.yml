@@ -24,18 +24,18 @@ neurons:
     cell_radius: 8.0
     cell_interaction_factor: 1.25
     neurite_radius: 0.5
-    neurite_interaction_factor: 2.0
-    neurite_spring_constant: 5.0
-    neurite_default_length: 10.0
+    neurite_interaction_factor: 1.5
+    neurite_spring_constant: 10.0
+    neurite_default_length: 7.0
 
   # Cycling and differentitation rates [1/min]
   clocks:
-    proliferation_rate: 0.0007
-    death_rate: 0.00002
-    differentiation_rate: 0.0006
+    proliferation_rate: 0.000
+    death_rate: 0.0
+    differentiation_rate: 0.0007
 
   # Number of neurites allowed until differentiation is blocked 
-  max_number_of_neurites: 3
+  max_number_of_neurites: 7
 
 # Object interactions
 interactions:
@@ -43,14 +43,11 @@ interactions:
   # or potentials functions ["potentials"]
   type: "potentials"
   sphere_sphere_adhesion: 5.0
-  sphere_sphere_repulsion: 25.0
-  # Smoothness factor should be commented for simple adhesion/repulsion
+  sphere_sphere_repulsion: 75.0
   sphere_sphere_smoothness: 1
-  sphere_cylinder_adhesion: 5.0
-  sphere_cylinder_repulsion: 50.0
-  # Smoothness factor should be commented for simple adhesion/repulsion
+  sphere_cylinder_adhesion: 1.0
+  sphere_cylinder_repulsion: 100.0
   sphere_cylinder_smoothness: 1
   cylinder_cylinder_adhesion: 5.0
-  cylinder_cylinder_repulsion: 15.0
-    # Smoothness factor should be commented for simple adhesion/repulsion
+  cylinder_cylinder_repulsion: 75.0
   cylinder_cylinder_smoothness: 1

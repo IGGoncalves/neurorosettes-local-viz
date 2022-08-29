@@ -323,7 +323,7 @@ class ObjectFactory:
         self,
         proximal_position: np.ndarray,
         axis: np.ndarray,
-        restriction_factor: float = 0.8,
+        restriction_factor: float = 0.9,
     ) -> Neurite:
         """
         Returns a Neurite object placed on the given position, pointing towards the axis.

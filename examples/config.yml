@@ -1,6 +1,6 @@
 # Simulation time [minutes]
 time:
-  total_time: 200.0
+  total_time: 300.0
   step: 0.1
 
 # Domain options
@@ -22,17 +22,17 @@ neurons:
   # Physical objects properties
   objects:
     cell_radius: 8.0
-    cell_interaction_factor: 1.5
+    cell_interaction_factor: 1.25
     neurite_radius: 0.5
     neurite_interaction_factor: 1.5
-    neurite_spring_constant: 5.0
-    neurite_default_length: 10.0
+    neurite_spring_constant: 10.0
+    neurite_default_length: 7.0
 
   # Cycling and differentitation rates [1/min]
   clocks:
     proliferation_rate: 0.0
     death_rate: 0.0
-    differentiation_rate: 0.02
+    differentiation_rate: 0.007
 
   # Number of neurites allowed until differentiation is blocked 
   max_number_of_neurites: 2

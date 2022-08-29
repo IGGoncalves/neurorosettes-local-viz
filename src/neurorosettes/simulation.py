@@ -5,7 +5,7 @@ from typing import List, Optional, Union
 from dataclasses import dataclass
 
 import numpy as np
-from vedo import ProgressBar
+from vedo import ProgressBar, merge, Cylinder, write
 
 from neurorosettes.config import ConfigParser
 from neurorosettes.clocks import ClocksFactory
@@ -436,6 +436,7 @@ class Container:
             reversed_order = range(len(neuron.neurites) - 1, -1, -1)
 
             for j, neurite in zip(reversed_order, reversed(neuron.neurites)):
+
                 # Get force from spring
                 force_spring = neurite.get_spring_force()
                 neurite.force += force_spring
@@ -554,6 +555,7 @@ class Container:
                 neurite.force = np.zeros(3)
                 neurite.force_from_daughter = np.zeros(3)
                 self.move_neurite(neurite, neurite.distal_point + neurite.displacement)
+
                 if j < len(neuron.neurites) - 1:
                     neuron.neurites[j + 1].move_proximal_point(
                         neuron.neurites[j].distal_point
@@ -616,6 +618,34 @@ class Simulation:
             # Print time to the console as a progressbar
             self.timer.current_time += self.timer.step
             sim_time.print()
+
+    def save_meshes(self, file_name: str) -> None:
+        """
+        Saves the neurons as PLY objects. Cell bodies are saved as spheres.
+        Neurites are saved as cylinders.
+        """
+        # Save the cell bodies as one mesh (spheres)
+        meshes = merge([neuron.cell.sphere for neuron in self.container.neurons])
+        
+        # Save the neurites as one mesh (cylinders)
+        cylinders = []
+
+        for neuron in self.container.neurons:
+            for neurite in neuron.neurites:
+                # Create a cylinder from the neurite's geometry
+                cylinder = Cylinder(pos=neurite.proximal_point+0.5*neurite.spring_axis, 
+                                    height=neurite.current_length, 
+                                    axis=neurite.spring_axis/neurite.current_length,
+                                    r=neurite.mechanics.radius)
+                cylinders.append(cylinder)
+
+        cylinder_meshes = merge(cylinders)
+
+        # Save the result
+        write(meshes, f"{file_name}_cells.ply")
+        if cylinder_meshes:
+            write(cylinder_meshes, f"{file_name}_neurites.ply")
+
 
     @classmethod
     def from_file(cls, config_path: Union[Path, str]) -> "Simulation":

@@ -158,9 +158,9 @@ class CellClocks:
 
     def block_all_clocks(self):
         """Blocks the cycling, death and differentiation clocks."""
-        self.cycle_clock.block()
-        self.death_clock.block()
-        self.differentiation_clock.block()
+        self.cycle_clock.block = True
+        self.death_clock.block = True
+        self.differentiation_clock.block = True
 
 
 @dataclass
