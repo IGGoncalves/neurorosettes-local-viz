@@ -28,14 +28,14 @@ def main():
     # Plot the current state of the simulation
     sim_world.container.animator.set_camera(height=150.0)
     sim_world.container.animator.show()
-    sim_world.container.animator.save_screenshot("../output/ideal_case_start_small")
-    sim_world.save_meshes("ideal_case_start_small")
+    #sim_world.container.animator.save_screenshot("../output/ideal_case_start_small")
+    #sim_world.save_meshes("ideal_case_fast_start_2")
     # Run the simulation to check if springs work
     sim_world.run()
     # Plot the results (mark interactive as False to automatically  close the window)
     #sim_world.container.animator.show(interactive=False)
-    sim_world.container.animator.save_screenshot("../output/ideal_case_small_2")
-    sim_world.save_meshes("ideal_case_small_2")
+    #sim_world.container.animator.save_screenshot("../output/ideal_case_small_2")
+    sim_world.save_meshes("ideal_case_fast_rep_2")
 
 
 

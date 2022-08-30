@@ -30,12 +30,12 @@ neurons:
 
   # Cycling and differentitation rates [1/min]
   clocks:
-    proliferation_rate: 0.000
+    proliferation_rate: 0.0007
     death_rate: 0.0
-    differentiation_rate: 0.0007
+    differentiation_rate: 0.000
 
   # Number of neurites allowed until differentiation is blocked 
-  max_number_of_neurites: 7
+  max_number_of_neurites: 2
 
 # Object interactions
 interactions:
@@ -43,11 +43,11 @@ interactions:
   # or potentials functions ["potentials"]
   type: "potentials"
   sphere_sphere_adhesion: 5.0
-  sphere_sphere_repulsion: 75.0
+  sphere_sphere_repulsion: 50.0
   sphere_sphere_smoothness: 1
-  sphere_cylinder_adhesion: 1.0
+  sphere_cylinder_adhesion: 5.0
   sphere_cylinder_repulsion: 100.0
   sphere_cylinder_smoothness: 1
   cylinder_cylinder_adhesion: 5.0
-  cylinder_cylinder_repulsion: 75.0
+  cylinder_cylinder_repulsion: 25.0
   cylinder_cylinder_smoothness: 1

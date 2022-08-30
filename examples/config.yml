@@ -32,7 +32,7 @@ neurons:
   clocks:
     proliferation_rate: 0.0
     death_rate: 0.0
-    differentiation_rate: 0.007
+    differentiation_rate: 0.07
 
   # Number of neurites allowed until differentiation is blocked 
   max_number_of_neurites: 2
@@ -42,7 +42,7 @@ interactions:
   # Interactions may be based on simple adhesion/repulsion functions ["simple"]
   # or potentials functions ["potentials"]
   type: "potentials"
-  sphere_sphere_adhesion: 5.0
+  sphere_sphere_adhesion: 0.0
   sphere_sphere_repulsion: 50.0
   sphere_sphere_smoothness: 1
   sphere_cylinder_adhesion: 5.0
