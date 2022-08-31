@@ -30,12 +30,12 @@ neurons:
 
   # Cycling and differentitation rates [1/min]
   clocks:
-    proliferation_rate: 0.0007
+    proliferation_rate: 0.000
     death_rate: 0.0
-    differentiation_rate: 0.000
+    differentiation_rate: 0.002
 
   # Number of neurites allowed until differentiation is blocked 
-  max_number_of_neurites: 2
+  max_number_of_neurites: 7
 
 # Object interactions
 interactions:

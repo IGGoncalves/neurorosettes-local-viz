@@ -46,8 +46,8 @@ def main():
 
     # Plot and save the results (mark interactive as False to automatically close the window)
     #sim_world.container.animator.show(interactive=True)
-    sim_world.container.animator.save_screenshot(f"output/no_diff")
-    sim_world.save_meshes("output/no_diff")
+    sim_world.container.animator.save_screenshot(f"output/diff")
+    sim_world.save_meshes("output/diff")
     #sim_world.container.animator.plotter.close()
 
 
