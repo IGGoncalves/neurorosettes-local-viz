@@ -17,7 +17,7 @@ def set_density_check(container: Container) -> None:
 def create_tissue(container: Container) -> None:
     """Creates and registers new neurons in the simulation world."""
     # Initial cell positions
-    tissue = HexagonalTissue(size=150, spacing=20).get_coordinates()
+    tissue = HexagonalTissue(size=190, spacing=20).get_coordinates()
     # Create a neuron with two neurites
     for cell in tissue:
         container.create_new_neuron(coordinates=cell)
@@ -30,7 +30,7 @@ def simulation(sim_world: Simulation) -> None:
     # Create initial configuration
     create_tissue(sim_world.container)
     # Plot the current state of the simulation
-    sim_world.container.animator.set_camera(height=350.0)
+    sim_world.container.animator.set_camera(height=400.0)
     sim_world.container.animator.show()
     #sim_world.container.animator.save_screenshot(f"output/start")
     #sim_world.save_meshes("output/start")
@@ -46,8 +46,8 @@ def main():
 
     # Plot and save the results (mark interactive as False to automatically close the window)
     #sim_world.container.animator.show(interactive=True)
-    sim_world.container.animator.save_screenshot(f"output/diff")
-    sim_world.save_meshes("output/diff")
+    sim_world.container.animator.save_screenshot(f"output/no_diff")
+    sim_world.save_meshes("output/no_diff")
     #sim_world.container.animator.plotter.close()
 
 

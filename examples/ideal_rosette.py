@@ -31,11 +31,35 @@ def main():
     #sim_world.container.animator.save_screenshot("../output/ideal_case_start_small")
     #sim_world.save_meshes("ideal_case_fast_start_2")
     # Run the simulation to check if springs work
-    sim_world.run()
+
+    sim_time = sim_world.timer.get_progress_bar()
+
+    for t in sim_time.range():
+        sim_world.container.advance_cycles(sim_world.timer.step)
+        sim_world.container.kill()
+        sim_world.container.differentiate()
+        sim_world.container.divide()
+        # Solve interactions and draw the new object positions
+        sim_world.container.solve_mechanics(sim_world.timer.step)
+        sim_world.container.update_drawings()
+
+        # Update the simulation time on the simulation window
+        if t % 10 == 0:
+            sim_world.container.animator.update_clock(t)
+
+        if t % 600 == 0:
+            sim_world.save_meshes(f"../output/ideal_t{t}")
+
+        # Print time to the console as a progressbar
+        sim_world.timer.current_time += sim_world.timer.step
+        sim_time.print()
+
+    # Plot the results (mark interactive as False to automatically  close the window)
+    sim_world.container.animator.show(interactive=True)
     # Plot the results (mark interactive as False to automatically  close the window)
     #sim_world.container.animator.show(interactive=False)
     #sim_world.container.animator.save_screenshot("../output/ideal_case_small_2")
-    sim_world.save_meshes("ideal_case_fast_rep_2")
+    sim_world.save_meshes("../output/ideal_final")
 
 
 
