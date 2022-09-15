@@ -47,8 +47,8 @@ def main():
         if t % 10 == 0:
             sim_world.container.animator.update_clock(t)
 
-        if t % 600 == 0:
-            sim_world.save_meshes(f"../output/ideal_t{t}")
+        if t % 150 == 0:
+            sim_world.save_meshes(f"../output/anim_ideal_t{t}")
 
         # Print time to the console as a progressbar
         sim_world.timer.current_time += sim_world.timer.step
@@ -59,7 +59,7 @@ def main():
     # Plot the results (mark interactive as False to automatically  close the window)
     #sim_world.container.animator.show(interactive=False)
     #sim_world.container.animator.save_screenshot("../output/ideal_case_small_2")
-    sim_world.save_meshes("../output/ideal_final")
+    sim_world.save_meshes("../output/anim_ideal_final")
 
 
 
