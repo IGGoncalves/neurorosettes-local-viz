@@ -4,8 +4,6 @@ from pathlib import Path
 import json
 from itertools import count
 
-import click
-
 from neurorosettes.simulation import Simulation, Container
 from neurorosettes.utilities import HexagonalTissue
 from neurorosettes.grid import OneLevelDensityCheck
@@ -68,9 +66,7 @@ def create_params_dict(
     }
 
 
-@click.command()
-@click.option("--config_path", default="config/config.yml", help="Configuration file path.")
-def main(config_path):
+def main():
     # Simple counter to make sure that output files are stored in unique folders
     sim_counter = count(start=0)
 
@@ -99,7 +95,7 @@ def main(config_path):
 
                 for i in range(NUMBER_OF_REPLICATES):
                     # Load the data from the configuration file to create a simulation instance
-                    sim_world = Simulation.from_file(config_path)
+                    sim_world = Simulation.from_file("config/config.yml")
 
                     # Update the interaction coefficients based on the current iteration
                     sim_world.container.sphere_int.adhesion_coefficient = cell_cell_adhesion

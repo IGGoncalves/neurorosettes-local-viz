@@ -1,29 +1,26 @@
 """Script to simulate the formation of Homer-Wright rosettes."""
-import click
+
+import numpy as np
 
 from neurorosettes.simulation import Simulation, Container
-from neurorosettes.utilities import HexagonalTissue, RectangularTissue
-from neurorosettes.grid import OneLevelDensityCheck
 
-
-TISSUE = HexagonalTissue(size=160, spacing=20).get_coordinates()
-DENSITY_CHECK = OneLevelDensityCheck(max_neighbors=19)
-
-def set_density_check(container: Container) -> None:
-    container.set_density_check(DENSITY_CHECK)
 
 def create_tissue(container: Container) -> None:
     """Creates and registers new neurons in the simulation world."""
-    # Create a neuron with two neurites
-    for cell in TISSUE:
-        container.create_new_neuron(coordinates=cell)
+    radius = 24.0
+    number_of_cells = 9
+    t = np.linspace(0, 2*np.pi, number_of_cells, endpoint=False)
 
-@click.command()
-@click.option("--config_path", default="config/config.yml", help="Configuration file path.")
-def main(config_path):
+    x = radius * np.cos(t)
+    y = radius * np.sin(t)
+
+    for x_coord, y_coord in zip(x, y):
+        neuron = container.create_new_neuron(coordinates=[x_coord, y_coord, 0])
+        neuron.set_outgrowth_axis(np.subtract(np.zeros(3), neuron.cell.position))
+
+def main():
     # Initialize simulation objects
-    sim_world = Simulation.from_file(config_path)
-    set_density_check(sim_world.container)
+    sim_world = Simulation.from_file("config/config.yml")
     # Create initial configuration
     create_tissue(sim_world.container)
     # Plot the current state of the simulation
