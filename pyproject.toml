@@ -2,7 +2,7 @@
 name = "neurorosettes"
 version = "0.1.0"
 description = "A computational modelling framework designed to simulate the formation of rosette patterns in tissues of the nervous system."
-authors = ["Inês G Gonçalves, Jose Manuel García-Aznar"]
+authors = ["Inês G Gonçalves"]
 
 [tool.poetry.scripts]
 rosette_formation = "examples.rosette_formation:main"
