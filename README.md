@@ -1,6 +1,8 @@
 # neurorosettes
 
 ![GitHub](https://img.shields.io/github/license/m2be-igg/neurorosettes) 
+[![Documentation Status](https://readthedocs.org/projects/neurorosettes/badge/?version=latest)](https://neurorosettes.readthedocs.io/en/latest/?badge=latest)
+
 
 `neurorosettes` is a Python package that implements agent-based modelling to study the formation of rosette patterns in tissues
 during neuronal development. It is built on top of the `vedo` package (version 2022.1.0), which provides an interface
@@ -16,3 +18,7 @@ The package can be downloaded through pip using `pip install neurorosettes`.
 - Cell cycle and death;
 - Creation and extension of neuronal processes;
 - Physical interactions between cell bodies and neuronal processes;
+
+## Documentation
+
+Documentation available on [ReadTheDocs](https://neurorosettes.readthedocs.io/en/latest/?badge=latest).
