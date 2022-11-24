@@ -3,7 +3,6 @@
 ```{toctree}
 :maxdepth: 2
 
-examples.md
 simulation.md
 cycle.md
 mechanics.md

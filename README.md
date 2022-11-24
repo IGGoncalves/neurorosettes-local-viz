@@ -1,5 +1,6 @@
 # neurorosettes
-> An agent-based framework to model the formation of rosette patterns in tissues of the nervous system
+
+![GitHub](https://img.shields.io/github/license/m2be-igg/neurorosettes) 
 
 `neurorosettes` is a Python package that implements agent-based modelling to study the formation of rosette patterns in tissues
 during neuronal development. It is built on top of the `vedo` package (version 2022.1.0), which provides an interface

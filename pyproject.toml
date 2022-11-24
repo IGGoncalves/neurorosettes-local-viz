@@ -1,8 +1,10 @@
 [tool.poetry]
 name = "neurorosettes"
-version = "0.1.0"
+version = "0.1.1"
 description = "A computational modelling framework designed to simulate the formation of rosette patterns in tissues of the nervous system."
 authors = ["Inês G Gonçalves"]
+license = "BSD-3-Clause"
+readme = "README.md"
 
 [tool.poetry.scripts]
 rosette_formation = "examples.rosette_formation:main"
